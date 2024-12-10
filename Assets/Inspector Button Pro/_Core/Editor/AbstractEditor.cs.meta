@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 228974b996e634792becf7ee3bde0c2c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 151474
+  packageName: Inspector Button Pro - Editor Buttons With Parameters
+  packageVersion: 2.0.0
+  assetPath: Assets/Inspector Button Pro/_Core/Editor/AbstractEditor.cs
+  uploadId: 619629
