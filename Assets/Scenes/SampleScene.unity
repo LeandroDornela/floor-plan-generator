@@ -388,14 +388,18 @@ MonoBehaviour:
   _delay: 10
   _debugColors:
     _serializedList:
-    - Key: z0
+    - Key: Terreno
       Value: {r: 1, g: 1, b: 1, a: 1}
-    - Key: z1
+    - Key: Privado
       Value: {r: 1, g: 0.5295368, b: 0, a: 1}
-    - Key: z2
+    - Key: Publico
       Value: {r: 0.0047169924, g: 0.5195647, b: 1, a: 1}
-    - Key: z3
+    - Key: Sala
       Value: {r: 0.03901875, g: 1, b: 0, a: 1}
+    - Key: Banheiro
+      Value: {r: 1, g: 0.07075471, b: 0.07075471, a: 1}
+    - Key: Quarto
+      Value: {r: 0.6375065, g: 0, b: 1, a: 1}
 --- !u!4 &1925644678
 Transform:
   m_ObjectHideFlags: 0

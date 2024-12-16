@@ -2,6 +2,7 @@ using AYellowpaper.SerializedCollections;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -75,16 +76,28 @@ public class GridVisualDebugger : MonoBehaviour
         }
     }
 
-    /*
-    public async Task UpdateGrid(Grid<Cell> grid)
+
+    private void OnDrawGizmos()
     {
-        for (int i = 0; i < _cells.Count; i++)
+        Vector3 size = Vector3.one;
+        foreach (var cell in _cells)
+        {
+            Handles.Label(cell.transform.position, $"({cell.transform.position.x}, {cell.transform.position.y})");
+            //Gizmos.color = _debugColors[cell._cell._zone.ZoneId];
+            //Gizmos.DrawCube(cell.transform.position, size);
+        }
+    }
+
+    
+    public async Task UpdateGrid(CellsGrid grid)
+    {
+        foreach (var cell in _cells)
         {
             // SE A EXECUÇÃO FOR ASSINCRONA NÃO HA GARANTIA DE QUE AS CELULAR FOR COLOCADAS NA ORDEM
-            _cells[i].SetColor(grid._cells[i]._zone.Config.DebugColor);
+            //Vector2Int coord = grid
+            //cell.SetColor(grid._cells[i]._zone.Config.DebugColor);
 
             //await Task.Delay(_delay);
         }
     }
-    */
 }

@@ -25,7 +25,6 @@ public class Generator : MonoBehaviour
     //[NaughtyAttributes.Expandable]
     public ZoneHierarchyConfig _hierarchyConfig;
 
-    //public Zone _root;
     public CellsGrid _cellsGrid;
     //public Grid<float> _weightsGrid;
 
@@ -45,6 +44,26 @@ public class Generator : MonoBehaviour
 
         List<Zone> _root = _hierarchyConfig.GetZoneHierarchy();
 
+        RandomSetCells(_root);
+
         await _debugger.CreateVisualGrid(_cellsGrid);
+    }
+
+
+    public void RandomSetCells(List<Zone> zones)
+    {
+        foreach(Cell cell in _cellsGrid._cells)
+        {
+            cell.SetZone(zones[Random.Range(0, zones.Count)]);
+        }
+    }
+
+
+    public void SpawnZones(List<Zone> zones)
+    {
+        foreach (Zone zone in zones)
+        {
+            
+        }
     }
 }

@@ -28,10 +28,4 @@ public class VisualCell : MonoBehaviour
         if(_renderer == null) { _renderer = GetComponent<Renderer> (); }
         _renderer.material.color = color;
     }
-
-
-    private void OnDrawGizmos()
-    {
-        Handles.Label(transform.position, $"({transform.position.x}, {transform.position.y})");
-    }
 }
