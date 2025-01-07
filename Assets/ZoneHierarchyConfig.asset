@@ -19,19 +19,19 @@ MonoBehaviour:
         _parentZoneId: 
     - Key: Privado
       Value:
-        _parentZoneId: Terreno
+        _parentZoneId: 
     - Key: Publico
       Value:
-        _parentZoneId: Terreno
+        _parentZoneId: 
     - Key: Sala
       Value:
-        _parentZoneId: Publico
+        _parentZoneId: 
     - Key: Banheiro
       Value:
-        _parentZoneId: Privado
+        _parentZoneId: 
     - Key: Quarto
       Value:
-        _parentZoneId: Privado
+        _parentZoneId: 
   _adjacencies:
     _serializedList:
     - Key: Sala

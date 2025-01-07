@@ -48,7 +48,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         // TODO: checar se a celula ja esta na zona.
         _cells.Add(cell);
-        cell.SetZone(this);
+        //cell.SetZone(this);
     }
 
 

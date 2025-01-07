@@ -31,6 +31,19 @@ public class ZoneConfig
 }
 
 
+public class ZoneHierarchy // class to avoid copy
+{
+    public List<Zone> _zonesTree;
+    public Dictionary<string, Zone> _zonesDictionary;
+
+    public ZoneHierarchy(List<Zone> zonesTree, Dictionary<string, Zone> zonesDictionary)
+    {
+        _zonesTree = zonesTree;
+        _zonesDictionary = zonesDictionary;
+    }
+}
+
+
 [CreateAssetMenu(fileName = "ZoneHierarchyConfig", menuName = "Scriptable Objects/ZoneHierarchyConfig")]
 public class ZoneHierarchyConfig : ScriptableObject
 {
@@ -43,7 +56,7 @@ public class ZoneHierarchyConfig : ScriptableObject
 
     public Dictionary<string, Zone> zonesInstances;
 
-    public List<Zone> GetZoneHierarchy()
+    public ZoneHierarchy GetZoneHierarchy()
     {
         zonesInstances = new Dictionary<string, Zone>();
 
@@ -88,6 +101,6 @@ public class ZoneHierarchyConfig : ScriptableObject
             }
         }
 
-        return rootZones;
+        return new ZoneHierarchy(rootZones, zonesInstances);
     }
 }

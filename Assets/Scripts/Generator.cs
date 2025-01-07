@@ -30,6 +30,8 @@ public class Generator : MonoBehaviour
 
     public GridVisualDebugger _debugger;
 
+    ZoneHierarchy _zonesHierarchy;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -42,9 +44,11 @@ public class Generator : MonoBehaviour
     async void Generate()
     {
 
-        List<Zone> _root = _hierarchyConfig.GetZoneHierarchy();
+        _zonesHierarchy = _hierarchyConfig.GetZoneHierarchy();
 
-        RandomSetCells(_root);
+        RandomSetCells(_zonesHierarchy._zonesTree);
+
+        PrintAdjacencies();
 
         await _debugger.CreateVisualGrid(_cellsGrid);
     }
@@ -54,7 +58,9 @@ public class Generator : MonoBehaviour
     {
         foreach(Cell cell in _cellsGrid._cells)
         {
-            cell.SetZone(zones[Random.Range(0, zones.Count)]);
+            Zone zone = zones[Random.Range(0, zones.Count)];
+            cell.SetZone(zone);
+            zone.AddCell(cell);
         }
     }
 
@@ -65,5 +71,29 @@ public class Generator : MonoBehaviour
         {
             
         }
+    }
+
+
+    public void PrintAdjacencies()
+    {
+        string result;
+
+        foreach (var zone in _zonesHierarchy._zonesDictionary)
+        {
+            result = $"{zone.Value.ZoneId}:";
+            foreach (var adjacency in zone.Value._adjacentZones)
+            {
+                result = $"{result} {adjacency.ZoneId}";
+            }
+            Debug.Log(result);
+        }
+    }
+
+
+    [ProButton]
+    public void SelectZone(string zoneId)
+    {
+        Debug.Log("Select: " +  zoneId);
+        _debugger.HighlightZone(_zonesHierarchy._zonesDictionary[zoneId]._cells);
     }
 }

@@ -59,7 +59,9 @@ public class GridVisualDebugger : MonoBehaviour
         for (int j = 0; j < grid.Dimmensions.x; j++)
         {
             grid.GetCell(collum, j, out cell);
-            _cells.Add(Instantiate(_cellPrefab, new Vector3(collum, j, 0), Quaternion.identity, transform).GetComponent<VisualCell>());
+            VisualCell newVisualCell = Instantiate(_cellPrefab, new Vector3(collum, j, 0), Quaternion.identity, transform).GetComponent<VisualCell>();
+            newVisualCell._cell = cell;
+            _cells.Add(newVisualCell);
 
             if (cell._zone == null)
             {
@@ -98,6 +100,32 @@ public class GridVisualDebugger : MonoBehaviour
             //cell.SetColor(grid._cells[i]._zone.Config.DebugColor);
 
             //await Task.Delay(_delay);
+        }
+    }
+
+
+    public void HighlightZone(List<Cell> cells)
+    {
+        if(cells.Count == 0)
+        {
+            Debug.LogWarning("No cells!");
+        }
+
+        foreach(var cell in _cells)
+        {
+            if(cell._cell == null)
+            {
+                Debug.LogError("No cell.");
+            }
+
+            if (cells.Contains(cell._cell))
+            {
+                cell.SetSelectedState(true);
+            }
+            else
+            {
+                cell.SetSelectedState(false);
+            }
         }
     }
 }
