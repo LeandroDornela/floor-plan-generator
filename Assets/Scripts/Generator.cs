@@ -30,13 +30,23 @@ public class Generator : MonoBehaviour
 
     public GridVisualDebugger _debugger;
 
-    ZoneHierarchy _zonesHierarchy;
+    public ZoneHierarchy _zonesHierarchy;
+
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _cellsGrid = new CellsGrid(_generatorConfig.GridDimensions);
         //_weightsGrid = new Grid<float>(_generatorConfig.GridDimensions, 0);
+
+        Generate();
+    }
+
+    public void TickGerador()
+    {
+        Debug.Log("Tick generator");
+
     }
 
     // para cada cada zona em cada nivel executar o algoritmo completo

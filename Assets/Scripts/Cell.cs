@@ -7,6 +7,8 @@ public class Cell // dando preferencia para classes para passar por ref
 {
     public Zone _zone;
     public Vector2Int _gridPosition;
+    
+    public VisualCell visualCell;
 
     public Cell(int gridPositionX, int gridPositionY, Zone zone = null)
     {

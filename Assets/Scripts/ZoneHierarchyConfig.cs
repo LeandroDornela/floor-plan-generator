@@ -14,6 +14,10 @@ public class ZoneConfig
     //public float RelativeArea => _relativeArea;
     public string ParentZoneId => _parentZoneId;
 
+    public Color Color;
+
+
+
 
 
     // TODO: move the jason to a class that hold all the settings for creation.
@@ -63,7 +67,7 @@ public class ZoneHierarchyConfig : ScriptableObject
         // Create all zones.
         foreach(var zone in _zonesConfigs)
         {
-            zonesInstances.Add(zone.Key, new Zone(zone.Key));
+            zonesInstances.Add(zone.Key, new Zone(zone.Key, zone.Value.Color));
         }
 
         // Set the parents and children of the zones.

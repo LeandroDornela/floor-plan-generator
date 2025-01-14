@@ -61,6 +61,7 @@ public class GridVisualDebugger : MonoBehaviour
             grid.GetCell(collum, j, out cell);
             VisualCell newVisualCell = Instantiate(_cellPrefab, new Vector3(collum, j, 0), Quaternion.identity, transform).GetComponent<VisualCell>();
             newVisualCell._cell = cell;
+            cell.visualCell = newVisualCell;
             _cells.Add(newVisualCell);
 
             if (cell._zone == null)
@@ -95,7 +96,7 @@ public class GridVisualDebugger : MonoBehaviour
     {
         foreach (var cell in _cells)
         {
-            // SE A EXECUÇÃO FOR ASSINCRONA NÃO HA GARANTIA DE QUE AS CELULAR FOR COLOCADAS NA ORDEM
+            // SE A EXECUï¿½ï¿½O FOR ASSINCRONA Nï¿½O HA GARANTIA DE QUE AS CELULAR FOR COLOCADAS NA ORDEM
             //Vector2Int coord = grid
             //cell.SetColor(grid._cells[i]._zone.Config.DebugColor);
 
