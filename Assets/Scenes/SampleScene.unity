@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 1078632253}
-  repeatRate: 0.5
+  repeatRate: 0.1
 --- !u!4 &598976787
 Transform:
   m_ObjectHideFlags: 0
@@ -382,8 +382,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -492,21 +492,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cellPrefab: {fileID: 529773522307099553, guid: ca35827f3d1ad0e4eae3c04470be2aae, type: 3}
   _cells: []
+  _dimmensions: {x: 0, y: 0}
   _delay: 10
   _debugColors:
     _serializedList:
     - Key: Terreno
-      Value: {r: 1, g: 1, b: 1, a: 1}
+      Value: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
     - Key: Privado
-      Value: {r: 1, g: 0.5295368, b: 0, a: 1}
+      Value: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
     - Key: Publico
-      Value: {r: 0.0047169924, g: 0.5195647, b: 1, a: 1}
+      Value: {r: 0.9245283, g: 0.9245283, b: 0.9245283, a: 1}
     - Key: Sala
-      Value: {r: 0.03901875, g: 1, b: 0, a: 1}
+      Value: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 1}
     - Key: Banheiro
-      Value: {r: 1, g: 0.07075471, b: 0.07075471, a: 1}
+      Value: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     - Key: Quarto
-      Value: {r: 0.6375065, g: 0, b: 1, a: 1}
+      Value: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
 --- !u!4 &1925644678
 Transform:
   m_ObjectHideFlags: 0

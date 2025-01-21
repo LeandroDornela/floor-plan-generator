@@ -17,21 +17,27 @@ MonoBehaviour:
     - Key: Terreno
       Value:
         _parentZoneId: 
+        Color: {r: 1, g: 0, b: 0, a: 1}
     - Key: Privado
       Value:
         _parentZoneId: 
+        Color: {r: 0, g: 1, b: 0.19647932, a: 1}
     - Key: Publico
       Value:
         _parentZoneId: 
+        Color: {r: 0, g: 0.075000286, b: 1, a: 1}
     - Key: Sala
       Value:
         _parentZoneId: 
+        Color: {r: 1, g: 0.8286115, b: 0, a: 1}
     - Key: Banheiro
       Value:
         _parentZoneId: 
+        Color: {r: 1, g: 0, b: 0.932662, a: 1}
     - Key: Quarto
       Value:
         _parentZoneId: 
+        Color: {r: 0, g: 1, b: 0.8087065, a: 1}
   _adjacencies:
     _serializedList:
     - Key: Sala

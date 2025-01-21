@@ -35,7 +35,7 @@ public class Generator : MonoBehaviour
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         _cellsGrid = new CellsGrid(_generatorConfig.GridDimensions);
         //_weightsGrid = new Grid<float>(_generatorConfig.GridDimensions, 0);
@@ -68,7 +68,7 @@ public class Generator : MonoBehaviour
     {
         foreach(Cell cell in _cellsGrid._cells)
         {
-            Zone zone = zones[Random.Range(0, zones.Count)];
+            Zone zone = zones[Random.Range(1, zones.Count)];
             cell.SetZone(zone);
             zone.AddCell(cell);
         }

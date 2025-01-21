@@ -22,7 +22,7 @@ Y V
 
 public class CellsGrid // using class to facilitate passing values by reference
 {
-    public Vector2Int _dimmensions; // dimenções da grade.
+    public Vector2Int _dimmensions; // dimenï¿½ï¿½es da grade.
     public Cell[] _cells; // array pois o tamanho das grids n deve mudar.
 
     public Vector2Int Dimmensions => _dimmensions;
@@ -40,6 +40,11 @@ public class CellsGrid // using class to facilitate passing values by reference
             for(int x = 0; x < dimmensions.x; x++)
             {
                 _cells[index] = new Cell(x, y);
+                if(x == 8 || x == 12)
+                {
+                    _cells[index].atributos.Add("parede", "sim");
+                }
+
                 index++;
             }
         }
@@ -60,7 +65,7 @@ public class CellsGrid // using class to facilitate passing values by reference
         }
         else
         {
-            Debug.LogError($"Invalid grid position:{x},{y}");
+            Debug.LogWarning($"Invalid grid position:{x},{y}");
             cell = default;
             return false;
         }
@@ -103,8 +108,8 @@ public class CellsGrid // using class to facilitate passing values by reference
     }
 
 
-    // O uso de Actions para isso reduz performance, prefira iteração direta. TODO: verificar se é possivel passar a expresão lambda direto sem uso de Actions e se isso é mais rapido.
-    // USE DE REF COM ACTIONS NÃO É PERMITIDO
+    // O uso de Actions para isso reduz performance, prefira iteraï¿½ï¿½o direta. TODO: verificar se ï¿½ possivel passar a expresï¿½o lambda direto sem uso de Actions e se isso ï¿½ mais rapido.
+    // USE DE REF COM ACTIONS Nï¿½O ï¿½ PERMITIDO
     /*
     public void ForEachCellOnGrid(Action<T> action)
     {

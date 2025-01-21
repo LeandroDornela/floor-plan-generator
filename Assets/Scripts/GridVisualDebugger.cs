@@ -10,6 +10,7 @@ public class GridVisualDebugger : MonoBehaviour
 {
     public GameObject _cellPrefab;
     public List<VisualCell> _cells;
+    public Vector2Int _dimmensions;
     public int _delay = 100;
     [SerializedDictionary("Zone, Adjacencies")]
     public SerializedDictionary<string, Color> _debugColors;
@@ -43,6 +44,8 @@ public class GridVisualDebugger : MonoBehaviour
     public async Task CreateVisualGrid(CellsGrid grid)
     {
         _cells = new List<VisualCell>();
+
+        _dimmensions = grid.Dimmensions;
 
         for (int i = 0; i < grid.Dimmensions.y; i++)
         {
@@ -128,5 +131,21 @@ public class GridVisualDebugger : MonoBehaviour
                 cell.SetSelectedState(false);
             }
         }
+    }
+
+    // highlight cell
+
+    // TODO: on cell grid created
+
+    // TODO: on grid update
+
+    // TODO: on update zone
+
+    // TODO: on update cell
+
+
+    public void SetCellColor(int x, int y, string colorId)
+    {
+        _cells[CellsGrid.MatrixToArrayIndex(x, y, _dimmensions.x)].SetColor(_debugColors[colorId]);
     }
 }
