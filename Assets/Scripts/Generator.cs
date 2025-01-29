@@ -56,7 +56,7 @@ public class Generator : MonoBehaviour
 
         _zonesHierarchy = _hierarchyConfig.GetZoneHierarchy();
 
-        RandomSetCells(_zonesHierarchy._zonesTree);
+        //RandomSetCells(_zonesHierarchy._zonesTree);
 
         PrintAdjacencies();
 

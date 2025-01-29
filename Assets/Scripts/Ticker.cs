@@ -23,17 +23,30 @@ public class Ticker : MonoBehaviour
         WIDTH = generator._generatorConfig.GridDimensions.x;
         HEIGTH = generator._generatorConfig.GridDimensions.y;
 
+        // Colore a primeira celula
         _cells = new List<Cell>();
-        generator._cellsGrid.GetCell(10, 10, out Cell cell);
-        _cells.Add(cell);
+        
+        SetZoneToCell(2,3,0);
+        SetZoneToCell(11,5,1);
+        SetZoneToCell(7,11,2);
 
         InvokeRepeating("Tick", 1, repeatRate);
+    }
+
+    void SetZoneToCell(int x, int y, int zoneIdIndex)
+    {
+        generator._cellsGrid.GetCell(x, y, out Cell cell);
+        Zone zone;
+        zone = generator._zonesHierarchy._zonesTree[zoneIdIndex];
+        cell.SetZone(zone);
+        generator._debugger.SetCellColor(cell._gridPosition.x, cell._gridPosition.y, zone.ZoneId);
+        _cells.Add(cell);
     }
 
     void Tick()
     {
         //Temp_linear();
-        Temp_Flood_2();
+        Temp_Flood();
     }
 
     void Temp_linear()
@@ -59,72 +72,14 @@ public class Ticker : MonoBehaviour
     {
         if(_cells.Count == 0) return;
 
-        Zone zone;
-        zone = generator._zonesHierarchy._zonesTree[0];
-        _cells[0].SetZone(zone);
-
-        generator._debugger.SetCellColor(_cells[0]._gridPosition.x, _cells[0]._gridPosition.y, zone.ZoneId);
-
-        Cell vizinho;
-        for(int x = -1; x <= 1; x++)
-        {
-            for(int y = -1; y <= 1; y++)
-            {
-                if(x == y || x + y == 0) continue;
-
-                if(generator._cellsGrid.GetCell(_cells[0]._gridPosition.x + x, _cells[0]._gridPosition.y + y, out vizinho))
-                {
-                    if(!vizinho.tag)
-                    {
-                        _cells.Add(vizinho);
-                        vizinho.tag = true;
-                    }
-                }
-            }
-        }
+        TrySetNeig(1, 0);
+        TrySetNeig(-1, 0);
+        TrySetNeig(0, 1);
+        TrySetNeig(0, -1);
 
         _cells.RemoveAt(0);
-
-        /*
-        if(generator._cellsGrid.GetCell(_cells[0]._gridPosition.x + 1, _cells[0]._gridPosition.y, out vizinho))
-        {
-            if(!vizinho.tag)
-            {
-                _cells.Add(vizinho);
-                vizinho.tag = true;
-                //Debug.Log("Vizinho adicionado");
-            }
-        }
-        if(generator._cellsGrid.GetCell(_cells[0]._gridPosition.x - 1, _cells[0]._gridPosition.y, out vizinho))
-        {
-            if(!vizinho.tag)
-            {
-                _cells.Add(vizinho);
-                vizinho.tag = true;
-                //Debug.Log("Vizinho adicionado");
-            }
-        }
-        if(generator._cellsGrid.GetCell(_cells[0]._gridPosition.x, _cells[0]._gridPosition.y + 1, out vizinho))
-        {
-            if(!vizinho.tag)
-            {
-                _cells.Add(vizinho);
-                vizinho.tag = true;
-                //Debug.Log("Vizinho adicionado");
-            }
-        }
-        if(generator._cellsGrid.GetCell(_cells[0]._gridPosition.x, _cells[0]._gridPosition.y - 1, out vizinho))
-        {
-            if(!vizinho.tag)
-            {
-                _cells.Add(vizinho);
-                vizinho.tag = true;
-                //Debug.Log("Vizinho adicionado");
-            }
-        }
-        */
-        
     }
+
 
     void Temp_Flood_2()
     {
@@ -134,7 +89,9 @@ public class Ticker : MonoBehaviour
         zone = generator._zonesHierarchy._zonesTree[0];
         _cells[0].SetZone(zone);
 
+
         generator._debugger.SetCellColor(_cells[0]._gridPosition.x, _cells[0]._gridPosition.y, zone.ZoneId);
+
 
         Cell vizinho;
         for(int x = -1; x <= 1; x++)
@@ -160,5 +117,21 @@ public class Ticker : MonoBehaviour
         _cells.RemoveAt(0);
     }
 
+    void TrySetNeig(int x, int y)
+    {
+        Cell vizinho;
+        if(generator._cellsGrid.GetCell(_cells[0]._gridPosition.x + x, _cells[0]._gridPosition.y + y, out vizinho))
+        {
+            // Pula se vizinho ja tem zona.
+            if(vizinho._zone != null) return;
 
+            // Muda zona do vizinho
+            Zone zone = _cells[0]._zone;
+            vizinho.SetZone(zone);
+            generator._debugger.SetCellColor(_cells[0]._gridPosition.x + x, _cells[0]._gridPosition.y + y, zone.ZoneId);
+
+            // Add vizinho para checagem dos seus vizinhos
+            _cells.Add(vizinho);
+        }
+    }
 }
