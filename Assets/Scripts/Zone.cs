@@ -9,7 +9,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     public List<Cell> _cells; // Celulas atualmente associadas a zona.
     // Runtime const
     private string _zoneId;
-      public Color _color;
+    public Color _color;
     public Zone _parentZone; // A zona m�e pode ser usada para verificar se uma celula est� na mesma zona que outra.
     public List<Zone> _childZones;
     public List<Zone> _adjacentZones;

@@ -1,11 +1,13 @@
 using AYellowpaper.SerializedCollections;
-using com.cyborgAssets.inspectorButtonPro;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class ZoneConfig
 {
+    // TODO: adjacencies
+
     //[SerializeField] private string _zoneId;
     //[SerializeField] [Range(0, 1)] private float _relativeArea;
     [SerializeField] private string _parentZoneId;
@@ -15,9 +17,6 @@ public class ZoneConfig
     public string ParentZoneId => _parentZoneId;
 
     public Color Color;
-
-
-
 
 
     // TODO: move the jason to a class that hold all the settings for creation.
@@ -34,7 +33,7 @@ public class ZoneConfig
     */
 }
 
-
+[Obsolete]
 public class ZoneHierarchy // class to avoid copy
 {
     public List<Zone> _zonesTree;
@@ -52,14 +51,18 @@ public class ZoneHierarchy // class to avoid copy
 public class ZoneHierarchyConfig : ScriptableObject
 {
     [SerializedDictionary("ZoneId", "Settings")]
-    public SerializedDictionary<string, ZoneConfig> _zonesConfigs;
+    public SerializedDictionary<string, ZoneConfig> _zonesConfigs; // TODO: MAKE PRIVATE
     [SerializedDictionary("ZoneId", "Adjacencies")]
-    public SerializedDictionary<string, string[]> _adjacencies;
+    public SerializedDictionary<string, string[]> _adjacencies; // TODO: MAKE PRIVATE
+
+    public SerializedDictionary<string, ZoneConfig> ZonesConfigs => _zonesConfigs;
+    public SerializedDictionary<string, string[]> Adjacencies => _adjacencies;
 
     //[SerializeField] private TextAsset _hierarchyConfigJSON;
 
     public Dictionary<string, Zone> zonesInstances;
-
+    
+    [Obsolete]
     public ZoneHierarchy GetZoneHierarchy()
     {
         zonesInstances = new Dictionary<string, Zone>();
