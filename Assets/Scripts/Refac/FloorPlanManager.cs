@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,66 +29,78 @@ using UnityEngine;
             -Jardim
     */
 
-//[System.Serializable]
+public struct FloorPlanConfig
+{
+    public Vector2Int GridDimensions;
+    public Dictionary<string, ZoneConfig> ZonesConfigs;
+    public Dictionary<string, string[]> Adjacencies;
+
+    public bool IsValid()
+    {
+        if(GridDimensions.x <= 0 || GridDimensions.y <= 0) return false;
+        if(ZonesConfigs == null || ZonesConfigs.Count == 0) return false;
+        if(Adjacencies == null || Adjacencies.Count == 0) return false;
+
+        return true;
+    }
+}
+
+[Serializable]
+public struct ZoneConfig
+{
+    public string ParentZoneId;
+    public Color Color; // TODO: temporario
+
+    public bool IsValid()
+    {
+        return ParentZoneId != string.Empty;
+    }
+}
+
 public class FloorPlanManager
 {
-    // store the grid
-    // store the hierarchy
-    // store zones/rooms list
-
-    // create the data structures from config
-
-    // trigger data ready to be read by other classes, like visual debug
-
-    // methods for grid manipulation
-
-    // TODO: possibilitar a entrada de dados de outra forma. Ex gerados em outra classe.
-    [SerializeField] private GeneratorConfig _generatorConfig;
-    [SerializeField] private ZoneHierarchyConfig _hierarchyConfig;
-
     private CellsGrid _cellsGrid;
-
-    // TODO: Não sei qual melhor opção para a raiz, mas ter apenas 1 root, correspondente a area total
-    // parece ser uma opção melhor.
-    private List<Zone> _rootZones;
+    // RUNTIME DATA
+    private List<Zone> _rootZones;// TODO: Não sei qual melhor opção para a raiz, mas ter apenas 1 root, correspondente a area total parece ser uma opção melhor.
     private Dictionary<string, Zone> _zonesInstances;
-
     private bool _initialized = false;
 
 
-    public void Init()
+    public CellsGrid CellsGrid => _cellsGrid;
+    public List<Zone> RootZones => _rootZones;
+    public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
+
+
+    public bool Init(FloorPlanConfig floorPlanConfig)
     {
         Debug.Log("Initializing floor plan manager.");
 
-        if(_generatorConfig == null)
+        if(!floorPlanConfig.IsValid())
         {
-            Debug.LogError("Generator config not set.");
-            return;
+            Debug.LogError("Invalid general floor plan config.");
+            return false;
         }
+        
 
-        if(_hierarchyConfig == null)
-        {
-            Debug.LogError("Hierarchy config not set.");
-            return;
-        }
+        _rootZones = new List<Zone>(); // a list of all the first zones of the hierarchy.
+        _zonesInstances = new Dictionary<string, Zone>(); // a list/dictionary of all the zones instances, identified by the zone id.
 
-        _rootZones = new List<Zone>();
-        _zonesInstances = new Dictionary<string, Zone>();
+        _cellsGrid = new CellsGrid(floorPlanConfig.GridDimensions);
 
-        _cellsGrid = new CellsGrid(_generatorConfig.GridDimensions);
-
-        CreateZonesHierarchy(_hierarchyConfig);
+        CreateZonesHierarchy(floorPlanConfig.ZonesConfigs, floorPlanConfig.Adjacencies);
 
         _initialized = true;
+
+        return _initialized;
     }
 
 
-    void CreateZonesHierarchy(ZoneHierarchyConfig config)
+    void CreateZonesHierarchy(Dictionary<string, ZoneConfig> zonesConfigs, Dictionary<string, string[]> adjacencies)
     {
         _zonesInstances = new Dictionary<string, Zone>();
 
         // Create all zones.
-        foreach(var zone in config.ZonesConfigs)
+        foreach(var zone in zonesConfigs)
         {
             _zonesInstances.Add(zone.Key, new Zone(zone.Key, zone.Value.Color));
         }
@@ -95,7 +108,7 @@ public class FloorPlanManager
         // Set the parents and children of the zones.
         foreach(var zone in _zonesInstances)
         {
-            string parentZoneId = config.ZonesConfigs[zone.Key].ParentZoneId;
+            string parentZoneId = zonesConfigs[zone.Key].ParentZoneId;
 
             if (parentZoneId != string.Empty)
             {
@@ -106,7 +119,7 @@ public class FloorPlanManager
         }
 
         // For each zone with adjacencies configured, set the adjacent zones.
-        foreach(var zoneId in config.Adjacencies)
+        foreach(var zoneId in adjacencies)
         {
             foreach(var adjacentZoneId in zoneId.Value)
             {

@@ -21,23 +21,23 @@ using UnityEngine;
 public class Generator : MonoBehaviour
 {
     //[NaughtyAttributes.Expandable]
-    public GeneratorConfig _generatorConfig;
+    //public GeneratorConfig _generatorConfig;
     //[NaughtyAttributes.Expandable]
-    public ZoneHierarchyConfig _hierarchyConfig;
+    //public ZoneHierarchyConfig _hierarchyConfig;
 
     public CellsGrid _cellsGrid;
     //public Grid<float> _weightsGrid;
 
     public GridVisualDebugger _debugger;
 
-    public ZoneHierarchy _zonesHierarchy;
+    //public ZoneHierarchy _zonesHierarchy;
 
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        _cellsGrid = new CellsGrid(_generatorConfig.GridDimensions);
+        //_cellsGrid = new CellsGrid(_generatorConfig.GridDimensions);
         //_weightsGrid = new Grid<float>(_generatorConfig.GridDimensions, 0);
 
         Generate();
@@ -54,11 +54,11 @@ public class Generator : MonoBehaviour
     async void Generate()
     {
 
-        _zonesHierarchy = _hierarchyConfig.GetZoneHierarchy();
+        //_zonesHierarchy = _hierarchyConfig.GetZoneHierarchy();
 
         //RandomSetCells(_zonesHierarchy._zonesTree);
 
-        PrintAdjacencies();
+        //PrintAdjacencies();
 
         await _debugger.CreateVisualGrid(_cellsGrid);
     }
@@ -83,7 +83,7 @@ public class Generator : MonoBehaviour
         }
     }
 
-
+/*
     public void PrintAdjacencies()
     {
         string result;
@@ -98,12 +98,13 @@ public class Generator : MonoBehaviour
             Debug.Log(result);
         }
     }
-
-
+*/
+/*
     [ProButton]
     public void SelectZone(string zoneId)
     {
         Debug.Log("Select: " +  zoneId);
         _debugger.HighlightZone(_zonesHierarchy._zonesDictionary[zoneId]._cells);
     }
+    */
 }

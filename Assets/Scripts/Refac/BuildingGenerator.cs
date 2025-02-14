@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class BuildingGenerator : MonoBehaviour
 {
-    // Uma varialvel com a ref de uma classe serializada exposta no editor "nunca" será nula.
+    // OBS: Uma varialvel com a ref de uma classe serializada exposta no editor "nunca" será nula.
     [SerializeField] private FloorPlanGenerator _floorPlanGenerator;
+    [SerializeField] private BuildingDataManager _buildingDataManager;
 
     void Start()
     {
@@ -19,6 +20,9 @@ public class BuildingGenerator : MonoBehaviour
     [ProButton]
     public void GenerateBuilding()
     {
-        _floorPlanGenerator.Init();
+        // generate
+        // wait generate
+        // show result
+        _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
     }
 }

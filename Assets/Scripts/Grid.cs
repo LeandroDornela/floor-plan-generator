@@ -80,22 +80,26 @@ public class CellsGrid // using class to facilitate passing values by reference
         }
     }
 
-    /*
     public void PrintGrid()
+    {
+        Debug.Log(GridToString());
+    }
+
+    public string GridToString()
     {
         string result = "\n";
         for(int i = 0; i < _dimmensions.y; i++)
         {
-            result += i.ToString() + ":";
+            //result += i.ToString() + ":";
             for(int j = 0; j < _dimmensions.x; j++)
             {
-                result += "[ " + _cells[i * _dimmensions.x + j] + " ]";
+                result += "[ " + _cells[i * _dimmensions.x + j]._zone?.ZoneId + " ]";
             }
             result += "\n";
         }
-        Debug.Log(result);
+        return result;
     }
-    */
+
 
     public static Vector2Int ArrayIndexToMatrix(int index, int size_x)
     {
