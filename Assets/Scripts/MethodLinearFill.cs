@@ -1,12 +1,15 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
+using System.Threading;
 
 [System.Serializable]
 public class MethodLinearFill : FPGenerationMethod
 {
     private int x, y, WIDTH, HEIGTH, counter;
     private float _delay = 0.01f;
+    private bool _fastMode = false;
+    private CancellationTokenSource _cts;
 
     public async override UniTask<bool> Run()
     {
@@ -16,17 +19,40 @@ public class MethodLinearFill : FPGenerationMethod
             return false;
         }
 
+        _cts = new CancellationTokenSource();
+        EditorApplication.playModeStateChanged += PlayModeStateChanged;
+
         x = 0;
         y = 0;
         counter = 0;
         WIDTH = _floorPlanManager.CellsGrid.Dimmensions.x;
         HEIGTH = _floorPlanManager.CellsGrid.Dimmensions.y;
 
-        AsyncTicker asyncTicker = AsyncTicker.Instantiate();
+        if(_fastMode)
+        {
+            await UniTask.WaitUntil(SyncChangeCellZone, cancellationToken: _cts.Token);
+        }
+        else
+        {
+            AsyncTicker asyncTicker = AsyncTicker.Instantiate();
+            asyncTicker.Begin(ChangeCellZone, _delay);
+                await UniTask.WaitUntil(() => counter == WIDTH * HEIGTH);
+            asyncTicker.End();
+        }
 
-        asyncTicker.Begin(ChangeCellZone, _delay);
-            await UniTask.WaitUntil(() => counter == WIDTH * HEIGTH);
-        asyncTicker.End();
+
+        EditorApplication.playModeStateChanged -= PlayModeStateChanged;
+
+        return true;
+    }
+
+    bool SyncChangeCellZone()
+    {
+        while(counter < WIDTH * HEIGTH)
+        {
+            ChangeCellZone();
+        }
+
         return true;
     }
 
@@ -41,13 +67,20 @@ public class MethodLinearFill : FPGenerationMethod
         }
 
         Cell cell;
-        Zone zone;
         _floorPlanManager.CellsGrid.GetCell(x, y, out cell);
-        zone = _floorPlanManager.RootZones[Random.Range(0, _floorPlanManager.RootZones.Count)];
+        Zone zone = _floorPlanManager.RootZones[Random.Range(0, _floorPlanManager.RootZones.Count)];
         zone?.AddCell(cell);
 
         counter++;
 
         TriggerOnCellChanged(cell);
+    }
+
+    void PlayModeStateChanged(PlayModeStateChange state)
+    {
+        if(state == PlayModeStateChange.ExitingPlayMode)
+        {
+            _cts.Cancel();
+        }
     }
 }

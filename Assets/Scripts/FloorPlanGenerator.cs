@@ -71,7 +71,7 @@ public class FloorPlanGenerator
         _running = true;
         
         _floorPlanManager.CellsGrid.PrintGrid();
-        await _currentMethod.Run();
+            await _currentMethod.Run();
         _floorPlanManager.CellsGrid.PrintGrid();
 
         _running = false;

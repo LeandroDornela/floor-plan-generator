@@ -2,17 +2,24 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using System.Threading;
 
 [System.Serializable]
 public class MethodFloodFill : FPGenerationMethod
 {
     private List<Cell> _cells;
+    private bool _fastMode = false;
+
+    private CancellationTokenSource _cts;
 
     public override bool Init(FloorPlanManager floorPlanManager)
     {
         Debug.Log("Initializing MethodFloodFill.");
 
         base.Init(floorPlanManager);
+
+        _cts = new CancellationTokenSource();
+        EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
         _cells = new List<Cell>();
         SetZoneToCell(2,3,0);
@@ -32,10 +39,31 @@ public class MethodFloodFill : FPGenerationMethod
             return false;
         }
 
-        AsyncTicker asyncTicker = AsyncTicker.Instantiate();
-        asyncTicker.Begin(Flood, 0.01f);
-            await UniTask.WaitUntil(() => _cells.Count == 0);
-        asyncTicker.End();
+        if(_fastMode)
+        {
+            await UniTask.WaitUntil(SyncFlood);
+        }
+        else
+        {
+            AsyncTicker asyncTicker = AsyncTicker.Instantiate();
+            asyncTicker.Begin(Flood, 0.01f);
+                await UniTask.WaitUntil(() => _cells.Count == 0);
+            asyncTicker.End();
+        }
+        
+        EditorApplication.playModeStateChanged -= PlayModeStateChanged;
+
+        return true;
+    }
+
+    bool SyncFlood()
+    {
+        while(_cells.Count > 0)
+        {
+            if(!Application.isPlaying) break;
+
+            Flood();
+        }
 
         return true;
     }
@@ -44,8 +72,7 @@ public class MethodFloodFill : FPGenerationMethod
     void SetZoneToCell(int x, int y, int zoneIdIndex)
     {
         _floorPlanManager.CellsGrid.GetCell(x, y, out Cell cell);
-        Zone zone;
-        zone = _floorPlanManager.RootZones[zoneIdIndex];
+        Zone zone = _floorPlanManager.RootZones[zoneIdIndex];
         _cells.Add(cell);
         zone.AddCell(cell);
 
@@ -81,6 +108,14 @@ public class MethodFloodFill : FPGenerationMethod
             _cells.Add(vizinho);
 
             TriggerOnCellChanged(vizinho);
+        }
+    }
+
+    void PlayModeStateChanged(PlayModeStateChange state)
+    {
+        if(state == PlayModeStateChange.ExitingPlayMode)
+        {
+            _cts.Cancel();
         }
     }
 }
