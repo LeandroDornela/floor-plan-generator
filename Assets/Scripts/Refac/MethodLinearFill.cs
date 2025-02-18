@@ -1,19 +1,18 @@
-using System.Threading.Tasks;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using UnityEditorInternal;
 using UnityEditor;
 
 [System.Serializable]
 public class MethodLinearFill : FPGenerationMethod
 {
     private int x, y, WIDTH, HEIGTH, counter;
+    private float _delay = 0.01f;
 
     public async override UniTask<bool> Run()
     {
         if(!EditorApplication.isPlaying)
         {
-            Debug.LogError("Avoid using it outside play mode.");
+            Debug.LogError("Don't use it outside play mode.");
             return false;
         }
 
@@ -25,8 +24,8 @@ public class MethodLinearFill : FPGenerationMethod
 
         AsyncTicker asyncTicker = AsyncTicker.Instantiate();
 
-        asyncTicker.Begin(ChangeCellZone, 0.05f);
-        await UniTask.WaitUntil(() => counter == WIDTH * HEIGTH);
+        asyncTicker.Begin(ChangeCellZone, _delay);
+            await UniTask.WaitUntil(() => counter == WIDTH * HEIGTH);
         asyncTicker.End();
         return true;
     }
@@ -36,11 +35,16 @@ public class MethodLinearFill : FPGenerationMethod
         x = counter % WIDTH;
         y = counter / WIDTH;
 
+        if(counter == WIDTH * HEIGTH)
+        {
+            return;
+        }
+
         Cell cell;
         Zone zone;
         _floorPlanManager.CellsGrid.GetCell(x, y, out cell);
-        zone = _floorPlanManager.RootZones[0];
-        cell.SetZone(zone);
+        zone = _floorPlanManager.RootZones[Random.Range(0, _floorPlanManager.RootZones.Count)];
+        zone?.AddCell(cell);
 
         counter++;
 

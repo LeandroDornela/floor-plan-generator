@@ -18,11 +18,15 @@ public class BuildingGenerator : MonoBehaviour
     }
 
     [ProButton]
-    public void GenerateBuilding()
+    public async void GenerateBuilding()
     {
         // generate
         // wait generate
         // show result
-        _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
+        if(!Application.isPlaying) return;
+        while(true)
+        {
+            await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
+        }
     }
 }

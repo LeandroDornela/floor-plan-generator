@@ -20,15 +20,21 @@ MonoBehaviour:
       - Key: 0
         Value:
           ParentZoneId: 
-          Color: {r: 1, g: 0, b: 0, a: 1}
+      - Key: 3
+        Value:
+          ParentZoneId: 
+      - Key: 4
+        Value:
+          ParentZoneId: 
       - Key: 1
         Value:
           ParentZoneId: 
-          Color: {r: 0.016251326, g: 1, b: 0, a: 1}
       - Key: 2
         Value:
           ParentZoneId: 1
-          Color: {r: 0, g: 0.01317215, b: 1, a: 1}
+      - Key: 5
+        Value:
+          ParentZoneId: 
     Adjacencies:
       _serializedList:
       - Key: 0

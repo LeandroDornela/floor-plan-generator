@@ -31,6 +31,7 @@ public class FloorPlanGenerator
     [SerializeField] private bool _enableDebug = false;
 
     private bool _initialized = false;
+    private bool _running = false;
 
     private bool Init(FloorPlanConfig floorPlanConfig)
     {
@@ -50,9 +51,6 @@ public class FloorPlanGenerator
             case FPGenerationMethodType.FloodFill:
                 _currentMethod = new MethodFloodFill();
                 break;
-            case FPGenerationMethodType.FloodFillMult:
-                _currentMethod = new MethodFloodFillMult();
-                break;
         }
         _currentMethod.Init(_floorPlanManager);  // TODO: check init success
 
@@ -60,7 +58,7 @@ public class FloorPlanGenerator
         // ====== Visual debugger setup ======
         if(_sceneDebugger != null)
         {
-            if (_enableDebug == true) _sceneDebugger.Init(this);
+            if (_enableDebug == true) _sceneDebugger.Init(this, floorPlanConfig);
             else Object.Destroy(_sceneDebugger);
         }
 
@@ -69,12 +67,23 @@ public class FloorPlanGenerator
         return _initialized;
     }
 
-    public async UniTaskVoid GenerateFloorPlan(FloorPlanConfig floorPlanConfig)
+    public async UniTask<bool> GenerateFloorPlan(FloorPlanConfig floorPlanConfig)
     {
+        if(_running)
+        {
+            Debug.LogWarning("Generation in process, please wait.");
+            return false;
+        }
+
         Init(floorPlanConfig);
+
+        _running = true;
         
         _floorPlanManager.CellsGrid.PrintGrid();
         await _currentMethod.Run();
         _floorPlanManager.CellsGrid.PrintGrid();
+
+        _running = false;
+        return true;
     }
 }

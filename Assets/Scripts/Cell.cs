@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class Cell // dando preferencia para classes para passar por ref
 {
-    public Zone _zone;
-    public Vector2Int _gridPosition;
+    private Zone _zone;
+    private Vector2Int _gridPosition;
     
-    public VisualCell visualCell;
-
-    public bool tag = false;
+    //public VisualCell visualCell;
 
     public Dictionary<string, string> atributos;
+
+    public Zone Zone => _zone;
+    public Vector2Int GridPosition => _gridPosition;
+
 
     public Cell(int gridPositionX, int gridPositionY, Zone zone = null)
     {

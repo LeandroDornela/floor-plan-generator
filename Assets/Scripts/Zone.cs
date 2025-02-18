@@ -9,20 +9,17 @@ public class Zone // similar a uma estrutura de nos em arvore
     public List<Cell> _cells; // Celulas atualmente associadas a zona.
     // Runtime const
     private string _zoneId;
-    public Color _color;
     public Zone _parentZone; // A zona m�e pode ser usada para verificar se uma celula est� na mesma zona que outra.
     public List<Zone> _childZones;
     public List<Zone> _adjacentZones;
-    //public bool _isLeaf = false; // Ou isRoom.
 
   
 
     public string ZoneId => _zoneId;
 
-    public Zone(string zoneId, Color color)
+    public Zone(string zoneId)
     {
         _zoneId = zoneId;
-        _color = color;
         _parentZone = null;
         _cells = new List<Cell>();
         _childZones = new List<Zone>();
@@ -32,16 +29,8 @@ public class Zone // similar a uma estrutura de nos em arvore
 
     public Zone(string zoneId, Zone parentZone)
     {
-        //_config = config;
         _zoneId = zoneId;
         _parentZone = parentZone;
-
-        /*
-        if(config.Subzones.Length == 0)
-        {
-            _isLeaf = true;
-        }
-        */
 
         _cells = new List<Cell>();
     }
@@ -49,14 +38,51 @@ public class Zone // similar a uma estrutura de nos em arvore
 
     public void AddCell(Cell cell)
     {
-        // TODO: checar se a celula ja esta na zona.
+        if(cell == null)
+        {
+            Debug.LogError("Tryng to add a null cell.");
+            return;
+        }
+
+        // TODO: evitar essa verificação, pode ser custoso. Fazer de forma que a culala não esteja na zona.
+        if(_cells.Contains(cell))
+        {
+            Debug.LogError("Tryng to add an exiting cell.");
+            return;
+        }
+
         _cells.Add(cell);
-        //cell.SetZone(this);
+        cell.SetZone(this);
+    }
+
+    public void RemoveCell(Cell cell)
+    {
+        if(cell == null)
+        {
+            Debug.LogError("Tryng to remove a null cell.");
+            return;
+        }
+
+        if(_cells.Contains(cell))
+        {
+            _cells.Remove(cell);
+            cell.SetZone(null);
+        }
+        else
+        {
+            Debug.LogError("The cell isn't in the zone.");
+        }
     }
 
 
     public void AddChildZone(Zone childZone)
     {
+        if(childZone == null)
+        {
+            Debug.LogError("Tryng to add a null child.");
+            return;
+        }
+
         if(!_childZones.Contains(childZone))
         {
             _childZones.Add(childZone);

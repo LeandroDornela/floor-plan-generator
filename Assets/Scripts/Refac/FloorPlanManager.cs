@@ -49,7 +49,6 @@ public struct FloorPlanConfig
 public struct ZoneConfig
 {
     public string ParentZoneId;
-    public Color Color; // TODO: temporario
 
     public bool IsValid()
     {
@@ -102,7 +101,7 @@ public class FloorPlanManager
         // Create all zones.
         foreach(var zone in zonesConfigs)
         {
-            _zonesInstances.Add(zone.Key, new Zone(zone.Key, zone.Value.Color));
+            _zonesInstances.Add(zone.Key, new Zone(zone.Key));
         }
 
         // Set the parents and children of the zones.

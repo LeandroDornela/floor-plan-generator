@@ -93,7 +93,7 @@ public class CellsGrid // using class to facilitate passing values by reference
             //result += i.ToString() + ":";
             for(int j = 0; j < _dimmensions.x; j++)
             {
-                result += "[ " + _cells[i * _dimmensions.x + j]._zone?.ZoneId + " ]";
+                result += "[" + _cells[i * _dimmensions.x + j].Zone?.ZoneId + "]";
             }
             result += "\n";
         }

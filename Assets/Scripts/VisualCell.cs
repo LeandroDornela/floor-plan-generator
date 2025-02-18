@@ -1,10 +1,9 @@
-using UnityEditor;
 using UnityEngine;
 
 public class VisualCell : MonoBehaviour
 {
     public Renderer _renderer;
-    public Cell _cell;
+    private Cell _cell;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,6 +20,7 @@ public class VisualCell : MonoBehaviour
     public void Init(Cell cell)
     {
         _cell = cell;
+        gameObject.name = "Cell_" + cell.GridPosition.x + "_" + cell.GridPosition.y;
     }
 
     public void SetColor(Color color)
