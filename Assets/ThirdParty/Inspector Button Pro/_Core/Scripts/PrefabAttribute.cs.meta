@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 323a1a56f47364819b514f82d924614d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 151474
+  packageName: Inspector Button Pro - Editor Buttons With Parameters
+  packageVersion: 2.0.0
+  assetPath: Assets/Inspector Button Pro/_Core/Scripts/PrefabAttribute.cs
+  uploadId: 619629

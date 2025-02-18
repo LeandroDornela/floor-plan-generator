@@ -1,0 +1,70 @@
+{
+    "_zoneId": "Terrain",
+    "_relativeArea": 1.0,
+    "_debugColor": {
+        "r": 0.23584908246994019,
+        "g": 0.23584908246994019,
+        "b": 0.23584908246994019,
+        "a": 1.0
+    },
+    "_subzones": [
+        {
+            "_zoneId": "Interior",
+            "_relativeArea": 0.699999988079071,
+            "_debugColor": {
+                "r": 1.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "_subzones": [
+                {
+                    "_zoneId": "Private",
+                    "_relativeArea": 0.5,
+                    "_debugColor": {
+                        "r": 1.0,
+                        "g": 0.34198859333992007,
+                        "b": 0.0,
+                        "a": 1.0
+                    },
+                    "_subzones": [],
+                    "_adjacentZonesIds": [
+                        "Public"
+                    ]
+                },
+                {
+                    "_zoneId": "Public",
+                    "_relativeArea": 0.5,
+                    "_debugColor": {
+                        "r": 1.0,
+                        "g": 0.7134177684783936,
+                        "b": 0.0,
+                        "a": 1.0
+                    },
+                    "_subzones": [],
+                    "_adjacentZonesIds": [
+                        "Private"
+                    ]
+                }
+            ],
+            "_adjacentZonesIds": [
+                "Exterior"
+            ]
+        },
+        {
+            "_zoneId": "Exterior",
+            "_relativeArea": 0.30000001192092898,
+            "_debugColor": {
+                "r": 0.028681278228759767,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "_subzones": [],
+            "_adjacentZonesIds": [
+                "Interior"
+            ]
+        }
+    ],
+    "_adjacentZonesIds": []
+}
