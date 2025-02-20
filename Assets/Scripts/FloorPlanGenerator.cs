@@ -4,7 +4,8 @@ using Cysharp.Threading.Tasks;
 public enum FPGenerationMethodType
 {
     LinearFill,
-    FloodFill
+    FloodFill,
+    FloodFillWeighted
 }
 
 
@@ -41,6 +42,9 @@ public class FloorPlanGenerator
                 break;
             case FPGenerationMethodType.FloodFill:
                 _currentMethod = new MethodFloodFill();
+                break;
+            case FPGenerationMethodType.FloodFillWeighted:
+                _currentMethod = new MethodFloodFillWeighted();
                 break;
         }
         _currentMethod.Init(_floorPlanManager);  // TODO: check init success

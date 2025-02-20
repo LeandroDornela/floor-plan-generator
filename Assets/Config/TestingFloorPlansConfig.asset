@@ -20,19 +20,16 @@ MonoBehaviour:
       - Key: 0
         Value:
           ParentZoneId: 
-      - Key: 3
-        Value:
-          ParentZoneId: 
-      - Key: 4
-        Value:
-          ParentZoneId: 
       - Key: 1
         Value:
           ParentZoneId: 
       - Key: 2
         Value:
-          ParentZoneId: 1
-      - Key: 5
+          ParentZoneId: 
+      - Key: 3
+        Value:
+          ParentZoneId: 
+      - Key: 4
         Value:
           ParentZoneId: 
     Adjacencies:
