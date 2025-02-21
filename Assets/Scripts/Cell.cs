@@ -30,4 +30,18 @@ public class Cell // dando preferencia para classes para passar por ref
     {
         return zoneToCheck == _zone;
     }
+
+    public List<Zone> GetParentZonesHierarchy()
+    {
+        List<Zone> parentZones = new List<Zone>();
+
+        Zone currentZone = _zone;
+        while(currentZone != null)
+        {
+            parentZones.Add(currentZone);
+            currentZone = currentZone._parentZone;
+        }
+
+        return parentZones;
+    }
 }

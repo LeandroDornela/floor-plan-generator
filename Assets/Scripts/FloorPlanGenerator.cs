@@ -5,7 +5,8 @@ public enum FPGenerationMethodType
 {
     LinearFill,
     FloodFill,
-    FloodFillWeighted
+    FloodFillWeighted,
+    Growth
 }
 
 
@@ -31,7 +32,10 @@ public class FloorPlanGenerator
 
         // ====== Floor plan manager setup ======
         _floorPlanManager = new FloorPlanManager();
-        _floorPlanManager.Init(floorPlanConfig); // TODO: check init success
+        _floorPlanManager.Init(floorPlanConfig); // TODO check init success
+                                                 // <!--
+                                                 // order:0
+                                                 // -->
 
 
         // ====== Generation algorthm setup ======
@@ -46,8 +50,14 @@ public class FloorPlanGenerator
             case FPGenerationMethodType.FloodFillWeighted:
                 _currentMethod = new MethodFloodFillWeighted();
                 break;
+            case FPGenerationMethodType.Growth:
+                _currentMethod = new MethodGrowth();
+                break;
         }
-        _currentMethod.Init(_floorPlanManager);  // TODO: check init success
+        _currentMethod.Init(_floorPlanManager);  // TODO check init success
+                                                 // <!--
+                                                 // order:-10
+                                                 // -->
 
 
         // ====== Visual debugger setup ======

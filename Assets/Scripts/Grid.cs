@@ -110,9 +110,25 @@ public class CellsGrid // using class to facilitate passing values by reference
         return size_x * y + x;
     }
 
+    public void AssignCellToZone(int x, int y, Zone zone)
+    {
+        if(GetCell(x, y, out Cell cell))
+        {
+            if(cell.Zone != null)
+            {
+                cell.Zone.RemoveCell(cell);
+            }
 
-    // O uso de Actions para isso reduz performance, prefira itera��o direta. TODO: verificar se � possivel passar a expres�o lambda direto sem uso de Actions e se isso � mais rapido.
+            zone.AddCell(cell);
+        }
+    }
+
+
+    // O uso de Actions para isso reduz performance, prefira itera��o direta. TODO verificar se � possivel passar a expres�o lambda direto sem uso de Actions e se isso � mais rapido.
     // USE DE REF COM ACTIONS N�O � PERMITIDO
+    // <!--
+    // order:-40
+    // -->
     /*
     public void ForEachCellOnGrid(Action<T> action)
     {

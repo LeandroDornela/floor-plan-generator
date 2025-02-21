@@ -285,7 +285,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _floorPlanGenerator._generationMethodType
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7173197788445162609, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: m_LocalPosition.x

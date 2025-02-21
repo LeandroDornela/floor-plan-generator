@@ -14,26 +14,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
   - FloorPlanId: Plan 0
-    GridDimensions: {x: 15, y: 15}
+    GridDimensions: {x: 20, y: 20}
     ZonesConfigs:
       _serializedList:
       - Key: 0
         Value:
           ParentZoneId: 
+          _presetArea: 1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0
       - Key: 1
         Value:
-          ParentZoneId: 
+          ParentZoneId: 0
+          _presetArea: 
       - Key: 2
         Value:
-          ParentZoneId: 
+          ParentZoneId: 0
+          _presetArea: 
       - Key: 3
         Value:
-          ParentZoneId: 
+          ParentZoneId: 0
+          _presetArea: 
       - Key: 4
         Value:
-          ParentZoneId: 
+          ParentZoneId: 0
+          _presetArea: 
     Adjacencies:
       _serializedList:
-      - Key: 0
+      - Key: 1
         Value:
-        - 1
+        - 2
+        - 3
+        - 4
+    ZonesAreasPresets:
+      _serializedList: []

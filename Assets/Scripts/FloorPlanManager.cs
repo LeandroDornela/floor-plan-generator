@@ -49,10 +49,27 @@ public struct FloorPlanConfig
 public struct ZoneConfig
 {
     public string ParentZoneId;
+    
+    [Obsolete]
+    [SerializeField] private string _presetArea;
 
     public bool IsValid()
     {
         return ParentZoneId != string.Empty;
+    }
+
+    [Obsolete]
+    public int[] PresetArea()
+    {
+        string[] area = _presetArea.Split(',');
+        int[] presetArea = new int[area.Length];
+
+        for(int i = 0; i < area.Length; i++)
+        {
+            presetArea[i] = int.Parse(area[i]);
+        }
+
+        return presetArea;
     }
 }
 
@@ -60,13 +77,18 @@ public class FloorPlanManager
 {
     private CellsGrid _cellsGrid;
     // RUNTIME DATA
-    private List<Zone> _rootZones;// TODO: Não sei qual melhor opção para a raiz, mas ter apenas 1 root, correspondente a area total parece ser uma opção melhor.
+    [Obsolete]private List<Zone> _rootZones;// TODO Não sei qual melhor opção para a raiz, mas ter apenas 1 root, correspondente a area total parece ser uma opção melhor.
+                                            // <!--
+                                            // order:-20
+                                            // -->
+    private Zone _rootZone;
     private Dictionary<string, Zone> _zonesInstances;
     private bool _initialized = false;
 
 
     public CellsGrid CellsGrid => _cellsGrid;
-    public List<Zone> RootZones => _rootZones;
+    [Obsolete]public List<Zone> RootZones => _rootZones;
+    public Zone RootZone => _rootZone;
     public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
 
 
@@ -127,13 +149,25 @@ public class FloorPlanManager
             }
         }
 
-        // TODO: Assuming the can start with multple zones, skipping the first zone that shold be the full terrain.
+        // TODO Assuming the can start with multple zones, skipping the first zone that shold be the full terrain.
+        // <!--
+        // order:-30
+        // -->
         foreach(var zone in _zonesInstances)
         {
             // If is a root.
             if(zone.Value._parentZone == null)
             {
                 _rootZones.Add(zone.Value);
+
+                if(_rootZone == null)
+                {
+                    _rootZone = zone.Value;
+                }
+                else
+                {
+                    Debug.LogError("Only one root zone is allowed. Add a parent to all zones except the root.");
+                }
             }
         }
     }

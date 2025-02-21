@@ -87,8 +87,17 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     void OnCellsGridChanged(CellsGrid cellsGrid)
     {
         if(!_initialized) { return; }
+
+        _gridPreview = _floorPlanGenerator._floorPlanManager.CellsGrid.GridToString();
         
-        Debug.Log("Cells grid changed.");
+        for(int i = 0; i < cellsGrid._cells.Length; i++)
+        {
+            Zone cellZone = cellsGrid._cells[i].Zone;
+            if(cellZone != null)
+            {
+                _cellsGraphicsInstances[i].SetColor(_debugColors[cellZone.ZoneId]);
+            }
+        }
     }
 
 

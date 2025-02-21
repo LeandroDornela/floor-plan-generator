@@ -21,9 +21,9 @@ public class BuildingGenerator : MonoBehaviour
     public async void GenerateBuilding()
     {
         if(!Application.isPlaying) return;
-        while(true)
-        {
+        //while(true)
+        //{
             await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
-        }
+        //}
     }
 }
