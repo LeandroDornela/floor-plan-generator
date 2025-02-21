@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /*
@@ -59,12 +60,12 @@ public class CellsGrid // using class to facilitate passing values by reference
     {
         if(IsValidPosition(x, y))
         {
-            cell = _cells[MatrixToArrayIndex(x, y, _dimmensions.x)];
+            cell = _cells[Utils.MatrixToArrayIndex(x, y, _dimmensions.x)];
             return true;
         }
         else
         {
-            Debug.LogWarning($"Invalid grid position:{x},{y}");
+            //Debug.LogWarning($"Invalid grid position:{x},{y}");
             cell = default;
             return false;
         }
@@ -92,23 +93,19 @@ public class CellsGrid // using class to facilitate passing values by reference
             //result += i.ToString() + ":";
             for(int j = 0; j < _dimmensions.x; j++)
             {
-                result += "[" + _cells[i * _dimmensions.x + j].Zone?.ZoneId + "]";
+                Zone zone = _cells[i * _dimmensions.x + j].Zone;
+                string num = "--";
+                if(zone != null)
+                {
+                    num = Int32.Parse(zone.ZoneId).ToString("D2");
+                }
+                result += $"[{num}]";
             }
             result += "\n";
         }
         return result;
     }
 
-
-    public static Vector2Int ArrayIndexToMatrix(int index, int size_x)
-    {
-        return new Vector2Int(index / size_x, index % size_x);
-    }
-
-    public static int MatrixToArrayIndex(int x, int y, int size_x)
-    {
-        return size_x * y + x;
-    }
 
     public void AssignCellToZone(int x, int y, Zone zone)
     {

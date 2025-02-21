@@ -106,7 +106,7 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
         if(!_initialized) { return; }
 
         _gridPreview = _floorPlanGenerator._floorPlanManager.CellsGrid.GridToString();
-        int index = CellsGrid.MatrixToArrayIndex(cell.GridPosition.x, cell.GridPosition.y, _dimmensions.x);
+        int index = Utils.MatrixToArrayIndex(cell.GridPosition.x, cell.GridPosition.y, _dimmensions.x);
         _cellsGraphicsInstances[index].SetColor(_debugColors[cell.Zone.ZoneId]);
     }
 
@@ -114,7 +114,6 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     void OnDrawGizmos()
     {
         if(!_initialized) { return; }
-
         Handles.Label(Vector3.zero, _gridPreview);
     }
 

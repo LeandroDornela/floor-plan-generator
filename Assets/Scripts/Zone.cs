@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 
 /*
@@ -168,11 +169,16 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <returns></returns>
     public float GetZoneAspect()
     {
-        return _topCells.numberOfCells / _leftCells.numberOfCells;
+        return (float)_topCells.numberOfCells / _leftCells.numberOfCells;
     }
 
-    public bool TryGrowthTop(CellsGrid cellsGrid)
+    public bool TryGrowTop(CellsGrid cellsGrid)
     {
+        if(_cells.Count == 0)
+        {
+            Debug.LogError("No cells to grow.");
+        }
+
         // Check if all cells on top of the top cells are available.
         for(int x = 0; x < _topCells.numberOfCells; x++)
         {
@@ -205,8 +211,13 @@ public class Zone // similar a uma estrutura de nos em arvore
     }
 
 
-    public bool TryGrowthBottom(CellsGrid cellsGrid)
+    public bool TryGrowBottom(CellsGrid cellsGrid)
     {
+        if(_cells.Count == 0)
+        {
+            Debug.LogError("No cells to grow.");
+        }
+
         // Check if all cells on top of the top cells are available.
         for(int x = 0; x < _bottomCells.numberOfCells; x++)
         {
@@ -237,8 +248,13 @@ public class Zone // similar a uma estrutura de nos em arvore
     }
 
 
-    public bool TryGrowthRight(CellsGrid cellsGrid)
+    public bool TryGrowRight(CellsGrid cellsGrid)
     {
+        if(_cells.Count == 0)
+        {
+            Debug.LogError("No cells to grow.");
+        }
+
         // Check if all cells on top of the top cells are available.
         for(int y = 0; y < _rightCells.numberOfCells; y++)
         {
@@ -268,8 +284,13 @@ public class Zone // similar a uma estrutura de nos em arvore
         return true;
     }
 
-    public bool TryGrowthLeft(CellsGrid cellsGrid)
+    public bool TryGrowLeft(CellsGrid cellsGrid)
     {
+        if(_cells.Count == 0)
+        {
+            Debug.LogError("No cells to grow.");
+        }
+
         // Check if all cells on top of the top cells are available.
         for(int y = 0; y < _leftCells.numberOfCells; y++)
         {

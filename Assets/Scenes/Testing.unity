@@ -179,7 +179,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 8
   m_Depth: -1
   m_CullingMask:
@@ -204,13 +204,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 6.83, y: 6.4, z: -7}
+  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
+  m_LocalPosition: {x: -3.46, y: 12.18, z: -23.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!1001 &8564757141131690427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,6 +222,46 @@ PrefabInstance:
     - target: {fileID: 378047528774288143, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: m_Name
       value: BuildingGenerator
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[0].Key
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[1].Key
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[2].Key
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[3].Key
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[4].Key
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[5].Key
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[6].Key
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[7].Key
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[8].Key
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[0].Value.b
@@ -244,8 +284,16 @@ PrefabInstance:
       value: 0.08884287
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[2].Value.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[2].Value.g
       value: 0.1387968
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[2].Value.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[3].Value.b
@@ -282,6 +330,54 @@ PrefabInstance:
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[5].Value.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[6].Value.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[6].Value.b
+      value: 0.015352436
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[6].Value.g
+      value: 0.6509434
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[6].Value.r
+      value: 0.52929115
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[7].Value.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[7].Value.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[7].Value.g
+      value: 0.40008587
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[7].Value.r
+      value: 0.9811321
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[8].Value.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[8].Value.b
+      value: 0.745283
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[8].Value.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[8].Value.r
+      value: 0.43809798
       objectReference: {fileID: 0}
     - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _floorPlanGenerator._generationMethodType

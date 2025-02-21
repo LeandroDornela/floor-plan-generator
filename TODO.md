@@ -6,6 +6,9 @@ Project Description
 
 ### Todo
 
+- [ ] classe de utils e random. Pode ser a mesma  
+- [ ] Mover "AssignCellToZone" para floorPlanManager  
+- [ ] talvez o ideal é a classe da zona não modificar a grid diretamente. Adicionar metor de verificação para crescer e de acesso as variaveis para q o metodo faça as mudanças. Talvez essa modificação pode ficar no floor plan manager  
 - [ ] criqar namespace  
 - [ ] trocar delegates por actions, ou não  
 

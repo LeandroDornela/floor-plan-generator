@@ -31,11 +31,27 @@ MonoBehaviour:
           _presetArea: 
       - Key: 3
         Value:
-          ParentZoneId: 0
+          ParentZoneId: 1
           _presetArea: 
       - Key: 4
         Value:
-          ParentZoneId: 0
+          ParentZoneId: 1
+          _presetArea: 
+      - Key: 5
+        Value:
+          ParentZoneId: 2
+          _presetArea: 
+      - Key: 6
+        Value:
+          ParentZoneId: 5
+          _presetArea: 
+      - Key: 7
+        Value:
+          ParentZoneId: 5
+          _presetArea: 
+      - Key: 8
+        Value:
+          ParentZoneId: 3
           _presetArea: 
     Adjacencies:
       _serializedList:
