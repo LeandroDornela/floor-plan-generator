@@ -119,6 +119,98 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &720531454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 720531457}
+  - component: {fileID: 720531456}
+  - component: {fileID: 720531455}
+  m_Layer: 0
+  m_Name: Main Camera (1)
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &720531455
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720531454}
+  m_Enabled: 1
+--- !u!20 &720531456
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720531454}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 11.104926
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &720531457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720531454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 9.72, y: 19.29, z: -9.85}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &963194226
 AudioListener:
   m_ObjectHideFlags: 0
@@ -225,7 +317,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.size
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[0].Key
@@ -262,6 +354,10 @@ PrefabInstance:
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[8].Key
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[9].Key
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[0].Value.b
@@ -379,6 +475,22 @@ PrefabInstance:
       propertyPath: _debugColors._serializedList.Array.data[8].Value.r
       value: 0.43809798
       objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[9].Value.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[9].Value.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[9].Value.g
+      value: 0.5990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _debugColors._serializedList.Array.data[9].Value.r
+      value: 0.99949163
+      objectReference: {fileID: 0}
     - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _floorPlanGenerator._generationMethodType
       value: 3
@@ -433,4 +545,5 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 963194228}
+  - {fileID: 720531457}
   - {fileID: 8564757141131690427}

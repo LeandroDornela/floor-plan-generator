@@ -88,6 +88,9 @@ public class FloorPlanManager
 
     public CellsGrid CellsGrid => _cellsGrid;
     [Obsolete]public List<Zone> RootZones => _rootZones;
+    /// <summary>
+    /// The util floor plan zone, grid's cells outside this zone will not be used by the algorith.
+    /// </summary>
     public Zone RootZone => _rootZone;
     public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
 

@@ -37,4 +37,9 @@ public class FPGenerationMethod
     {
         return false;
     }
+
+    public virtual void OnDrawGizmos()
+    {
+        
+    }
 }

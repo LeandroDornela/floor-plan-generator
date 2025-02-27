@@ -91,4 +91,9 @@ public class FloorPlanGenerator
         _running = false;
         return true;
     }
+
+    public void OnDrawGizmos()
+    {
+        _currentMethod?.OnDrawGizmos();
+    }
 }

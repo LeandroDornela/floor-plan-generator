@@ -114,7 +114,7 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     void OnDrawGizmos()
     {
         if(!_initialized) { return; }
-        Handles.Label(Vector3.zero, _gridPreview);
+        //Handles.Label(Vector3.zero, _gridPreview);
     }
 
 

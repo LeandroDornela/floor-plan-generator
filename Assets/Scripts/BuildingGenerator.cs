@@ -33,4 +33,9 @@ public class BuildingGenerator : MonoBehaviour
         if(!Application.isPlaying) return;
         await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
     }
+
+    void OnDrawGizmos()
+    {
+        _floorPlanGenerator?.OnDrawGizmos();
+    }
 }
