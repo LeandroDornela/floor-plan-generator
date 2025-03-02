@@ -20,7 +20,7 @@ public class MethodGrowth : FPGenerationMethod
     
     private float delay = 0.005f;
 
-    private ZoneBorder _zoneBorder_TEMP;
+    private CellsLineDescription _zoneBorder_TEMP;
 
    
 
@@ -93,7 +93,12 @@ public class MethodGrowth : FPGenerationMethod
             while(zonesToGrow.Count > 0)
             {
                 _currentZone = GetNextZone(zonesToGrow);
-
+                
+                //_currentZone.Test(_floorPlanManager.CellsGrid);
+                
+                zonesToGrow.Remove(_currentZone);
+                grownZones.Add(_currentZone);
+                
                 /*
                 _zoneBorder_TEMP = _currentZone.GetLargestSideLine(_floorPlanManager.CellsGrid, Zone.Side.Top);
                 if(_zoneBorder_TEMP.numberOfCells > 0) await UniTask.WaitForSeconds(0.5f, cancellationToken: _cts.Token);
@@ -104,12 +109,16 @@ public class MethodGrowth : FPGenerationMethod
                 _zoneBorder_TEMP = _currentZone.GetLargestSideLine(_floorPlanManager.CellsGrid, Zone.Side.Right);
                 if(_zoneBorder_TEMP.numberOfCells > 0) await UniTask.WaitForSeconds(0.5f, cancellationToken: _cts.Token);
                 */
+                
+                
 
+                /*
                 if(!GrowZoneLShape(_currentZone, _floorPlanManager.CellsGrid))
                 {
                     zonesToGrow.Remove(_currentZone);
                     grownZones.Add(_currentZone);
                 }
+                */
 
                 TriggerOnCellsGridChanged(_floorPlanManager.CellsGrid);
                 await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
@@ -333,9 +342,9 @@ public class MethodGrowth : FPGenerationMethod
     {
         Vector3 from = new Vector3();
         Vector3 to = new Vector3();
-        ZoneBorder zb = _zoneBorder_TEMP;
+        CellsLineDescription zb = _zoneBorder_TEMP;
         float os = 0.5f;
-
+        /*
         switch(_zoneBorder_TEMP.side)
         {
             case Zone.Side.Top:
@@ -372,5 +381,6 @@ public class MethodGrowth : FPGenerationMethod
             break;
         }
         Gizmos.DrawLine(from, to);
+        */
     }
 }

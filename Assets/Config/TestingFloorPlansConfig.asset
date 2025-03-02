@@ -17,32 +17,32 @@ MonoBehaviour:
     GridDimensions: {x: 15, y: 15}
     ZonesConfigs:
       _serializedList:
-      - Key: 0
+      - Key: red
         Value:
           ParentZoneId: 
           _presetArea: 
-      - Key: 1
+      - Key: green
         Value:
-          ParentZoneId: 0
+          ParentZoneId: red
           _presetArea: 
-      - Key: 2
+      - Key: blue
         Value:
-          ParentZoneId: 0
+          ParentZoneId: red
           _presetArea: 
-      - Key: 3
+      - Key: cian
         Value:
-          ParentZoneId: 0
+          ParentZoneId: red
           _presetArea: 
-      - Key: 4
+      - Key: mag
         Value:
-          ParentZoneId: 0
+          ParentZoneId: red
           _presetArea: 
     Adjacencies:
       _serializedList:
-      - Key: 1
+      - Key: green
         Value:
-        - 2
-        - 3
+        - blue
+        - cian
     ZonesAreasPresets:
       _serializedList: []
   - FloorPlanId: Plan 0

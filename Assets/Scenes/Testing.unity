@@ -321,23 +321,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[0].Key
-      value: 0
+      value: red
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[1].Key
-      value: 1
+      value: green
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[2].Key
-      value: 2
+      value: blue
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[3].Key
-      value: 3
+      value: cian
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[4].Key
-      value: 4
+      value: mag
       objectReference: {fileID: 0}
     - target: {fileID: 2092830379301074066, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _debugColors._serializedList.Array.data[5].Key

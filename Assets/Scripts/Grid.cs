@@ -97,7 +97,8 @@ public class CellsGrid // using class to facilitate passing values by reference
                 string num = "--";
                 if(zone != null)
                 {
-                    num = Int32.Parse(zone.ZoneId).ToString("D2");
+                    //num = Int32.Parse(zone.ZoneId).ToString("D2");
+                    num = zone.ZoneId;
                 }
                 result += $"[{num}]";
             }
