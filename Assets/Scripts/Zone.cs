@@ -83,6 +83,11 @@ public class Zone // similar a uma estrutura de nos em arvore
     private bool _isLShaped = false;
     public bool IsLShaped => _isLShaped;
     private CellsLineDescription _lBorderCells;
+
+    private readonly Vector4 _TOP_MATRIX = new Vector4(1,0,0,-1);
+    private readonly Vector4 _BOTTOM_MATRIX = new Vector4(1,0,0,1);
+    private readonly Vector4 _LEFT_MATRIX = new Vector4(0,1,-1,0);
+    private readonly Vector4 _RIGHT_MATRIX = new Vector4(0,1,1,0);
   
 
     public string ZoneId => _zoneId;
@@ -208,6 +213,8 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         return (float)_topCells.numberOfCells / _leftCells.numberOfCells;
     }
+
+/*
 #region Private Vertical grow functions
     bool TryGrowVertically(CellsGrid cellsGrid, Side side)
     {
@@ -566,24 +573,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         }
     }
 
-    public bool SetLBorder(CellsGrid cellsGrid)
-    {
-        int largestSide = 0;
-        CellsLineDescription border;
-
-        foreach(Side side in Enum.GetValues(typeof(Side)))
-        {
-            border = GetLargestSideLine(cellsGrid, side);
-            if(border.numberOfCells > largestSide)
-            {
-                _lBorderCells = border;
-                _isLShaped = true;
-                return true;
-            }
-        }
-
-        return false; // cant grow in L.
-    }
+    */
 
     public CellsLineDescription GetLargestSideLine(CellsGrid cellsGrid, Side side)
     {
@@ -700,6 +690,24 @@ public class Zone // similar a uma estrutura de nos em arvore
         }
     }
 
+public bool SetLBorder(CellsGrid cellsGrid)
+    {
+        int largestSide = 0;
+        CellsLineDescription border;
+
+        foreach(Side side in Enum.GetValues(typeof(Side)))
+        {
+            border = GetLargestSideLine(cellsGrid, side);
+            if(border.numberOfCells > largestSide)
+            {
+                _lBorderCells = border;
+                _isLShaped = true;
+                return true;
+            }
+        }
+
+        return false; // cant grow in L.
+    }
     public bool GrowLSide(CellsGrid cellsGrid)
     {
         if(!_isLShaped)
@@ -723,17 +731,6 @@ public class Zone // similar a uma estrutura de nos em arvore
         return false;
     }
 
-
-    bool ZoneIsValid()
-    {
-        if(_cells == null || _cells?.Count == 0)
-        {
-            Debug.LogError("No cells to grow.");
-            return false;
-        }
-
-        return true;
-    }
 
     bool TryGrowUp(CellsGrid cellsGrid, CellsLineDescription cellsToGrow)
     {
@@ -791,7 +788,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     // pode ser retornada uma tupla ou apenas a ref da linha. {Classe.IsFullLine, Class.Line, Class.Distance}
 
 
-    public void Print_GetExpansionSpace_ForAllSides(CellsGrid cellsGrid)
+    public void Debug_Print_GetExpansionSpace_ForAllSides(CellsGrid cellsGrid)
     {
         Debug.Log("-----------------------------------------------------------------------------");
         var a = GetExpansionSpace(_topCells, cellsGrid, true);
@@ -804,7 +801,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         Debug.Log($"zid:{ZoneId} side:{a.line.side} space:{a.space} cells:{a.line.numberOfCells}");
     }
 
-    // TODO: talvez checar expansão siomples nos 2 sentidos prieiro e depois checar a profundidade
+    // TODO: talvez checar expansão simples nos 2 sentidos prieiro e depois checar a profundidade
     // TODO: ao inves de ter retornos em varios pontos, guardar resulados de cada avaliação para comparar no final
     public (CellsLineDescription line, bool isFullLine, int space) GetExpansionSpace(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid, bool fullSpaceSearch = false)
     {
@@ -827,19 +824,19 @@ public class Zone // similar a uma estrutura de nos em arvore
         switch(cellsLineDesc.side)
         {
             case Side.Top:
-                m = new Vector4(1,0,0,-1);
+                m = _TOP_MATRIX;
                 break;
             case Side.Bottom:
-                m = new Vector4(1,0,0,1);
+                m = _BOTTOM_MATRIX;
                 break;
             case Side.Left:
-                m = new Vector4(0,1,-1,0);
+                m = _LEFT_MATRIX;
                 break;
             case Side.Right:
-                m = new Vector4(0,1,1,0);
+                m = _RIGHT_MATRIX;
                 break;
             default:
-                m = new Vector4(1,0,0,-1);
+                m = _TOP_MATRIX;
                 break;
         }
 
@@ -1001,5 +998,116 @@ public class Zone // similar a uma estrutura de nos em arvore
         }
         
         return (freeLine, false, maxExpansionSpace);
+    }
+
+    public bool TryExpand(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid)
+    {
+        Vector4 m; // Transformation matrix
+        
+        switch(cellsLineDesc.side)
+        {
+            case Side.Top:
+                m = _TOP_MATRIX;
+                break;
+            case Side.Bottom:
+                m = _BOTTOM_MATRIX;
+                break;
+            case Side.Left:
+                m = _LEFT_MATRIX;
+                break;
+            case Side.Right:
+                m = _RIGHT_MATRIX;
+                break;
+            default:
+                m = _TOP_MATRIX;
+                break;
+        }
+
+
+        // Assign the cells to the zone.
+        for(int i = 0; i < cellsLineDesc.numberOfCells; i++)
+        {
+            cellsGrid.AssignCellToZone(cellsLineDesc.firstCellCoord.x + i * (int)m.x + (int)m.z,
+                                       cellsLineDesc.firstCellCoord.y + i * (int)m.y + (int)m.w,
+                                       this);
+        }
+
+
+        switch(cellsLineDesc.side)
+        {
+            case Side.Top:
+                _topCells.MoveUp(1);
+                _leftCells.MoveUp(1);
+                _rightCells.MoveUp(1);
+                _leftCells.AddCells(1);
+                _rightCells.AddCells(1);
+                break;
+            case Side.Bottom:
+                _bottomCells.MoveDown(1);
+                _leftCells.AddCells(1);
+                _rightCells.AddCells(1);
+                break;
+            case Side.Left:
+                _leftCells.MoveLeft(1);
+                _topCells.MoveLeft(1);
+                _bottomCells.MoveLeft(1);
+                _topCells.AddCells(1);
+                _bottomCells.AddCells(1);
+                break;
+            case Side.Right:
+                _rightCells.MoveRight(1);
+                _topCells.AddCells(1);
+                _bottomCells.AddCells(1);
+                break;
+            default: // Top
+                _topCells.MoveUp(1);
+                _leftCells.MoveUp(1);
+                _rightCells.MoveUp(1);
+                _leftCells.AddCells(1);
+                _rightCells.AddCells(1);
+                break;
+        }
+
+        return true;
+    }
+
+    public bool CheckSpaceAndExpand(Side side, CellsGrid cellsGrid)
+    {
+        CellsLineDescription cellsLineDesc;
+
+        if(_isLShaped)
+        {
+            cellsLineDesc = _lBorderCells;
+        }
+        else
+        {
+            switch(side)
+            {
+                case Side.Top:
+                    cellsLineDesc = _topCells;
+                    break;
+                case Side.Bottom:
+                    cellsLineDesc = _bottomCells;
+                    break;
+                case Side.Left:
+                    cellsLineDesc = _leftCells;
+                    break;
+                case Side.Right:
+                    cellsLineDesc = _rightCells;
+                    break;
+                default:
+                    cellsLineDesc = _topCells;
+                    break;
+            }
+        }
+
+        if(GetExpansionSpace(cellsLineDesc, cellsGrid, false).isFullLine)
+        {
+            return TryExpand(cellsLineDesc, cellsGrid);
+        }
+        else
+        {
+            return false;
+        }
     }
 }

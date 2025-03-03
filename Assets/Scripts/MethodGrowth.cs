@@ -18,7 +18,7 @@ public class MethodGrowth : FPGenerationMethod
     // Depois retorna para crescer usando outra logical, 'L' ou 'free'
     List<Zone> grownZones;
     
-    private float delay = 0.005f;
+    private float delay = 0.05f;
 
     private CellsLineDescription _zoneBorder_TEMP;
 
@@ -34,7 +34,7 @@ public class MethodGrowth : FPGenerationMethod
         return _initialized;
     }
 
-
+    // TODO: receber a grid e tudo mais como parametros
     public override async UniTask<bool> Run()
     {
         if(!EditorApplication.isPlaying)
@@ -194,7 +194,7 @@ public class MethodGrowth : FPGenerationMethod
 
     bool GrowZoneRect(Zone zone, CellsGrid cellsGrid)
     {
-        /*
+        
         if(TryGrowToDirection(Zone.Side.Right, zone, cellsGrid))
             return true;
         if(TryGrowToDirection(Zone.Side.Left, zone, cellsGrid))
@@ -204,7 +204,7 @@ public class MethodGrowth : FPGenerationMethod
         if(TryGrowToDirection(Zone.Side.Bottom, zone, cellsGrid))
             return true;
         return false;
-        */
+        
 
         float aspect = zone.GetZoneAspect();
 
@@ -306,27 +306,7 @@ public class MethodGrowth : FPGenerationMethod
     // OBS: the direction paramenter is taking in mind a randomization of the order of try.
     bool TryGrowToDirection(Zone.Side direction, Zone zone, CellsGrid cellsGrid)
     {
-        switch(direction)
-        {
-            case Zone.Side.Top:
-                if(zone.TryGrowTop(cellsGrid))
-                    return true;
-                break;
-            case Zone.Side.Bottom:
-                if(zone.TryGrowBottom(cellsGrid))
-                    return true;
-                break;
-            case Zone.Side.Left:
-                if(zone.TryGrowLeft(cellsGrid))
-                    return true;
-                break;
-            case Zone.Side.Right:
-                if(zone.TryGrowRight(cellsGrid))
-                    return true;
-                break;
-        }
-
-        return false;
+        return zone.CheckSpaceAndExpand(direction, cellsGrid);
     }
 
 
