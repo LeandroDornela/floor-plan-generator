@@ -6,10 +6,7 @@ Project Description
 
 ### Todo
 
-- [ ] MUDAR O ARMAZENAMENTO DAS BORDAS PARA CLASSE  
 - [ ] plot inicial em subzona muito pequena pode falhar por falta de espaço  
-- [ ] crescer para onde tiver mais espaço ao inves de aleatorio  
-- [ ] classe de utils e random. Pode ser a mesma  
 - [ ] Mover "AssignCellToZone" para floorPlanManager  
 - [ ] talvez o ideal é a classe da zona não modificar a grid diretamente. Adicionar metor de verificação para crescer e de acesso as variaveis para q o metodo faça as mudanças. Talvez essa modificação pode ficar no floor plan manager  
 - [ ] criqar namespace  
@@ -20,4 +17,7 @@ Project Description
 
 ### Done ✓
 
+- [x] classe de utils e random. Pode ser a mesma  
+- [x] crescer para onde tiver mais espaço ao inves de aleatorio  
+- [x] MUDAR O ARMAZENAMENTO DAS BORDAS PARA CLASSE  
 

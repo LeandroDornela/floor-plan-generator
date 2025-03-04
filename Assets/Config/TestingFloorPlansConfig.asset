@@ -37,6 +37,14 @@ MonoBehaviour:
         Value:
           ParentZoneId: red
           _presetArea: 
+      - Key: yel
+        Value:
+          ParentZoneId: red
+          _presetArea: 
+      - Key: oran
+        Value:
+          ParentZoneId: red
+          _presetArea: 
     Adjacencies:
       _serializedList:
       - Key: green
@@ -46,55 +54,55 @@ MonoBehaviour:
     ZonesAreasPresets:
       _serializedList: []
   - FloorPlanId: Plan 0
-    GridDimensions: {x: 20, y: 20}
+    GridDimensions: {x: 15, y: 15}
     ZonesConfigs:
       _serializedList:
-      - Key: 0
+      - Key: red
         Value:
           ParentZoneId: 
           _presetArea: 1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0
-      - Key: 1
+      - Key: green
         Value:
-          ParentZoneId: 0
+          ParentZoneId: red
           _presetArea: 
-      - Key: 2
+      - Key: blue
         Value:
-          ParentZoneId: 0
+          ParentZoneId: red
           _presetArea: 
-      - Key: 3
+      - Key: cian
         Value:
-          ParentZoneId: 0
+          ParentZoneId: red
           _presetArea: 
-      - Key: 4
+      - Key: mag
         Value:
-          ParentZoneId: 0
+          ParentZoneId: red
           _presetArea: 
-      - Key: 5
+      - Key: yel
         Value:
-          ParentZoneId: 1
+          ParentZoneId: green
           _presetArea: 
-      - Key: 6
+      - Key: vomito
         Value:
-          ParentZoneId: 1
+          ParentZoneId: green
           _presetArea: 
-      - Key: 7
+      - Key: oran
         Value:
-          ParentZoneId: 2
+          ParentZoneId: blue
           _presetArea: 
-      - Key: 8
+      - Key: purple
         Value:
-          ParentZoneId: 2
+          ParentZoneId: blue
           _presetArea: 
-      - Key: 9
+      - Key: pink
         Value:
-          ParentZoneId: 0
+          ParentZoneId: blue
           _presetArea: 
     Adjacencies:
       _serializedList:
-      - Key: 1
+      - Key: green
         Value:
-        - 2
-        - 3
-        - 4
+        - blue
+        - cian
+        - mag
     ZonesAreasPresets:
       _serializedList: []

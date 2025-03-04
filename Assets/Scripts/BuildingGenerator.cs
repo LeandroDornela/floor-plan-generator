@@ -1,3 +1,4 @@
+using System;
 using com.cyborgAssets.inspectorButtonPro;
 using UnityEngine;
 
@@ -24,6 +25,7 @@ public class BuildingGenerator : MonoBehaviour
         while(true)
         {
             await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
+            ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
         }
     }
 
@@ -32,6 +34,7 @@ public class BuildingGenerator : MonoBehaviour
     {
         if(!Application.isPlaying) return;
         await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
+        ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
     }
 
     void OnDrawGizmos()
