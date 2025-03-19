@@ -492,6 +492,10 @@ PrefabInstance:
       value: 0.99949163
       objectReference: {fileID: 0}
     - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: totalToTest
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _floorPlanGenerator._generationMethodType
       value: 3
       objectReference: {fileID: 0}

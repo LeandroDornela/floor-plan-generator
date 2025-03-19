@@ -13,20 +13,22 @@ public class MethodLinearFill : FPGenerationMethod
 
     public async override UniTask<bool> Run()
     {
+        /*
         if(!EditorApplication.isPlaying)
         {
             Debug.LogError("Don't use it outside play mode.");
             return false;
         }
+        */
 
         _cts = new CancellationTokenSource();
-        EditorApplication.playModeStateChanged += PlayModeStateChanged;
+        //EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
         x = 0;
         y = 0;
         counter = 0;
-        WIDTH = _floorPlanManager.CellsGrid.Dimmensions.x;
-        HEIGTH = _floorPlanManager.CellsGrid.Dimmensions.y;
+        WIDTH = _floorPlanManager.CellsGrid.Dimensions.x;
+        HEIGTH = _floorPlanManager.CellsGrid.Dimensions.y;
 
         if(_fastMode)
         {
@@ -41,7 +43,7 @@ public class MethodLinearFill : FPGenerationMethod
         }
 
 
-        EditorApplication.playModeStateChanged -= PlayModeStateChanged;
+        //EditorApplication.playModeStateChanged -= PlayModeStateChanged;
 
         return true;
     }
@@ -75,7 +77,7 @@ public class MethodLinearFill : FPGenerationMethod
 
         TriggerOnCellChanged(cell);
     }
-
+/*
     void PlayModeStateChanged(PlayModeStateChange state)
     {
         if(state == PlayModeStateChange.ExitingPlayMode)
@@ -83,4 +85,5 @@ public class MethodLinearFill : FPGenerationMethod
             _cts.Cancel();
         }
     }
+    */
 }

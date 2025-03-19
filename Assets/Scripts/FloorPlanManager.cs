@@ -49,6 +49,7 @@ public struct FloorPlanConfig
 public struct ZoneConfig
 {
     public string ParentZoneId;
+    [Range(0, 1)] public float AreaRatio;
     
     [Obsolete]
     [SerializeField] private string _presetArea;
@@ -126,7 +127,7 @@ public class FloorPlanManager
         // Create all zones.
         foreach(var zone in zonesConfigs)
         {
-            _zonesInstances.Add(zone.Key, new Zone(zone.Key));
+            _zonesInstances.Add(zone.Key, new Zone(zone.Key, zone.Value.AreaRatio));
         }
 
         // Set the parents and children of the zones.

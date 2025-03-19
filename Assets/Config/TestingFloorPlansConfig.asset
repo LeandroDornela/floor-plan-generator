@@ -20,30 +20,37 @@ MonoBehaviour:
       - Key: red
         Value:
           ParentZoneId: 
+          AreaRatio: 0
           _presetArea: 
       - Key: green
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: blue
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: cian
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: mag
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: yel
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: oran
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
     Adjacencies:
       _serializedList:
@@ -60,42 +67,52 @@ MonoBehaviour:
       - Key: red
         Value:
           ParentZoneId: 
+          AreaRatio: 0
           _presetArea: 1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0
       - Key: green
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: blue
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: cian
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: mag
         Value:
           ParentZoneId: red
+          AreaRatio: 0
           _presetArea: 
       - Key: yel
         Value:
           ParentZoneId: green
+          AreaRatio: 0
           _presetArea: 
       - Key: vomito
         Value:
           ParentZoneId: green
+          AreaRatio: 0
           _presetArea: 
       - Key: oran
         Value:
           ParentZoneId: blue
+          AreaRatio: 0
           _presetArea: 
       - Key: purple
         Value:
           ParentZoneId: blue
+          AreaRatio: 0
           _presetArea: 
       - Key: pink
         Value:
           ParentZoneId: blue
+          AreaRatio: 0
           _presetArea: 
     Adjacencies:
       _serializedList:

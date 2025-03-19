@@ -38,6 +38,11 @@ public class FPGenerationMethod
         return false;
     }
 
+    public virtual bool RunSync()
+    {
+        return false;
+    }
+
     public virtual void OnDrawGizmos()
     {
         

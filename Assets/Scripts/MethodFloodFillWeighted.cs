@@ -24,7 +24,7 @@ public class MethodFloodFillWeighted : FPGenerationMethod
         base.Init(floorPlanManager);
 
         _cts = new CancellationTokenSource();
-        EditorApplication.playModeStateChanged += PlayModeStateChanged;
+        //EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
         _weights = new Dictionary<string, int>
         {
@@ -61,11 +61,13 @@ public class MethodFloodFillWeighted : FPGenerationMethod
 
     public async override UniTask<bool> Run()
     {
+        /*
         if(!EditorApplication.isPlaying)
         {
             Debug.LogError("Don't use it outside play mode.");
             return false;
         }
+        */
 /*
         for(int i = 0; i < _floorPlanManager.RootZones.Count; i++)
         {
@@ -84,7 +86,7 @@ public class MethodFloodFillWeighted : FPGenerationMethod
             asyncTicker.End();
         }
         
-        EditorApplication.playModeStateChanged -= PlayModeStateChanged;
+        //EditorApplication.playModeStateChanged -= PlayModeStateChanged;
 
         foreach(var zone in _floorPlanManager.RootZones)
         {
@@ -179,7 +181,7 @@ public class MethodFloodFillWeighted : FPGenerationMethod
             TriggerOnCellChanged(vizinho);
         }
     }
-
+/*
     void PlayModeStateChanged(PlayModeStateChange state)
     {
         if(state == PlayModeStateChange.ExitingPlayMode)
@@ -187,4 +189,5 @@ public class MethodFloodFillWeighted : FPGenerationMethod
             _cts.Cancel();
         }
     }
+    */
 }

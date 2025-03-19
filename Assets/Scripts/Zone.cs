@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /*------------------>x
@@ -12,17 +13,22 @@ y       [v][-][-][v]
 */
 
 // OBS: Seguindo o padão da grid, leitura esquerda->direita, cima->baixo
+/// <summary>
+/// 
+/// </summary>
 public class CellsLineDescription
 {
     public Vector2Int firstCellCoord;
     public int numberOfCells;
     public Zone.Side side;
+    public int totalDistanceExpanded;
 
     public CellsLineDescription(int firstCellX, int firstCellY, int numberOfCells, Zone.Side side)
     {
         this.firstCellCoord = new Vector2Int(firstCellX, firstCellY);
         this.numberOfCells = numberOfCells;
         this.side = side;
+        this.totalDistanceExpanded = 0;
     }
 
     public void AddCells(int amount)
@@ -33,25 +39,64 @@ public class CellsLineDescription
     public void MoveUp(int amount)
     {
         firstCellCoord.y -= amount;
+
+        if(side == Zone.Side.Top)
+        {
+            totalDistanceExpanded++;
+        }
+        else if(side == Zone.Side.Bottom)
+        {
+            totalDistanceExpanded--;
+        }
     }
 
     public void MoveDown(int amount)
     {
         firstCellCoord.y += amount;
+
+        if(side == Zone.Side.Top)
+        {
+            totalDistanceExpanded--;
+        }
+        else if(side == Zone.Side.Bottom)
+        {
+            totalDistanceExpanded++;
+        }
     }
 
     public void MoveLeft(int amount)
     {
         firstCellCoord.x -= amount;
+
+        if(side == Zone.Side.Left)
+        {
+            totalDistanceExpanded++;
+        }
+        else if(side == Zone.Side.Right)
+        {
+            totalDistanceExpanded--;
+        }
     }
 
     public void MoveRight(int amount)
     {
         firstCellCoord.x += amount;
+
+        if(side == Zone.Side.Left)
+        {
+            totalDistanceExpanded--;
+        }
+        else if(side == Zone.Side.Right)
+        {
+            totalDistanceExpanded++;
+        }
     }
 }
 
 
+/// <summary>
+/// 
+/// </summary>
 public class Zone // similar a uma estrutura de nos em arvore
 {
     public enum Side
@@ -66,34 +111,38 @@ public class Zone // similar a uma estrutura de nos em arvore
     public List<Cell> _cells; // Celulas atualmente associadas a zona.
     // Runtime const
     private string _zoneId;
-    public Zone _parentZone; // A zona m�e pode ser usada para verificar se uma celula est� na mesma zona que outra.
+    public string ZoneId => _zoneId;
+    private float _areaRatio;
+    public float AreaRatio => _areaRatio;
+    public Zone _parentZone;
     public List<Zone> _childZones;
     public List<Zone> _adjacentZones;
-
-    // (first cell X, first cell Y, number of cells)
-    private CellsLineDescription _topCells;
-    private CellsLineDescription _bottomCells;
-    private CellsLineDescription _leftCells;
-    private CellsLineDescription _rightCells;
 
     private float _desiredAspect = 1; // 1 is square
     public float DesiredAspect => _desiredAspect;
 
+    //Borders descriptions
+    private Dictionary<Side, CellsLineDescription> _zoneBorders;
+
+    // L shape description
     private bool _isLShaped = false;
     public bool IsLShaped => _isLShaped;
     public CellsLineDescription _lBorderCells;
 
-    private readonly Vector4 _TOP_MATRIX = new Vector4(1,0,0,-1);
-    private readonly Vector4 _BOTTOM_MATRIX = new Vector4(1,0,0,1);
-    private readonly Vector4 _LEFT_MATRIX = new Vector4(0,1,-1,0);
-    private readonly Vector4 _RIGHT_MATRIX = new Vector4(0,1,1,0);
-  
+    // Coord transformation matrix, used to compact the methods that have different behavior base on the border of the shape.
+    private readonly Dictionary<Side, Vector4> _coordTransMatrices = new Dictionary<Side, Vector4>
+    {{Side.Top, new Vector4(1,0,0,-1)},
+    {Side.Bottom, new Vector4(1,0,0,1)},
+    {Side.Left, new Vector4(0,1,-1,0)},
+    {Side.Right, new Vector4(0,1,1,0)}};
 
-    public string ZoneId => _zoneId;
+    private int _minimumCellsToExpand = 1;
+    
 
-    public Zone(string zoneId)
+    public Zone(string zoneId, float areaRatio)
     {
         _zoneId = zoneId;
+        _areaRatio = areaRatio;
         _parentZone = null;
         _cells = new List<Cell>();
         _childZones = new List<Zone>();
@@ -101,7 +150,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     }
 
 
-    public Zone(string zoneId, Zone parentZone)
+    private Zone(string zoneId, Zone parentZone)
     {
         _zoneId = zoneId;
         _parentZone = parentZone;
@@ -110,310 +159,295 @@ public class Zone // similar a uma estrutura de nos em arvore
     }
 
 
-    public void AddCell(Cell cell)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    public bool AddCell(Cell cell)
     {
         if(cell == null)
         {
-            Debug.LogError("Tryng to add a null cell.");
-            return;
+            Debug.LogError("Trying to add a null cell.");
+            return false;
         }
 
-        // TODO evitar essa verificação, pode ser custoso. Fazer de forma que a culala não esteja na zona.
-        // <!--
-        // order:-70
-        // -->
         if(_cells.Contains(cell))
         {
-            Debug.LogError("Tryng to add an exiting cell.");
-            return;
+            Debug.LogError("Trying to add an exiting cell.");
+            return false;
         }
 
+        // Set up the borders.
         if(_cells.Count == 0) // First cell
         {
-            _topCells = new CellsLineDescription(cell.GridPosition.x, cell.GridPosition.y, 1, Side.Top);
-            _bottomCells = new CellsLineDescription(cell.GridPosition.x, cell.GridPosition.y, 1, Side.Bottom);
-            _leftCells = new CellsLineDescription(cell.GridPosition.x, cell.GridPosition.y, 1, Side.Left);
-            _rightCells = new CellsLineDescription(cell.GridPosition.x, cell.GridPosition.y, 1, Side.Right);
+            _zoneBorders = new Dictionary<Side, CellsLineDescription>
+            {
+                { Side.Top, new CellsLineDescription(cell.GridPosition.x, cell.GridPosition.y, 1, Side.Top) },
+                { Side.Bottom, new CellsLineDescription(cell.GridPosition.x, cell.GridPosition.y, 1, Side.Bottom) },
+                { Side.Left, new CellsLineDescription(cell.GridPosition.x, cell.GridPosition.y, 1, Side.Left) },
+                { Side.Right, new CellsLineDescription(cell.GridPosition.x, cell.GridPosition.y, 1, Side.Right) }
+            };
         }
 
         _cells.Add(cell);
-        cell.SetZone(this);
+        return true;
     }
 
-    public void RemoveCell(Cell cell)
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    public bool RemoveCell(Cell cell)
     {
         if(cell == null)
         {
-            Debug.LogError("Tryng to remove a null cell.");
-            return;
+            Debug.LogError("Trying to remove a null cell.");
+            return false;
         }
 
         if(_cells.Contains(cell))
         {
-            _cells.Remove(cell);
-            cell.SetZone(null);
+            return _cells.Remove(cell);
         }
         else
         {
             Debug.LogError("The cell isn't in the zone.");
+            return false;
         }
     }
 
 
-    public void AddChildZone(Zone childZone)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="childZone"></param>
+    /// <returns></returns>
+    public bool AddChildZone(Zone childZone)
     {
         if(childZone == null)
         {
-            Debug.LogError("Tryng to add a null child.");
-            return;
+            Debug.LogError("Trying to add a null child.");
+            return false;
         }
 
-        if(!_childZones.Contains(childZone))
+        if(_childZones.Contains(childZone))
         {
-            _childZones.Add(childZone);
+            Debug.LogWarning("Trying to add an exiting child.");
+            return false;
         }
-        else
-        {
-            Debug.LogWarning("Tryng to add an exiting child.");
-        }
+
+        _childZones.Add(childZone);
+        return true;
     }
 
 
-    public void AddAdjacentZone(Zone adjacentZone)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="adjacentZone"></param>
+    /// <returns></returns>
+    public bool AddAdjacentZone(Zone adjacentZone)
     {
-        //TODO Check if adj. zone is already set.
-        // <!--
-        // order:-80
-        // -->
+        if(adjacentZone == null)
+        {
+            Debug.LogError("Trying to add a null adjacent zone.");
+            return false;
+        }
+
+        if(_adjacentZones.Contains(adjacentZone))
+        {
+            Debug.LogError("Trying to add an existing adjacent zone.");
+        }
+
         _adjacentZones.Add(adjacentZone);
+        return true;
     }
 
 
-    public void SetParentZone(Zone parentZone)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="parentZone"></param>
+    /// <returns></returns>
+    public bool SetParentZone(Zone parentZone)
     {
         if(_parentZone == null)
         {
             _parentZone = parentZone;
+            return true;
         }
         else
         {
             Debug.LogError("Parent zone can't be overridden.");
+            return false;
         }
     }
 
     /// <summary>
-    /// If < 1: zone is taller than wide
-    /// If > 1: zone is wider than tall
-    /// If == 1: zone is square
-    /// Will not work well in 'L' shaped zones
+    /// (top cells) / (left cells);
+    /// (if smaller 1): zone is taller than wide;
+    /// (if larger 1): zone is wider than tall;
+    /// (if equal 1): zone is square;
+    /// Will not work well in 'L' shaped zones.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Current zone aspect ratio.</returns>
     public float GetZoneAspect()
     {
-        return (float)_topCells.numberOfCells / _leftCells.numberOfCells;
+        return (float)_zoneBorders[Side.Top].numberOfCells / _zoneBorders[Side.Left].numberOfCells;
     }
 
-    public CellsLineDescription GetLargestSideLine(CellsGrid cellsGrid, Side side)
+
+    /// <summary>
+    /// Get the zone are in cells units.
+    /// </summary>
+    /// <returns>The number of cells as the zone area.</returns>
+    public int GetZoneArea()
     {
-        // TODO: Se o tamanho do seguimento for igual ao tamanho total do lado n precisa checar o outro lado
-        int leftRightCount = 0;
-        int rightLeftCount = 0;
-        CellsLineDescription zoneBorder;
-        Vector4 m; // Transformation matrix
-
-
-        // criar zona resultado
-        // modificar em execução, simplifica o retorno
-
-
-        
-        //[mx][mz] * [i]
-        //[my][mw]   [1]
-        // x = i * mx + 1 * mz
-        // y = I * my + 1 * mw
-        // (direcao das celulas em X, direcao das celulas em Y, direcao de expansão em X, direcao de expansao em Y)
-        // T = (1,0,0,-1)
-        // B = (1,0,0,1)
-        // L = (0,1,-1,0)
-        // R = (0,1,1,0)
-
-        switch(side)
-        {
-            case Side.Top:
-                zoneBorder = _topCells;
-                m = new Vector4(1,0,0,-1);
-                break;
-            case Side.Bottom:
-                zoneBorder = _bottomCells;
-                m = new Vector4(1,0,0,1);
-                break;
-            case Side.Left:
-                zoneBorder = _leftCells;
-                m = new Vector4(0,1,-1,0);
-                break;
-            case Side.Right:
-                zoneBorder = _rightCells;
-                m = new Vector4(0,1,1,0);
-                break;
-            default:
-                zoneBorder = _topCells;
-                m = new Vector4(1,0,0,-1);
-                break;
-        }
-
-        // check from Left to Right(Top to botton)(> ^)
-        for(int i = 0; i < zoneBorder.numberOfCells; i++)
-        {
-            if(cellsGrid.GetCell(zoneBorder.firstCellCoord.x + i * (int)m.x + (int)m.z,
-                                 zoneBorder.firstCellCoord.y + i * (int)m.y + (int)m.w,
-                                 out Cell cell))
-            {
-                if(cell.Zone == _parentZone) // cell is free
-                {
-                    leftRightCount++;
-                }
-                else // first invalid cell
-                {
-                    break;
-                }
-            }
-            else // Invalid grid pos.
-            {
-                return default;
-            }
-        }
-
-        // TODO: if have a return value ready, can just return from the if to skip the for loop.
-        // If the line has the maximum side, don't need to check the other direction.
-        if(leftRightCount != zoneBorder.numberOfCells)
-        {
-            // Check from Right to Left(Botton to Top)(< v)
-            for(int i = zoneBorder.numberOfCells - 1; i >= 0; i--)
-            {
-                if(cellsGrid.GetCell(zoneBorder.firstCellCoord.x + i * (int)m.x + (int)m.z,
-                                     zoneBorder.firstCellCoord.y + i * (int)m.y + (int)m.w,
-                                     out Cell cell))
-                {
-                    if(cell.Zone == _parentZone) // cell is free
-                    {
-                        rightLeftCount++;
-                    }
-                    else // first invalid cell
-                    {
-                        break;
-                    }
-                }
-                else // Invalid grid pos.
-                {
-                    return default;
-                }
-            }
-        }
-
-        // Return the largest cells sequence as ZoneBorder.
-        if(leftRightCount > rightLeftCount)
-        {
-            return new CellsLineDescription(zoneBorder.firstCellCoord.x, zoneBorder.firstCellCoord.y, leftRightCount, side);
-        }
-        else if(leftRightCount < rightLeftCount)
-        {
-            return new CellsLineDescription(zoneBorder.firstCellCoord.x + (zoneBorder.numberOfCells - rightLeftCount) * (int)m.x,
-                                            zoneBorder.firstCellCoord.y + (zoneBorder.numberOfCells - rightLeftCount) * (int)m.y,
-                                            rightLeftCount,
-                                            side);
-        }
-        else // equal
-        {
-            return new CellsLineDescription(zoneBorder.firstCellCoord.x, zoneBorder.firstCellCoord.y, leftRightCount, side);
-        }
+        return _cells.Count;
     }
 
-    public bool AutoSetLBorder(CellsGrid cellsGrid)
+
+    /// <summary>
+    /// Expensive. Cache the return when possible.
+    /// "Find" to make clear it will look for the border cells.
+    /// TODO: Optimize.
+    /// </summary>
+    /// <returns></returns>
+    public Cell[] FindBorderCells(CellsGrid cellsGrid)
     {
-        if(_isLShaped)
+        List<Cell> borderCells = new List<Cell>();
+
+        foreach(Cell cell in _cells)
         {
-            Debug.LogError("Can't redefine L border. A new method or modification is needed.");
+            Cell neighborCell;
+
+            for(int x = -1; x <= 1; x++)
+            {
+                for(int y = -1; y <= 1; y++)
+                {
+                    if(x == 0 && y == 0) continue;
+
+                    if(!cellsGrid.GetCell(cell.GridPosition.x + x, cell.GridPosition.y + y, out neighborCell) ||
+                      (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
+                    {
+                        borderCells.Add(cell);
+                    }
+                }
+            }
+
+            /*
+            // top
+            if(!cellsGrid.GetCell(cell.GridPosition.x, cell.GridPosition.y - 1, out neighborCell) )
+            {
+                // invalid grid pos, is a grid border so is also zone border.
+                borderCells.Add(cell);
+            }
+            // bottom
+            else if(!cellsGrid.GetCell(cell.GridPosition.x, cell.GridPosition.y + 1, out neighborCell) || (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
+            {
+                borderCells.Add(cell);
+            }
+            // left
+            else if(!cellsGrid.GetCell(cell.GridPosition.x - 1, cell.GridPosition.y, out neighborCell) || (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
+            {
+                borderCells.Add(cell);
+            }
+            // right
+            else if(!cellsGrid.GetCell(cell.GridPosition.x + 1, cell.GridPosition.y, out neighborCell) || (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
+            {
+                borderCells.Add(cell);
+            }
+            */
+        }
+
+        return borderCells.ToArray();
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="lBorder"></param>
+    /// <returns></returns>
+    public bool SetAsLShaped(CellsLineDescription lBorder)
+    {
+        if(lBorder == null)
+        {
+            Debug.LogError("L border can't be null");
             return false;
         }
 
-        CellsLineDescription largestFreeSide = null;
-
-        foreach(Side side in Enum.GetValues(typeof(Side)))
+        if(_isLShaped)
         {
-            CellsLineDescription newSide = GetExpansionSpace(side, cellsGrid).line;
+            Debug.LogError("Zone is already L shaped.");
+            return false;
+        }
 
-            if(newSide != null)
+        _lBorderCells = lBorder;
+        _isLShaped = true;
+
+        return true;
+    }
+
+
+#region ================================================== PUBLIC EXPANSION METHODS ==================================================
+    /// <summary>
+    /// Total space = distance x freeLineDescription.numberOfCells
+    /// </summary>
+    /// <param name="side"></param>
+    /// <param name="cellsGrid"></param>
+    /// <param name="fullSpaceSearch"></param>
+    /// <returns></returns>
+    public (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetExpansionSpaceRect(Side side, CellsGrid cellsGrid, bool fullSpaceSearch = false) // TODO: talvez mudar apra "get RECTangular exp space"
+    {
+        if(_isLShaped)
+        {
+            Debug.LogError("Don't use when L-shaped.");
+            return default;
+        }
+
+        return GetExpansionSpace(_zoneBorders[side], cellsGrid, fullSpaceSearch);
+    }
+
+
+    // the return can be a possible L shape border.
+    public (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetLargestExpansionSpaceRect(CellsGrid cellsGrid, bool fullSpaceSearch = false)
+    {
+        if(_isLShaped)
+        {
+            Debug.LogError("Don't use when L-shaped.");
+            return default;
+        }
+
+        (CellsLineDescription line, bool isFullLine, int distance) largestFreeSide = (null, false, 0);
+
+        foreach(var border in _zoneBorders)
+        {
+            var newSide = GetExpansionSpace(border.Value, cellsGrid, fullSpaceSearch);
+
+            if(newSide.freeLineDescription != null)
             {
-                if(largestFreeSide == null)
+                if(largestFreeSide.line == null)
                 {
                     largestFreeSide = newSide;
                 }
-                else if(newSide.numberOfCells > largestFreeSide.numberOfCells)
+                else
                 {
-                    largestFreeSide = newSide;
-                }
-            }
-        }
+                    int newSideTotalSpace = newSide.freeLineDescription.numberOfCells * newSide.distance;
+                    int largestFreeSideTotalSpace = largestFreeSide.line.numberOfCells * largestFreeSide.distance;
 
-        if(largestFreeSide != null)
-        {
-            _lBorderCells = largestFreeSide;
-            _isLShaped = true;
-            return true;
-        }
-
-        return false; // cant grow in L.
-    }
-
-    // GetUpperLine(bool findTheFarthestLine) retorna a maior linha de cima, pode ser a linha completa ou parcial vindo da direita ou esquerda
-    // while(get line valida){GetUpperLine()} permite contar o numero linhas completas vagas
-    // pode ser retornada uma tupla ou apenas a ref da linha. {Classe.IsFullLine, Class.Line, Class.Distance}
-
-
-    public void Debug_Print_GetExpansionSpace_ForAllSides(CellsGrid cellsGrid)
-    {
-        Debug.Log("-----------------------------------------------------------------------------");
-        var a = GetExpansionSpace(_topCells, cellsGrid, true);
-        Debug.Log($"zid:{ZoneId} side:{a.line.side} space:{a.space} cells:{a.line.numberOfCells}");
-        a = GetExpansionSpace(_bottomCells, cellsGrid, true);
-        Debug.Log($"zid:{ZoneId} side:{a.line.side} space:{a.space} cells:{a.line.numberOfCells}");
-        a = GetExpansionSpace(_leftCells, cellsGrid, true);
-        Debug.Log($"zid:{ZoneId} side:{a.line.side} space:{a.space} cells:{a.line.numberOfCells}");
-        a = GetExpansionSpace(_rightCells, cellsGrid, true);
-        Debug.Log($"zid:{ZoneId} side:{a.line.side} space:{a.space} cells:{a.line.numberOfCells}");
-    }
-
-    public (CellsLineDescription line, bool isFullLine, int space) GetExpansionSpace(Side side, CellsGrid cellsGrid, bool fullSpaceSearch = false)
-    {
-        switch(side)
-        {
-            case Side.Top:
-                return GetExpansionSpace(_topCells, cellsGrid, fullSpaceSearch);
-            case Side.Bottom:
-                return GetExpansionSpace(_bottomCells, cellsGrid, fullSpaceSearch);
-            case Side.Left:
-                return GetExpansionSpace(_leftCells, cellsGrid, fullSpaceSearch);
-            case Side.Right:
-                return GetExpansionSpace(_rightCells, cellsGrid, fullSpaceSearch);
-            default:
-                Debug.LogError($"Invalid side: {side}");
-                return default;
-        }
-    }
-
-    public (CellsLineDescription line, bool isFullLine, int space) GetLargestExpandableSide(CellsGrid cellsGrid, bool fullSpaceSearch = false)
-    {
-        (CellsLineDescription line, bool isFullLine, int space) largestFreeSide = (null, false, 0);
-
-        foreach(Side side in Enum.GetValues(typeof(Side)))
-        {
-            var newSide = GetExpansionSpace(side, cellsGrid, fullSpaceSearch);
-
-            if(newSide.line != null)
-            {
-                if(largestFreeSide.line == null || newSide.line.numberOfCells > largestFreeSide.line?.numberOfCells)
-                {
-                    largestFreeSide = newSide;
+                    if(newSideTotalSpace > largestFreeSideTotalSpace)
+                    {
+                        largestFreeSide = newSide;
+                    }
+                    else if(newSideTotalSpace == largestFreeSideTotalSpace && Utils.RandomBool())
+                    {
+                        largestFreeSide = newSide;
+                    }
+                    // else, is smaller, do nothing.
                 }
             }
         }
@@ -421,23 +455,64 @@ public class Zone // similar a uma estrutura de nos em arvore
         return largestFreeSide;
     }
 
-    // TODO: talvez checar expansão simples nos 2 sentidos prieiro e depois checar a profundidade
-    // TODO: ao inves de ter retornos em varios pontos, guardar resulados de cada avaliação para comparar no final
-    public (CellsLineDescription line, bool isFullLine, int space) GetExpansionSpace(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid, bool fullSpaceSearch = false)
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="side"></param>
+    /// <param name="cellsGrid"></param>
+    /// <returns></returns>
+    public bool TryExpandShapeRect(Side side, CellsGrid cellsGrid)
     {
-        if(cellsLineDesc.numberOfCells == 0)
+        if(_isLShaped)
         {
-            return (null, false, 0);
+            Debug.LogError("Trying to use rectangular expansion in L-Shaped zone.");
+            return false;
         }
 
-        // TODO: Se o tamanho do seguimento for igual ao tamanho total do lado n precisa checar o outro lado
-        int leftRightCount = 0;
-        int rightLeftCount = 0;
-        int maxExpansionSpace = 0;
-        CellsLineDescription freeLine = new CellsLineDescription(cellsLineDesc.firstCellCoord.x, cellsLineDesc.firstCellCoord.y, 0, cellsLineDesc.side);
-        Vector4 m; // Transformation matrix
+        return TryExpand(_zoneBorders[side], cellsGrid);
+    }
+    
 
-        
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cellsGrid"></param>
+    /// <param name="checkSpace"></param>
+    /// <returns></returns>
+    public bool TryExpandShapeL(CellsGrid cellsGrid, bool checkSpace = true)
+    {
+        if(checkSpace)
+        {
+            var expSpace = GetExpansionSpace(_lBorderCells, cellsGrid, false);
+
+            if(expSpace.isFullLine)
+            {
+                return TryExpand(_lBorderCells, cellsGrid);
+            }
+            else return false;
+        }
+        else
+        {
+            return TryExpand(_lBorderCells, cellsGrid);
+        }
+    }
+
+#endregion ==================================================
+
+
+
+    // TODO: talvez checar expansão simples nos 2 sentidos prieiro e depois checar a profundidade
+    // TODO: ao inves de ter retornos em varios pontos, guardar resulados de cada avaliação para comparar no final
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cellsLineDesc"></param>
+    /// <param name="cellsGrid"></param>
+    /// <param name="fullSpaceSearch"></param>
+    /// <returns></returns>
+    (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetExpansionSpace(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid, bool fullSpaceSearch = false)
+    {
         //[mx][mz] * [i]
         //[my][mw]   [1]
         // x = i * mx + 1 * mz
@@ -447,74 +522,85 @@ public class Zone // similar a uma estrutura de nos em arvore
         //  z: direction of expansion in X,
         //  w: direction of expansion in Y)
 
-        switch(cellsLineDesc.side)
+        if(cellsLineDesc.numberOfCells == 0)
         {
-            case Side.Top:
-                m = _TOP_MATRIX;
-                break;
-            case Side.Bottom:
-                m = _BOTTOM_MATRIX;
-                break;
-            case Side.Left:
-                m = _LEFT_MATRIX;
-                break;
-            case Side.Right:
-                m = _RIGHT_MATRIX;
-                break;
-            default:
-                m = _TOP_MATRIX;
-                break;
+            // [-][-][-][-][-] free line
+            // [o][o][o][o][o] original line
+            return (null, false, 0);
         }
 
+        int firstToLast_Count = 0; // from first to last cell in line.
+        int lastToFirst_Count = 0; // from last to first cell in line.
+        int maxExpansionSpace = 0;
+        // The return free line is to be used only as container of information about the line to be expanded, don't refer to real borders to avoid external modification.
+        CellsLineDescription freeLine = new CellsLineDescription(cellsLineDesc.firstCellCoord.x, cellsLineDesc.firstCellCoord.y, 0, cellsLineDesc.side);
+        Vector4 tMatrix = _coordTransMatrices[cellsLineDesc.side]; // Transformation matrix
 
-        // =================== check from Left to Right(Top to botton)(> ^)
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Check from FIRST to LAST cell of the line 
+
+        // =============== Check the first line on the side of orin line
+        // Do the first iteration from the first to the last cell on the side/border.
+        // Return immediately a failure result if find a invalid cell(a cell out of the grid).
+        // Or just stop iteration when find a cell that is not available to change zone, since
+        // it MUST be a continuos line.
         for(int i = 0; i < cellsLineDesc.numberOfCells; i++)
         {
-            if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)m.x + (int)m.z,
-                                 cellsLineDesc.firstCellCoord.y + i * (int)m.y + (int)m.w,
+            if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z,
+                                 cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w,
                                  out Cell cell))
             {
-                if(cell.Zone == _parentZone) // cell is free
+                if(CellIsAvailable(cell))
                 {
-                    leftRightCount++;
+                    firstToLast_Count++;
                 }
-                else // first invalid cell
+                else // First invalid cell, keep a continuos expansion line.
                 {
                     break;
                 }
             }
             else // Invalid grid pos.
             {
+                // [-][-][-][-][-] free line
+                // [o][o][o][o][o] original line
                 return (null, false, 0);
             }
         }
 
-        if(leftRightCount > 0)
+        // =============== Check partial result
+        // After checking the from the first cell, check if have any free valid cell the
+        // expand and update the possible return values with it.
+        if(firstToLast_Count > 0)
         {
-            freeLine.numberOfCells = leftRightCount;
-            maxExpansionSpace = 1; // Fisrt cell can be valid(exist on grid) but is from another parent zone.
+            // Have space to expand on the direction.
+            freeLine.numberOfCells = firstToLast_Count;
+            maxExpansionSpace = 1; // At least one line free.
         }
 
+        // =============== Check the all other valid lines on the sequence if requested.
+        // Iterate on the lines "on top" of the free line to check how many of the same size are free to expansion.
         if(fullSpaceSearch && freeLine.numberOfCells > 0)
         {
             int currentLineNumCells;
+            int safeCounter = 0; // Redundance to avoid infinity loops.
+            int maxIterations = cellsGrid.LargestDimension;
             bool done = false;
             
-            while(!done)
+            while(!done && safeCounter < maxIterations)
             {
                 currentLineNumCells = 0;
 
                 for(int i = 0; i < freeLine.numberOfCells; i++)
                 {
-                    if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)m.x + (maxExpansionSpace + 1)*(int)m.z,
-                                         cellsLineDesc.firstCellCoord.y + i * (int)m.y + (maxExpansionSpace + 1)*(int)m.w,
+                    if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
+                                         cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
                                          out Cell cell))
                     {
-                        if(cell.Zone == _parentZone) // cell is free
+                        if(CellIsAvailable(cell))
                         {
                             currentLineNumCells++;
                         }
-                        else // first invalid cell, can try next line on next iteration.
+                        else // First invalid cell of current line.
                         {
                             break;
                         }
@@ -522,9 +608,11 @@ public class Zone // similar a uma estrutura de nos em arvore
                     else // Invalid grid pos. Sure to not having more cells on this direction.
                     {
                         done = true;
-                        break;
+                        break; // Break the for loop.
                     }
                 }
+
+                if(done) break; // Break the while loop.
 
                 if(currentLineNumCells == freeLine.numberOfCells)
                 {
@@ -532,74 +620,104 @@ public class Zone // similar a uma estrutura de nos em arvore
                 }
                 else
                 {
-                    done = true;
-                    //break;
+                    break;
                 }
+
+                safeCounter++;
             }
         }
 
-
-        // Poderia ser ignorado se for levado em conta uma area total maior se crescer mais longe sendo mais curto
-        if(leftRightCount == cellsLineDesc.numberOfCells)
+        // =============== Check partial result, possible return.
+        // Is a full line so the other direction will not be larger. Return the result.
+        // If not, check if the other side is larger.
+        if(firstToLast_Count == cellsLineDesc.numberOfCells)
         {
+            // [o][o][o][o][o] free line
+            // [o][o][o][o][o] original line
             return (freeLine, true, maxExpansionSpace);
+            // return (cellsLineDesc, true, maxExpansionSpace); retorna a linha original completa, talvez n seja uma boa expor ela
         }
-        // else is a partial side, check if the other is larger
 
-        // ================  Check from Right to Left(Botton to Top)(< v)
+
+        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Check from LAST to FIRST cell of the line 
+
+        // =============== Check the first line on the side of orin line
+        // Do the first iteration from the LAST to FIRST cell on the side/border.
+        // Return immediately a failure result if find a invalid cell(a cell out of the grid).
+        // Or just stop iteration when find a cell that is not available to change zone, since
+        // it MUST be a continuos line.
         for(int i = cellsLineDesc.numberOfCells - 1; i >= 0; i--)
         {
-            if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)m.x + (int)m.z,
-                                 cellsLineDesc.firstCellCoord.y + i * (int)m.y + (int)m.w,
+            if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z,
+                                 cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w,
                                  out Cell cell))
             {
-                if(cell.Zone == _parentZone) // cell is free
+                if(CellIsAvailable(cell))
                 {
-                    rightLeftCount++;
+                    lastToFirst_Count++;
                 }
-                else // first invalid cell
+                else // First invalid cell.
                 {
                     break;
                 }
             }
             else // Invalid grid pos.
             {
-                // OBS: PROVAVELMENTE N NESCESSARIO, SE O LOOP ANTERIOR DETECTAR NÃO CHECA AQUI
+                // OBS: Probably never will reach this point.
+                // [-][-][-][-][-] free line
+                // [o][o][o][o][o] original line
                 return (null, false, 0);
             }
         }
 
-        // From right to left is smaller so return the previous result.
-        if(rightLeftCount <= leftRightCount)
+        // =============== Check partial result, possible return result.
+        // If the free section on this direction is smaller than the first, or if is equal randomize if will send it.
+        // return the first.
+        // TODO: when equal and deciding at this point will skip the deep check, making possible a higher space not been check.
+        if(lastToFirst_Count < firstToLast_Count || (lastToFirst_Count == firstToLast_Count && Utils.RandomBool())) // lastToFirst_Count == 0 CAN PASS IT, checking bellow.
         {
+            // [o][o][-][-][-] free line
+            // [o][o][o][o][o] original line
             return (freeLine, false, maxExpansionSpace);
         }
-        // else, continue.
 
-        freeLine.numberOfCells = rightLeftCount;
+        // =============== Check partial result
+        // lastToFirst_Count is bigger than firstToLast_Count and bigger than 0 continue. if not there is no free cells.
+        // Since lastToFirst_Count at this point is >= to firstToLast_Count.
+        if(lastToFirst_Count == 0)
+        {
+            // [-][-][-][-][-] free line
+            // [o][o][o][o][o] original line
+            return (null, false, 0);
+        }
+        
+        freeLine.numberOfCells = lastToFirst_Count;
         maxExpansionSpace = 1;
 
+        // =============== Check the all other valid lines on the sequence if requested.
+        // Iterate on the lines "on top" of the free line to check how many of the same size are free to expansion.
         if(fullSpaceSearch && freeLine.numberOfCells > 0)
         {
             int currentLineNumCells;
+            int safeCounter = 0; // Redundance to avoid infinity loops.
+            int maxIterations = cellsGrid.LargestDimension;
             bool done = false;
             
-            while(!done)
+            while(!done && safeCounter < maxIterations)
             {
                 currentLineNumCells = 0;
 
                 for(int i = cellsLineDesc.numberOfCells - 1; i >= cellsLineDesc.numberOfCells - freeLine.numberOfCells; i--)
                 {
-                    Cell cell;
-                    if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)m.x + (maxExpansionSpace + 1)*(int)m.z,
-                                         cellsLineDesc.firstCellCoord.y + i * (int)m.y + (maxExpansionSpace + 1)*(int)m.w,
-                                         out cell))
+                    if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
+                                         cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
+                                         out Cell cell))
                     {
-                        if(cell.Zone == _parentZone) // cell is free
+                        if(CellIsAvailable(cell))
                         {
                             currentLineNumCells++;
                         }
-                        else // first invalid cell, can try next line on next iteration.
+                        else // First invalid cell, can try next line on next iteration.
                         {
                             break;
                         }
@@ -611,52 +729,72 @@ public class Zone // similar a uma estrutura de nos em arvore
                     }
                 }
 
+                if(done) break;
+
                 if(currentLineNumCells == freeLine.numberOfCells)
                 {
                     maxExpansionSpace++;
                 }
                 else
                 {
-                    done = true;
-                    //break;
+                    break;
                 }
+
+                safeCounter++;
             }
         }
         
+        // After doing all possible checks, return the largest free line. At this point
+        // it will be a line smaller than original line and stating from the last cell.
+        // Update the first cell since at this point it still the first from the original nile, and now should be a cell in the middle.
+        if(freeLine.side == Side.Top || freeLine.side == Side.Bottom)
+        {
+            freeLine.firstCellCoord.x = cellsLineDesc.firstCellCoord.x + cellsLineDesc.numberOfCells - freeLine.numberOfCells;
+        }
+        else
+        {
+            freeLine.firstCellCoord.y = cellsLineDesc.firstCellCoord.y + cellsLineDesc.numberOfCells - freeLine.numberOfCells;
+        }
+        // [-][-][-][o][o] free line
+        // [o][o][o][o][o] original line
         return (freeLine, false, maxExpansionSpace);
     }
 
-    public bool TryExpand(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid)
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cellsLineDesc"></param>
+    /// <param name="cellsGrid"></param>
+    /// <returns></returns>
+    bool TryExpand(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid)
     {
         int amount = 1;
-        Vector4 m; // Transformation matrix
-        
-        switch(cellsLineDesc.side)
-        {
-            case Side.Top:
-                m = _TOP_MATRIX;
-                break;
-            case Side.Bottom:
-                m = _BOTTOM_MATRIX;
-                break;
-            case Side.Left:
-                m = _LEFT_MATRIX;
-                break;
-            case Side.Right:
-                m = _RIGHT_MATRIX;
-                break;
-            default:
-                m = _TOP_MATRIX;
-                break;
-        }
-
+        Vector4 tMatrix = _coordTransMatrices[cellsLineDesc.side]; // Transformation matrix
 
         // Assign the cells to the zone.
         for(int i = 0; i < cellsLineDesc.numberOfCells; i++)
         {
-            cellsGrid.AssignCellToZone(cellsLineDesc.firstCellCoord.x + i * (int)m.x + (int)m.z,
-                                       cellsLineDesc.firstCellCoord.y + i * (int)m.y + (int)m.w,
-                                       this);
+            int x = cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z;
+            int y = cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w;
+
+            if(cellsGrid.GetCell(x, y, out Cell cell))
+            {
+                if(!CellIsAvailable(cell))
+                {
+                    Debug.LogWarning($"Cell already have a zone in same hierarchy level. Cell zone: {cell.Zone}");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Trying to assign a cell in a invalid Grid position.({x},{y})");
+                return false;
+            }
+
+            if(!cellsGrid.AssignCellToZone(x, y, this))
+            {
+                return false;
+            }
         }
 
 
@@ -664,95 +802,91 @@ public class Zone // similar a uma estrutura de nos em arvore
         {
             case Side.Top:
                 if(_isLShaped) _lBorderCells.MoveUp(amount);
-                _topCells.MoveUp(amount);
-                _leftCells.MoveUp(amount);
-                _rightCells.MoveUp(amount);
-                _leftCells.AddCells(amount);
-                _rightCells.AddCells(amount);
+                _zoneBorders[Side.Top].MoveUp(amount);
+                _zoneBorders[Side.Left].MoveUp(amount);
+                _zoneBorders[Side.Right].MoveUp(amount);
+                _zoneBorders[Side.Left].AddCells(amount);
+                _zoneBorders[Side.Right].AddCells(amount);
                 break;
             case Side.Bottom:
                 if(_isLShaped) _lBorderCells.MoveDown(amount);
-                _bottomCells.MoveDown(amount);
-                _leftCells.AddCells(amount);
-                _rightCells.AddCells(amount);
+                _zoneBorders[Side.Bottom].MoveDown(amount);
+                _zoneBorders[Side.Left].AddCells(amount);
+                _zoneBorders[Side.Right].AddCells(amount);
                 break;
             case Side.Left:
                 if(_isLShaped) _lBorderCells.MoveLeft(amount);
-                _leftCells.MoveLeft(amount);
-                _topCells.MoveLeft(amount);
-                _bottomCells.MoveLeft(amount);
-                _topCells.AddCells(amount);
-                _bottomCells.AddCells(amount);
+                _zoneBorders[Side.Left].MoveLeft(amount);
+                _zoneBorders[Side.Top].MoveLeft(amount);
+                _zoneBorders[Side.Bottom].MoveLeft(amount);
+                _zoneBorders[Side.Top].AddCells(amount);
+                _zoneBorders[Side.Bottom].AddCells(amount);
                 break;
             case Side.Right:
                 if(_isLShaped) _lBorderCells.MoveRight(amount);
-                _rightCells.MoveRight(amount);
-                _topCells.AddCells(amount);
-                _bottomCells.AddCells(amount);
+                _zoneBorders[Side.Right].MoveRight(amount);
+                _zoneBorders[Side.Top].AddCells(amount);
+                _zoneBorders[Side.Bottom].AddCells(amount);
                 break;
             default: // Top
                 if(_isLShaped) _lBorderCells.MoveUp(amount);
-                _topCells.MoveUp(amount);
-                _leftCells.MoveUp(amount);
-                _rightCells.MoveUp(amount);
-                _leftCells.AddCells(amount);
-                _rightCells.AddCells(amount);
+                _zoneBorders[Side.Top].MoveUp(amount);
+                _zoneBorders[Side.Left].MoveUp(amount);
+                _zoneBorders[Side.Right].MoveUp(amount);
+                _zoneBorders[Side.Left].AddCells(amount);
+                _zoneBorders[Side.Right].AddCells(amount);
                 break;
         }
 
         return true;
     }
 
-    public bool CheckSpaceAndExpand(Side side, CellsGrid cellsGrid)
-    {
-        CellsLineDescription cellsLineDesc;
 
-        if(_isLShaped)
+#region ================================================== AUX FUNCS ==================================================
+    int CountAvailableCells(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid, Vector4 tMatrix, bool reverse, int maxExpansionSpace = 0)
+    {
+        int count = 0;
+        int start = reverse ? cellsLineDesc.numberOfCells - 1 : 0;
+        int end = reverse ? -1 : cellsLineDesc.numberOfCells;
+        int step = reverse ? -1 : 1;
+
+        for(int i = start; i != end; i += step)
         {
-            cellsLineDesc = _lBorderCells;
-        }
-        else
-        {
-            switch(side)
+            if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
+                                 cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
+                                 out Cell cell))
             {
-                case Side.Top:
-                    cellsLineDesc = _topCells;
-                    break;
-                case Side.Bottom:
-                    cellsLineDesc = _bottomCells;
-                    break;
-                case Side.Left:
-                    cellsLineDesc = _leftCells;
-                    break;
-                case Side.Right:
-                    cellsLineDesc = _rightCells;
-                    break;
-                default:
-                    cellsLineDesc = _topCells;
-                    break;
+                if(CellIsAvailable(cell))
+                {
+                    count++;
+                }
+                else break;
+            }
+            else
+            {
+                return 0;
             }
         }
 
-        if(GetExpansionSpace(cellsLineDesc, cellsGrid, false).isFullLine)
-        {
-            return TryExpand(cellsLineDesc, cellsGrid);
-        }
-        else
-        {
-            return false;
-        }
+        return count;
     }
-
-    public bool ExpandLShape(CellsGrid cellsGrid)
+    
+    bool CellIsAvailable(Cell cell)
     {
-        if(GetExpansionSpace(_lBorderCells, cellsGrid, false).isFullLine)
-        {
-            if(TryExpand(_lBorderCells, cellsGrid))
-            {
-                return true;
-            }
-        }
-        
-        return false;
+        return cell.Zone == _parentZone;
     }
+#endregion
+
+#region ================================================== DEBUG ==================================================
+    public void Debug_Print_GetExpansionSpace_ForAllSides(CellsGrid cellsGrid)
+    {
+        Debug.Log($"{ZoneId}--------------------------------");
+        foreach(var border in _zoneBorders)
+        {
+            var result = GetExpansionSpace(border.Value, cellsGrid, true);
+            Debug.Log($"zid:{ZoneId} side:{result.freeLineDescription?.side} space:{result.distance} cells:{result.freeLineDescription?.numberOfCells}");
+        }
+        Debug.Log("--------------------------------");
+    }
+#endregion
 }

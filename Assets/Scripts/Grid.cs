@@ -22,22 +22,24 @@ Y V
 
 public class CellsGrid // using class to facilitate passing values by reference
 {
-    public Vector2Int _dimmensions; // dimen��es da grade.
+    public Vector2Int _dimensions; // dimen��es da grade.
     public Cell[] _cells; // array pois o tamanho das grids n deve mudar.
 
-    public Vector2Int Dimmensions => _dimmensions;
+    public Vector2Int Dimensions => _dimensions;
+    public int LargestDimension => _dimensions.x > _dimensions.y? _dimensions.x : _dimensions.y;
+    public Cell[] Cells => _cells;
 
 
-    public CellsGrid(Vector2Int dimmensions)
+    public CellsGrid(Vector2Int dimensions)
     {
-        _dimmensions = new Vector2Int(dimmensions.x, dimmensions.y);
-        _cells = new Cell[dimmensions.x * dimmensions.y];
+        _dimensions = new Vector2Int(dimensions.x, dimensions.y);
+        _cells = new Cell[dimensions.x * dimensions.y];
 
         int index = 0;
 
-        for (int y = 0; y < dimmensions.y; y++)
+        for (int y = 0; y < dimensions.y; y++)
         {
-            for(int x = 0; x < dimmensions.x; x++)
+            for(int x = 0; x < dimensions.x; x++)
             {
                 _cells[index] = new Cell(x, y);
                 if(x == 8 || x == 12)
@@ -53,20 +55,20 @@ public class CellsGrid // using class to facilitate passing values by reference
 
     public bool IsValidPosition(int x, int y)
     {
-        return x >= 0 && x < _dimmensions.x && y >= 0 && y < _dimmensions.y;
+        return x >= 0 && x < _dimensions.x && y >= 0 && y < _dimensions.y;
     }
 
     public bool GetCell(int x, int y, out Cell cell)
     {
         if(IsValidPosition(x, y))
         {
-            cell = _cells[Utils.MatrixToArrayIndex(x, y, _dimmensions.x)];
+            cell = _cells[Utils.MatrixToArrayIndex(x, y, _dimensions.x)];
             return true;
         }
         else
         {
             //Debug.LogWarning($"Invalid grid position:{x},{y}");
-            cell = default;
+            cell = null;
             return false;
         }
     }
@@ -88,12 +90,12 @@ public class CellsGrid // using class to facilitate passing values by reference
     public string GridToString()
     {
         string result = "\n";
-        for(int i = 0; i < _dimmensions.y; i++)
+        for(int i = 0; i < _dimensions.y; i++)
         {
             //result += i.ToString() + ":";
-            for(int j = 0; j < _dimmensions.x; j++)
+            for(int j = 0; j < _dimensions.x; j++)
             {
-                Zone zone = _cells[i * _dimmensions.x + j].Zone;
+                Zone zone = _cells[i * _dimensions.x + j].Zone;
                 string num = "--";
                 if(zone != null)
                 {
@@ -108,16 +110,24 @@ public class CellsGrid // using class to facilitate passing values by reference
     }
 
 
-    public void AssignCellToZone(int x, int y, Zone zone)
+    public bool AssignCellToZone(int x, int y, Zone zone)
     {
         if(GetCell(x, y, out Cell cell))
         {
+            // Remove previous set cell zone.
             if(cell.Zone != null)
             {
                 cell.Zone.RemoveCell(cell);
             }
 
             zone.AddCell(cell);
+            cell.SetZone(zone);
+
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
