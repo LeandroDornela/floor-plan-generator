@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /*------------------>x
 |       Top
@@ -128,6 +129,22 @@ public class Zone // similar a uma estrutura de nos em arvore
     private bool _isLShaped = false;
     public bool IsLShaped => _isLShaped;
     public CellsLineDescription _lBorderCells;
+
+    // Get the zone are in cells units.
+    public int Area => _cells.Count;
+    public Cell[] Cells => _cells.ToArray();
+
+    private Cell[] _borderCells;
+    public Cell[] BorderCells
+    {
+        get
+        {
+            if(_borderCells.Length == 0) Debug.LogError("Border Cells is not set.");
+            return _borderCells;
+        }
+    }
+
+    public Cell OriginCell => (_cells != null && _cells.Count > 0)? _cells[0] : null;
 
     // Coord transformation matrix, used to compact the methods that have different behavior base on the border of the shape.
     private readonly Dictionary<Side, Vector4> _coordTransMatrices = new Dictionary<Side, Vector4>
@@ -301,22 +318,12 @@ public class Zone // similar a uma estrutura de nos em arvore
 
 
     /// <summary>
-    /// Get the zone are in cells units.
-    /// </summary>
-    /// <returns>The number of cells as the zone area.</returns>
-    public int GetZoneArea()
-    {
-        return _cells.Count;
-    }
-
-
-    /// <summary>
     /// Expensive. Cache the return when possible.
     /// "Find" to make clear it will look for the border cells.
     /// TODO: Optimize.
     /// </summary>
     /// <returns></returns>
-    public Cell[] FindBorderCells(CellsGrid cellsGrid)
+    Cell[] FindBorderCells(CellsGrid cellsGrid)
     {
         List<Cell> borderCells = new List<Cell>();
 
@@ -390,6 +397,37 @@ public class Zone // similar a uma estrutura de nos em arvore
         _isLShaped = true;
 
         return true;
+    }
+
+
+    public bool HasDesiredArea(CellsGrid cellsGrid)
+    {
+        return Area >= _areaRatio * cellsGrid.Area;
+    }
+
+    public void SetBorderCells(CellsGrid cellsGrid)
+    {
+        if(_borderCells != null && _borderCells.Length > 0)
+        {
+            Debug.LogError("Border cells is already defined.");
+            return;
+        }
+
+        _borderCells = FindBorderCells(cellsGrid);
+    }
+
+
+    // TODO: use dictionary for adjacent zones.
+    public bool IsAdjacent(Zone zoneToTest)
+    {
+        return _adjacentZones.Contains(zoneToTest);
+    }
+
+
+    // When zone has the final shape, convert lists to arrays, update and set values.
+    public void Bake()
+    {
+
     }
 
 

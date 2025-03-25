@@ -19,6 +19,8 @@ public partial class MethodGrowth
 
     public override void OnDrawGizmos()
     {
+        return;
+
         Vector3 from = new Vector3();
         Vector3 to = new Vector3();
         CellsLineDescription zb = _zoneBorder_TEMP;

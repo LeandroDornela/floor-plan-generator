@@ -49,7 +49,7 @@ public struct FloorPlanConfig
 public struct ZoneConfig
 {
     public string ParentZoneId;
-    [Range(0, 1)] public float AreaRatio;
+    [Range(0.01f, 1)] public float AreaRatio;
     
     [Obsolete]
     [SerializeField] private string _presetArea;

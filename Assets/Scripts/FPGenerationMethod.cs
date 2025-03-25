@@ -1,7 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
-public class FPGenerationMethod
+public class FPGenerationMethod : ScriptableObject
 {
     protected FloorPlanManager _floorPlanManager;
     [SerializeField] protected bool _initialized = false;

@@ -22,17 +22,25 @@ Y V
 
 public class CellsGrid // using class to facilitate passing values by reference
 {
-    public Vector2Int _dimensions; // dimen��es da grade.
+    public readonly Vector2Int _dimensions; // dimen��es da grade.
     public Cell[] _cells; // array pois o tamanho das grids n deve mudar.
 
     public Vector2Int Dimensions => _dimensions;
-    public int LargestDimension => _dimensions.x > _dimensions.y? _dimensions.x : _dimensions.y;
+    public int LargestDimension => _largestDimension;
     public Cell[] Cells => _cells;
+
+    private readonly int _largestDimension;
+    private readonly float _diagonalMagnitudeRounded;
+    
+    public float DiagonalMagnitudeRounded => _diagonalMagnitudeRounded;
+    public int Area => _cells.Length;
 
 
     public CellsGrid(Vector2Int dimensions)
     {
         _dimensions = new Vector2Int(dimensions.x, dimensions.y);
+        _largestDimension = _dimensions.x > _dimensions.y? _dimensions.x : _dimensions.y;
+        _diagonalMagnitudeRounded = Mathf.Round(_dimensions.magnitude);
         _cells = new Cell[dimensions.x * dimensions.y];
 
         int index = 0;

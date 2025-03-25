@@ -6,6 +6,9 @@ Project Description
 
 ### Todo
 
+- [ ] assegurar que peso 0 não está sendo sorteado  
+- [ ] Resolver area ratio subzona. Teoricamente a zona mae tem q ter a soma das filhas  
+- [ ] metodo de Bake para zona. Criar as bordas e move oque for lista para array  
 - [ ] talvez na função de crescimento em L crescer nas outras bordas tambem, ou ter forma de crescer de crescer em ambas, hora na borda L, hora nas regurales denpendedo da maior  
 - [ ] na zona add: expand to largest side, rect  
 - [ ] try expand privadas e public try expand L e try expand rect  

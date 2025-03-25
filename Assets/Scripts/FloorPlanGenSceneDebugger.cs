@@ -16,6 +16,8 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
 
     public void Init(FloorPlanGenerator floorPlanGenerator, FloorPlanConfig floorPlanConfig)
     {
+        if(_initialized) return;
+
         Debug.Log("Initializing floor plan generator scene debugger.");
 
         _floorPlanGenerator = floorPlanGenerator;
@@ -96,6 +98,10 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
             if(cellZone != null)
             {
                 _cellsGraphicsInstances[i].SetColor(_debugColors[cellZone.ZoneId]);
+            }
+            else
+            {
+                _cellsGraphicsInstances[i].SetColor(Color.black);
             }
         }
     }

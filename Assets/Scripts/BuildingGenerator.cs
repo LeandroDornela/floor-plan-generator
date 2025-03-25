@@ -34,7 +34,7 @@ public class BuildingGenerator : MonoBehaviour
         {
             await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
             counter++;
-            ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
+            //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
         }
     }
 

@@ -21,11 +21,13 @@ public class VisualCell : MonoBehaviour
     {
         _cell = cell;
         gameObject.name = "Cell_" + cell.GridPosition.x + "_" + cell.GridPosition.y;
+        _renderer.material.color = Color.black;
     }
 
     public void SetColor(Color color)
     {
         if(_renderer == null) { _renderer = GetComponent<Renderer> (); }
+        //_renderer.material.color = _renderer.material.color + color/100;
         _renderer.material.color = color;
     }
 

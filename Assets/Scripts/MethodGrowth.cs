@@ -5,12 +5,21 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using Unity.Mathematics;
 
 [System.Serializable]
+[CreateAssetMenu(fileName = "DefaultGrowthMethod", menuName = "Scriptable Objects/Generation Methods/Default Growth")]
 public partial class MethodGrowth : FPGenerationMethod
 {
     public AnimationCurve _borderDistanceCurve;
+    public AnimationCurve _adjacencyDistanceCurve;
+    
+
+    [Header("Testing")]
+    public float delay = 0.01f;
+    public bool _ignoreDesiredAreaInRect = false;
+    public bool _stopAtInitialPlot = false;
+    public bool _skipToFinalResult = false;
+    public bool _randomInitialArea = false;
 
     private CancellationTokenSource _cts;
     private bool _done = false;
@@ -23,9 +32,8 @@ public partial class MethodGrowth : FPGenerationMethod
 
     // key = Summation, value = cell weight
     private WeightedArray _cellsWeights;
+    private WeightedArray _zonesWeights;
     //private float _cellsWeightsTotalSum;
-    
-    private float delay = 0.01f;
 
     private CellsLineDescription _zoneBorder_TEMP;
 
@@ -61,7 +69,11 @@ public partial class MethodGrowth : FPGenerationMethod
 
         // TODO: temporario.
         // Setup da zona raiz.
-        int corner = 5; // Utils.RandomRange(0,6);
+        int corner;
+        if(_randomInitialArea)
+            corner = Utils.RandomRange(0,6);
+        else
+            corner = 5;
         int a = Utils.RandomRange(2,10);
         int b = Utils.RandomRange(2,10);
         
@@ -83,9 +95,11 @@ public partial class MethodGrowth : FPGenerationMethod
         {
             // Get the child zones from the next zone to subdivide.
             zonesToGrow = GetNextZonesToGrowList();
+            UpdateZonesWeights(zonesToGrow);
 
             //TriggerOnCellsGridChanged(cellsGrid);
-            //await UniTask.WaitForSeconds(2, cancellationToken: _cts.Token);
+            //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
+            if(_stopAtInitialPlot) break;
 
 
             // >>>>>>>>>>> begin main grow logic
@@ -97,15 +111,24 @@ public partial class MethodGrowth : FPGenerationMethod
                 if(!GrowZoneRect(_currentZone, cellsGrid))
                 {
                     zonesToGrow.Remove(_currentZone);
+                    UpdateZonesWeights(zonesToGrow);
                     grownZones.Add(_currentZone);
                 }
 
-                //TriggerOnCellsGridChanged(cellsGrid);
-                //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
+                if(!_skipToFinalResult)
+                {
+                    TriggerOnCellsGridChanged(cellsGrid);
+                    await UniTask.WaitForSeconds(delay + 0.1f, cancellationToken: _cts.Token);
+                }
             }
 
 
+            //TriggerOnCellsGridChanged(cellsGrid);
+            //await UniTask.WaitForSeconds(10, cancellationToken: _cts.Token);
+
+
             zonesToGrow = new List<Zone>(grownZones);
+            UpdateZonesWeights(zonesToGrow);
             grownZones.Clear();
             
             
@@ -118,11 +141,15 @@ public partial class MethodGrowth : FPGenerationMethod
                 if(!GrowZoneLShape(_currentZone, cellsGrid))
                 {
                     zonesToGrow.Remove(_currentZone);
+                    UpdateZonesWeights(zonesToGrow);
                     grownZones.Add(_currentZone);
                 }
 
-                //TriggerOnCellsGridChanged(cellsGrid);
-                //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
+                if(!_skipToFinalResult)
+                {
+                    TriggerOnCellsGridChanged(cellsGrid);
+                    await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
+                }
             }
 
 
@@ -149,7 +176,7 @@ public partial class MethodGrowth : FPGenerationMethod
         TriggerOnCellsGridChanged(cellsGrid);
         //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token, cancelImmediately: true);
         await UniTask.WaitForEndOfFrame();
-        //_cts.Dispose();
+        _cts.Dispose();
 
         return true;
     }
@@ -255,6 +282,52 @@ public partial class MethodGrowth : FPGenerationMethod
     {
         //return DEBUG_GrowSequential(zone, cellsGrid);
 
+        if(zone.HasDesiredArea(cellsGrid) && !_ignoreDesiredAreaInRect)
+        {
+            return false;
+        }
+
+/*
+        float aspect = zone.GetZoneAspect();
+        // All directions
+        if(aspect == zone.DesiredAspect)
+        {
+            var largestFreeSpace = zone.GetLargestExpansionSpaceRect(cellsGrid, true);
+            if(largestFreeSpace.isFullLine)
+            {
+                return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.side, cellsGrid);
+            }
+        }
+        // Vertical
+        else if(aspect > zone.DesiredAspect && (side == Zone.Side.Top || side == Zone.Side.Bottom))
+        {
+            var freeSpaceOnTop = zone.GetExpansionSpaceRect(Zone.Side.Top, cellsGrid, true);
+            var freeSpaceOnBottom = zone.GetExpansionSpaceRect(Zone.Side.Top, cellsGrid, true);
+        }
+        // Horizontal
+        else if(aspect < zone.DesiredAspect && (side == Zone.Side.Left || side == Zone.Side.Right))
+        {
+            if(TryGrowFromSide(side, zone, cellsGrid))
+            {
+                return true;
+            }
+        }
+*/
+
+
+        var largestFreeSpace = zone.GetLargestExpansionSpaceRect(cellsGrid, false); // INTERESSANTE, usar essa função sem checar espaço total gera formas retangulares, mas é mias custoso do q checar os aspect antes
+        if(largestFreeSpace.isFullLine)
+        {
+            return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.side, cellsGrid);
+        }
+        else
+        {
+            return false;
+        }
+
+
+
+        /*
         float aspect = zone.GetZoneAspect();
 
         // Guid.NewGuid() provides a way to get unique randon numbers. Create a array with the directions
@@ -288,6 +361,7 @@ public partial class MethodGrowth : FPGenerationMethod
                 }
             }
         }
+        */
 
         return false; // can't grow.
     }
@@ -385,25 +459,28 @@ public partial class MethodGrowth : FPGenerationMethod
             return null;
         }
 
+        // Zone to sub div has the final shape, bake the borders.
+        zonesToSubdivide[0].SetBorderCells(_floorPlanManager.CellsGrid);
+
         var childZones = zonesToSubdivide[0]._childZones;
         zonesToSubdivide.RemoveAt(0);
 
-        foreach(var zone in childZones)
+        for(int i = 0; i < childZones.Count; i++)
         {
-            //CalculateWeights(zone);
-
-            PlotFirstZoneCell(zone); // TODO: move to outside the method
+            Zone zone = childZones[i];
+            PlotFirstZoneCell(zone, childZones); // TODO: move to outside the method
         }
 
         return  childZones;
     }
 
 
-    void PlotFirstZoneCell(Zone zone)
+    void PlotFirstZoneCell(Zone zone, List<Zone> zonesToGrow)
     {
         if(zone._parentZone != null)
         {
             /*
+            // Random selection
             int index = Utils.RandomRange(0, zone._parentZone._cells.Count);
             Cell cell = null;
             try
@@ -415,10 +492,13 @@ public partial class MethodGrowth : FPGenerationMethod
             catch
             {
                 Debug.LogError($"{zone._parentZone._cells.Count}, {index}");
-            }*/
-            CalculateWeights(zone);
-            //Cell cell = GetRandomWeightedCell(_floorPlanManager.CellsGrid.Cells);
-            //if(cell != null)_floorPlanManager.CellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
+            }
+            _floorPlanManager.CellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
+            */
+            
+            // Weighted selection
+            CalculateWeights(zone, zonesToGrow);
+            //if(_cellsWeights.GetRandomWeightedElement(zone._parentZone.Cells, out Cell cell))
             if(_cellsWeights.GetRandomWeightedElement(_floorPlanManager.CellsGrid.Cells, out Cell cell))
             {
                 _floorPlanManager.CellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
@@ -436,7 +516,15 @@ public partial class MethodGrowth : FPGenerationMethod
 
     Zone GetNextZone(List<Zone> zonesToGrow)
     {
-        return zonesToGrow[Utils.RandomRange(0, zonesToGrow.Count)];
+        //return zonesToGrow[Utils.RandomRange(0, zonesToGrow.Count)];
+
+        if(_zonesWeights.GetRandomWeightedElement(zonesToGrow.ToArray(), out Zone zone))
+        {
+            return zone;
+        }
+
+        Debug.LogError("Unable to get a zone.");
+        return null;
     }
 
 
@@ -465,36 +553,106 @@ public partial class MethodGrowth : FPGenerationMethod
     // -> a celula(ZONA) que vai ser colocada,
     // -> as zonas ja exitentes, as bordas, as portas, as janelas(celulas presentes com caracteristicas que interferen no peso)
     // <- peso da celula
+    // TODO: peso para entrada e zonas primas.
+    // TODO: se celulas mais distantes teram valores de borda sobre escritos, deve se ter um melhor desenpenho al checar peso de adjacencia antes e pular aqueles com valor 0(talvez).
+    // TODO: tratamento peso 0 final em todas celulas.
     void CalculateWeights(Zone zoneToPlot, List<Zone> plottedZones = null)
     {
-        Debug.Log($"Plotting zone: {zoneToPlot.ZoneId}");
+        //Debug.Log($"Plotting zone: {zoneToPlot.ZoneId}");
 
-        var cellsGrid = _floorPlanManager.CellsGrid;
-        _cellsWeights = new WeightedArray(cellsGrid.Cells.Length);
+        CellsGrid cellsGrid = _floorPlanManager.CellsGrid;
         Zone parentZone = zoneToPlot._parentZone;
+        Cell[] cellsToCalc =  _floorPlanManager.CellsGrid.Cells;//parentZone.Cells;
+        _cellsWeights = new WeightedArray(cellsToCalc.Length);
 
-        for(int i = 0; i < cellsGrid.Cells.Length; i++) // TODO: percorrer apensas as celulas da zona mãe e não todas
+        float adjacencyWeightMultiplier = 1;
+        float borderWeightMultiplier = 1;
+
+        int desiredZoneSqSize = Mathf.CeilToInt(Mathf.Sqrt(zoneToPlot.AreaRatio * cellsGrid.Area)); // Ceiling to round up to a size that can fit it.
+        int desiredZoneDim = Mathf.CeilToInt(zoneToPlot.AreaRatio * cellsGrid.DiagonalMagnitudeRounded);
+        int minimumBorderDistance = desiredZoneSqSize / 4;
+        
+
+        for(int i = 0; i < cellsToCalc.Length; i++)
         {
-            Cell cell = cellsGrid.Cells[i];
+            Cell cell = cellsToCalc[i];
             float weight = 0;
 
             // Cell outside the current parent zone, the context zone.
             if(cell.Zone != parentZone)
             {
-                _cellsWeights.AddAt(i, weight);
+                _cellsWeights.AddAt(i, 0);
                 continue; // Next cell.
             }
 
-
-            // Distance from borders.
+            
+            // Calculate the smaller distance from borders.
             float smallerDistance = float.MaxValue;
-            foreach(Cell borderCell in parentZone.FindBorderCells(cellsGrid))
+            foreach(Cell borderCell in parentZone.BorderCells)
             {
-                float distance = MathF.Round((borderCell.GridPosition - cell.GridPosition).magnitude);
+                float distance = Mathf.Round((borderCell.GridPosition - cell.GridPosition).magnitude);
                 if(distance < smallerDistance)
                     smallerDistance = distance;
             }
-            weight = 1/MathF.Pow(smallerDistance + 1, 4);
+
+            // Calculate de weight from borders using the desired size of the zone sides on a function defined by a animation curve.
+            if(smallerDistance < minimumBorderDistance || smallerDistance > desiredZoneSqSize) // (smallerDistance > desiredZoneSqSize) smaller distance > expected side size, the cell is too far.
+            {
+                weight = 0;
+            }
+            else
+            {
+                weight = _borderDistanceCurve.Evaluate(smallerDistance / desiredZoneSqSize) * borderWeightMultiplier; // The value to be obtained is between a minimum and maximum based on zone to plot desired size.
+            }
+
+            
+            // Distance from adjacent or non adjacent.
+            if(plottedZones != null)
+            {
+                foreach(Zone plottedZone in plottedZones)
+                {
+                    if(plottedZone.OriginCell == null) // Plotted zone actually is not plotted.
+                        continue;
+
+                    float distance = Mathf.Round((plottedZone.OriginCell.GridPosition - cell.GridPosition).magnitude);
+                    float expectedAdjacentZoneSide = Mathf.Ceil(MathF.Sqrt(plottedZone.AreaRatio * cellsGrid.Area)) / 2;
+                    float normToPlottedRadius = distance / expectedAdjacentZoneSide;
+                    float normToTotalRadius = distance / (desiredZoneSqSize + expectedAdjacentZoneSide);
+
+
+                    // Between a minimum and maximum distance
+                    // *____________)---x--------)__________...
+                    // {1}*_________{2} ) ----- {3}x ---- {4} )___________...
+                    // 1:plotted cell
+                    // 2:expectedAdjacentZoneSide
+                    // 3:distance
+                    // 4:desiredZoneSqSize + expectedAdjacentZoneSide
+                    if(normToPlottedRadius < 1) // To close of a plotted zone
+                    {
+                        weight = 0;
+                        break; // Don't need to check other plotted zones.
+                    }
+                    else if(normToTotalRadius <= 1)
+                    {
+                        if(zoneToPlot.IsAdjacent(plottedZone))
+                        {
+                            weight += _adjacencyDistanceCurve.Evaluate(normToTotalRadius);
+                        }
+                        else
+                        {
+                            weight -= _adjacencyDistanceCurve.Evaluate(normToTotalRadius);
+                        }
+                    }
+                    else if(zoneToPlot.IsAdjacent(plottedZone)) // normToTotalRadius > 1
+                    {
+                        weight = 0; // Will prevent borders far away from adjacent zones to have weight.
+                    }
+                    // else don't change the weight.
+
+                    weight = Mathf.Clamp(weight, 0, float.MaxValue);
+                    weight = weight * adjacencyWeightMultiplier;
+                }
+            }
 
 
             _cellsWeights.AddAt(i, weight);
@@ -502,5 +660,17 @@ public partial class MethodGrowth : FPGenerationMethod
 
         
         Utils.PrintArrayAsGrid(cellsGrid.Dimensions.x, cellsGrid.Dimensions.y, _cellsWeights.Values);
+    }
+
+
+    void UpdateZonesWeights(List<Zone> zonesToGrow)
+    {
+        _zonesWeights = new WeightedArray(zonesToGrow.Count);
+
+        for(int i = 0; i < zonesToGrow.Count; i++)
+        {
+            Zone zone = zonesToGrow[i];
+            _zonesWeights.AddAt(i, zone.AreaRatio);
+        }
     }
 }

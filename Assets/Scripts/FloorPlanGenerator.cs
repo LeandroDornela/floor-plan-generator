@@ -15,9 +15,12 @@ public class FloorPlanGenerator
 {
     public FloorPlanManager _floorPlanManager;
 
-    [SerializeField] private FPGenerationMethodType _generationMethodType;
-    private FPGenerationMethod _currentMethod;
-    public FPGenerationMethod CurrentMethod => _currentMethod;
+    //[SerializeField] private FPGenerationMethodType _generationMethodType;
+    //private FPGenerationMethod _currentMethod;
+    //public FPGenerationMethod CurrentMethod => _currentMethod;
+
+    [SerializeField, NaughtyAttributes.Expandable] private FPGenerationMethod _generationMethod;
+    public FPGenerationMethod CurrentMethod => _generationMethod;
 
     [Header("Debug")]
     [SerializeField] private FloorPlanGenSceneDebugger _sceneDebugger;
@@ -37,7 +40,7 @@ public class FloorPlanGenerator
                                                  // order:0
                                                  // -->
 
-
+        /*
         // ====== Generation algorthm setup ======
         switch(_generationMethodType)
         {
@@ -58,6 +61,9 @@ public class FloorPlanGenerator
                                                  // <!--
                                                  // order:-10
                                                  // -->
+        */
+
+        _generationMethod.Init(_floorPlanManager);
 
 
         // ====== Visual debugger setup ======
@@ -84,9 +90,10 @@ public class FloorPlanGenerator
 
         _running = true;
         
-        _floorPlanManager.CellsGrid.PrintGrid();
-            await _currentMethod.Run();
-        _floorPlanManager.CellsGrid.PrintGrid();
+        //_floorPlanManager.CellsGrid.PrintGrid();
+        //await _currentMethod.Run();
+        await _generationMethod.Run();
+        //_floorPlanManager.CellsGrid.PrintGrid();
 
         _running = false;
 
@@ -104,7 +111,8 @@ public class FloorPlanGenerator
         Init(floorPlanConfig);
 
         _running = true;
-        _currentMethod.RunSync();
+        //_currentMethod.RunSync();
+        _generationMethod.RunSync();
         _running = false;
 
         return true;
@@ -112,6 +120,7 @@ public class FloorPlanGenerator
 
     public void OnDrawGizmos()
     {
-        _currentMethod?.OnDrawGizmos();
+        //_currentMethod?.OnDrawGizmos();
+        _generationMethod?.OnDrawGizmos();
     }
 }

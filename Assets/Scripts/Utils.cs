@@ -49,14 +49,44 @@ public class Utils
         }
         */
 
+        float largest = 0;
+        foreach(var val in data)
+        {
+            if(val > largest)
+            {
+                largest = val;
+            }
+        }
+
         string result = "[";
         for(int i = 0; i < height; i++)
         {
             for(int j = 0; j < width; j++)
             {
+                //float val = data[i * width + j];
+                //if(j == width - 1 && i == height - 1) result += $"{val:0.00}";
+                //else result += $"{val:0.00} ";
+                
                 int val = Mathf.CeilToInt(data[i * width + j] * 255);
-                if(j == width - 1 && i == height - 1) result += $"{val},{val},{val}";
-                else result += $"{val},{val},{val},";
+                string col;
+
+                if(val > 255)
+                {
+                    col = $"{255},{0},{0}";
+                }
+                else if(val < 0)
+                {
+                    col = $"{255},{0},{255}";
+                }
+                else
+                {
+                    col = $"{val},{val},{val}";
+                }
+
+                
+                
+                if(j == width - 1 && i == height - 1) result += col;
+                else result += $"{col},";
             }
         }
         result += "]";

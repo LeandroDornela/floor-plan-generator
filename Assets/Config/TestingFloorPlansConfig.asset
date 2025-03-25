@@ -13,44 +13,95 @@ MonoBehaviour:
   m_Name: TestingFloorPlansConfig
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
-  - FloorPlanId: Plan 1
-    GridDimensions: {x: 15, y: 15}
+  - FloorPlanId: Real
+    GridDimensions: {x: 20, y: 10}
     ZonesConfigs:
       _serializedList:
       - Key: red
         Value:
           ParentZoneId: 
-          AreaRatio: 0
+          AreaRatio: 1
           _presetArea: 
       - Key: green
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.5
           _presetArea: 
       - Key: blue
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.5
+          _presetArea: 
+      - Key: cian
+        Value:
+          ParentZoneId: green
+          AreaRatio: 0.25
+          _presetArea: 
+      - Key: mag
+        Value:
+          ParentZoneId: green
+          AreaRatio: 0.25
+          _presetArea: 
+      - Key: yel
+        Value:
+          ParentZoneId: blue
+          AreaRatio: 0.25
+          _presetArea: 
+      - Key: vomito
+        Value:
+          ParentZoneId: yel
+          AreaRatio: 0.01
+          _presetArea: 
+      - Key: oran
+        Value:
+          ParentZoneId: yel
+          AreaRatio: 0.85
+          _presetArea: 
+    Adjacencies:
+      _serializedList:
+      - Key: green
+        Value:
+        - blue
+    ZonesAreasPresets:
+      _serializedList: []
+  - FloorPlanId: Plan 1
+    GridDimensions: {x: 10, y: 10}
+    ZonesConfigs:
+      _serializedList:
+      - Key: red
+        Value:
+          ParentZoneId: 
+          AreaRatio: 1
+          _presetArea: 
+      - Key: green
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.01
+          _presetArea: 
+      - Key: blue
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.01
           _presetArea: 
       - Key: cian
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.01
           _presetArea: 
       - Key: mag
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.01
           _presetArea: 
       - Key: yel
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.01
           _presetArea: 
       - Key: oran
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.01
           _presetArea: 
     Adjacencies:
       _serializedList:
@@ -67,52 +118,52 @@ MonoBehaviour:
       - Key: red
         Value:
           ParentZoneId: 
-          AreaRatio: 0
+          AreaRatio: 1
           _presetArea: 1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0
       - Key: green
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.445
           _presetArea: 
       - Key: blue
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 1
           _presetArea: 
       - Key: cian
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.37
           _presetArea: 
       - Key: mag
         Value:
           ParentZoneId: red
-          AreaRatio: 0
+          AreaRatio: 0.347
           _presetArea: 
       - Key: yel
         Value:
           ParentZoneId: green
-          AreaRatio: 0
+          AreaRatio: 1
           _presetArea: 
       - Key: vomito
         Value:
           ParentZoneId: green
-          AreaRatio: 0
+          AreaRatio: 0.01
           _presetArea: 
       - Key: oran
         Value:
           ParentZoneId: blue
-          AreaRatio: 0
+          AreaRatio: 0.01
           _presetArea: 
       - Key: purple
         Value:
           ParentZoneId: blue
-          AreaRatio: 0
+          AreaRatio: 1
           _presetArea: 
       - Key: pink
         Value:
           ParentZoneId: blue
-          AreaRatio: 0
+          AreaRatio: 0.01
           _presetArea: 
     Adjacencies:
       _serializedList:
