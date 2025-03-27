@@ -116,8 +116,10 @@ public class Zone // similar a uma estrutura de nos em arvore
     private float _areaRatio;
     public float AreaRatio => _areaRatio;
     public Zone _parentZone;
+    public Zone ParentZone => _parentZone;
     public List<Zone> _childZones;
     public List<Zone> _adjacentZones;
+    public Zone[] AdjacentZones => _adjacentZones.ToArray();
 
     private float _desiredAspect = 1; // 1 is square
     public float DesiredAspect => _desiredAspect;
@@ -139,12 +141,15 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         get
         {
-            if(_borderCells.Length == 0) Debug.LogError("Border Cells is not set.");
+            if(_borderCells == null || _borderCells.Length == 0) Debug.LogError($"{ZoneId}: Border Cells is not set.");
             return _borderCells;
         }
     }
 
     public Cell OriginCell => (_cells != null && _cells.Count > 0)? _cells[0] : null;
+
+    private bool _isBaked = false;
+    public bool IsBaked => _isBaked;
 
     // Coord transformation matrix, used to compact the methods that have different behavior base on the border of the shape.
     private readonly Dictionary<Side, Vector4> _coordTransMatrices = new Dictionary<Side, Vector4>
@@ -325,6 +330,11 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <returns></returns>
     Cell[] FindBorderCells(CellsGrid cellsGrid)
     {
+        if(_cells == null || _cells.Count == 0)
+        {
+            return default;
+        }
+
         List<Cell> borderCells = new List<Cell>();
 
         foreach(Cell cell in _cells)
@@ -405,7 +415,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         return Area >= _areaRatio * cellsGrid.Area;
     }
 
-    public void SetBorderCells(CellsGrid cellsGrid)
+    private void SetBorderCells(CellsGrid cellsGrid)
     {
         if(_borderCells != null && _borderCells.Length > 0)
         {
@@ -423,11 +433,25 @@ public class Zone // similar a uma estrutura de nos em arvore
         return _adjacentZones.Contains(zoneToTest);
     }
 
-
-    // When zone has the final shape, convert lists to arrays, update and set values.
-    public void Bake()
+    public bool IsSister(Zone zoneToTest)
     {
+        return _parentZone == zoneToTest.ParentZone;
+    }
 
+
+    // TODO: bake needed properties.
+    // When zone has the final shape, convert lists to arrays, update and set values.
+    public void Bake(CellsGrid cellsGrid)
+    {
+        if(_isBaked)
+        {
+            Debug.LogError("Zone is already baked.");
+            return;
+        }
+
+        SetBorderCells(cellsGrid);
+
+        _isBaked = true;
     }
 
 

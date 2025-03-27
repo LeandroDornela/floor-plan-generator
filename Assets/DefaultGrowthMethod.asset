@@ -18,28 +18,28 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 10
-      outSlope: 10
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.1
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 0.5
+      inSlope: -2.7114108
+      outSlope: -2.7114108
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.047689695
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0
@@ -54,42 +54,37 @@ MonoBehaviour:
       value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33227202
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.05
+      time: 0.5
       value: 1
+      inSlope: 0
+      outSlope: -4.54517
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.076400876
+    - serializedVersion: 3
+      time: 0.99401855
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 1
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.32345974
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.07704099
+      inWeight: 0.18026048
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  delay: 0.05
+  _adjacencyWeightMultiplier: 1
+  _borderWeightMultiplier: 1
+  delay: 0.01
   _ignoreDesiredAreaInRect: 0
   _stopAtInitialPlot: 0
-  _skipToFinalResult: 0
+  _skipToFinalResult: 1
   _randomInitialArea: 0
+  _ignoreBorderWeights: 0
+  _ignoreAdjacentWeights: 0

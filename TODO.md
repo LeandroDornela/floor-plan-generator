@@ -6,6 +6,7 @@ Project Description
 
 ### Todo
 
+- [ ] ao tentar conectar com zona tia pode ser q a filha da tia q devia se conectar n se conected e as duas zonas acabem sem uma forma de se ligar. Ideal seria então não seria calcular o peso da tia mas sim da filha, no caso não havendo filha spawnada usa o peso da tia  
 - [ ] assegurar que peso 0 não está sendo sorteado  
 - [ ] Resolver area ratio subzona. Teoricamente a zona mae tem q ter a soma das filhas  
 - [ ] metodo de Bake para zona. Criar as bordas e move oque for lista para array  

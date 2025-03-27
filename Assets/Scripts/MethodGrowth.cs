@@ -6,12 +6,16 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
+
 [System.Serializable]
 [CreateAssetMenu(fileName = "DefaultGrowthMethod", menuName = "Scriptable Objects/Generation Methods/Default Growth")]
 public partial class MethodGrowth : FPGenerationMethod
 {
+    [Header("Weights")]
     public AnimationCurve _borderDistanceCurve;
     public AnimationCurve _adjacencyDistanceCurve;
+    public float _adjacencyWeightMultiplier = 1;
+    public float _borderWeightMultiplier = 1;
     
 
     [Header("Testing")]
@@ -20,36 +24,43 @@ public partial class MethodGrowth : FPGenerationMethod
     public bool _stopAtInitialPlot = false;
     public bool _skipToFinalResult = false;
     public bool _randomInitialArea = false;
+    public bool _ignoreBorderWeights = false;
+    public bool _ignoreAdjacentWeights = false;
 
     private CancellationTokenSource _cts;
-    private bool _done = false;
-    Zone _currentZone;
-    List<Zone> zonesToSubdivide; // TODO: QUEUE
-    List<Zone> zonesToGrow;
-    // quando uma zona n pode mais crescer na iteração atual é armazenada aqui.
+    private Zone _currentZone;
+    private List<Zone> _zonesToSubdivide; // TODO: QUEUE
+    private List<Zone> _zonesToGrow;
+    
+    // Quando uma zona n pode mais crescer na iteração atual é armazenada aqui.
     // Depois retorna para crescer usando outra logical, 'L' ou 'free'
-    List<Zone> grownZones;
+    private List<Zone> _grownZones;
 
-    // key = Summation, value = cell weight
     private WeightedArray _cellsWeights;
     private WeightedArray _zonesWeights;
-    //private float _cellsWeightsTotalSum;
 
     private CellsLineDescription _zoneBorder_TEMP;
 
    
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="floorPlanManager"></param>
+    /// <returns></returns>
     public override bool Init(FloorPlanManager floorPlanManager)
     {
         base.Init(floorPlanManager);
 
         _cts = new CancellationTokenSource();
 
-
         return _initialized;
     }
 
-    // TODO: receber a grid e tudo mais como parametros
+    
+    /// <summary>
+    /// TODO: receber a grid e tudo mais como parametros
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask<bool> Run()
     {
         
@@ -61,9 +72,9 @@ public partial class MethodGrowth : FPGenerationMethod
 
         EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
-        zonesToSubdivide = new List<Zone>();
-        zonesToGrow = new List<Zone>();
-        grownZones = new List<Zone>();
+        _zonesToSubdivide = new List<Zone>();
+        _zonesToGrow = new List<Zone>();
+        _grownZones = new List<Zone>();
 
         CellsGrid cellsGrid = _floorPlanManager.CellsGrid;
 
@@ -89,13 +100,14 @@ public partial class MethodGrowth : FPGenerationMethod
             cellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, _floorPlanManager.RootZone);
         }
 
-        zonesToSubdivide.Add(_floorPlanManager.RootZone);
+        _floorPlanManager.RootZone.Bake(cellsGrid);
+        _zonesToSubdivide.Add(_floorPlanManager.RootZone);
         
-        while(zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
+        while(_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
         {
             // Get the child zones from the next zone to subdivide.
-            zonesToGrow = GetNextZonesToGrowList();
-            UpdateZonesWeights(zonesToGrow);
+            _zonesToGrow = GetNextZonesToGrowList();
+            UpdateZonesWeights(_zonesToGrow);
 
             //TriggerOnCellsGridChanged(cellsGrid);
             //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
@@ -104,15 +116,15 @@ public partial class MethodGrowth : FPGenerationMethod
 
             // >>>>>>>>>>> begin main grow logic
             // =========================================================== LOOP CRESCIMENTO RECT
-            while(zonesToGrow.Count > 0)
+            while(_zonesToGrow.Count > 0)
             {
-                _currentZone = GetNextZone(zonesToGrow);
+                _currentZone = GetNextZone(_zonesToGrow);
 
                 if(!GrowZoneRect(_currentZone, cellsGrid))
                 {
-                    zonesToGrow.Remove(_currentZone);
-                    UpdateZonesWeights(zonesToGrow);
-                    grownZones.Add(_currentZone);
+                    _zonesToGrow.Remove(_currentZone);
+                    UpdateZonesWeights(_zonesToGrow);
+                    _grownZones.Add(_currentZone);
                 }
 
                 if(!_skipToFinalResult)
@@ -127,22 +139,22 @@ public partial class MethodGrowth : FPGenerationMethod
             //await UniTask.WaitForSeconds(10, cancellationToken: _cts.Token);
 
 
-            zonesToGrow = new List<Zone>(grownZones);
-            UpdateZonesWeights(zonesToGrow);
-            grownZones.Clear();
+            _zonesToGrow = new List<Zone>(_grownZones);
+            UpdateZonesWeights(_zonesToGrow);
+            _grownZones.Clear();
             
             
             // ======================================================== LOOP L
             // LOOP CRESCIMENTO L
-            while(zonesToGrow.Count > 0)
+            while(_zonesToGrow.Count > 0)
             {
-                _currentZone = GetNextZone(zonesToGrow);
+                _currentZone = GetNextZone(_zonesToGrow);
                 
                 if(!GrowZoneLShape(_currentZone, cellsGrid))
                 {
-                    zonesToGrow.Remove(_currentZone);
-                    UpdateZonesWeights(zonesToGrow);
-                    grownZones.Add(_currentZone);
+                    _zonesToGrow.Remove(_currentZone);
+                    UpdateZonesWeights(_zonesToGrow);
+                    _grownZones.Add(_currentZone);
                 }
 
                 if(!_skipToFinalResult)
@@ -159,15 +171,17 @@ public partial class MethodGrowth : FPGenerationMethod
             // <<<<<<<<<< end main grow logic
 
             // Prepare the next set of zones to grow.
-            foreach(Zone zone in grownZones)
+            foreach(Zone zone in _grownZones)
             {
+                zone.Bake(cellsGrid);
+
                 if(zone._childZones?.Count > 0)
                 {
-                    zonesToSubdivide.Add(zone);
+                    _zonesToSubdivide.Add(zone);
                 }
             }
 
-            grownZones.Clear();
+            _grownZones.Clear();
         }
         
 
@@ -181,103 +195,15 @@ public partial class MethodGrowth : FPGenerationMethod
         return true;
     }
 
-    public override bool RunSync()
-    {
-        if(!EditorApplication.isPlaying)
-        {
-            Debug.LogError("Don't use it outside play mode.");
-            return false;
-        }
 
-        EditorApplication.playModeStateChanged += PlayModeStateChanged;
+#region ========== GROWTH STEPS METHODS ==========
 
-        zonesToSubdivide = new List<Zone>();
-        zonesToGrow = new List<Zone>();
-        grownZones = new List<Zone>();
-
-        CellsGrid cellsGrid = _floorPlanManager.CellsGrid;
-
-        // TODO: temporario.
-        // Setup da zona raiz.
-        int corner = Utils.RandomRange(0,6);
-        int a = Utils.RandomRange(2,10);
-        int b = Utils.RandomRange(2,10);
-        
-        foreach(Cell cell in cellsGrid._cells)
-        {
-            if(corner == 0 && cell.GridPosition.x > a && cell.GridPosition.y > b) continue;
-            else if (corner == 1 && cell.GridPosition.x < a && cell.GridPosition.y < b) continue;
-            else if (corner == 2 && cell.GridPosition.x > a && cell.GridPosition.y < b) continue;
-            else if (corner == 3 && cell.GridPosition.x < a && cell.GridPosition.y > b) continue;
-            else if (corner == 4 && cell.GridPosition.x > 3 && cell.GridPosition.x < 10 && cell.GridPosition.y > 3 && cell.GridPosition.y < 10) continue;
-            // corner == 5, full area
-
-            cellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, _floorPlanManager.RootZone);
-        }
-
-        zonesToSubdivide.Add(_floorPlanManager.RootZone);
-        
-        while(zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
-        {
-            // Get the child zones from the next zone to subdivide.
-            zonesToGrow = GetNextZonesToGrowList();
-
-            // >>>>>>>>>>> begin main grow logic
-            // =========================================================== LOOP CRESCIMENTO RECT
-            while(zonesToGrow.Count > 0)
-            {
-                _currentZone = GetNextZone(zonesToGrow);
-
-                if(!GrowZoneRect(_currentZone, cellsGrid))
-                {
-                    zonesToGrow.Remove(_currentZone);
-                    grownZones.Add(_currentZone);
-                }
-            }
-
-
-            zonesToGrow = new List<Zone>(grownZones);
-            grownZones.Clear();
-            
-            
-            // ======================================================== LOOP L
-            // LOOP CRESCIMENTO L
-            while(zonesToGrow.Count > 0)
-            {
-                _currentZone = GetNextZone(zonesToGrow);
-                
-                if(!GrowZoneLShape(_currentZone, cellsGrid))
-                {
-                    zonesToGrow.Remove(_currentZone);
-                    grownZones.Add(_currentZone);
-                }
-            }
-
-
-            // ======================================================== CRESCIMENTO LIVRE(espaços restantes)
-            // while free spaces.
-
-            // <<<<<<<<<< end main grow logic
-
-            // Prepare the next set of zones to grow.
-            foreach(Zone zone in grownZones)
-            {
-                if(zone._childZones?.Count > 0)
-                {
-                    zonesToSubdivide.Add(zone);
-                }
-            }
-
-            grownZones.Clear();
-        }
-        
-
-        EditorApplication.playModeStateChanged -= PlayModeStateChanged;
-
-        return true;
-    }
-
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zone"></param>
+    /// <param name="cellsGrid"></param>
+    /// <returns></returns>
     bool GrowZoneRect(Zone zone, CellsGrid cellsGrid)
     {
         //return DEBUG_GrowSequential(zone, cellsGrid);
@@ -287,35 +213,9 @@ public partial class MethodGrowth : FPGenerationMethod
             return false;
         }
 
-/*
-        float aspect = zone.GetZoneAspect();
-        // All directions
-        if(aspect == zone.DesiredAspect)
-        {
-            var largestFreeSpace = zone.GetLargestExpansionSpaceRect(cellsGrid, true);
-            if(largestFreeSpace.isFullLine)
-            {
-                return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.side, cellsGrid);
-            }
-        }
-        // Vertical
-        else if(aspect > zone.DesiredAspect && (side == Zone.Side.Top || side == Zone.Side.Bottom))
-        {
-            var freeSpaceOnTop = zone.GetExpansionSpaceRect(Zone.Side.Top, cellsGrid, true);
-            var freeSpaceOnBottom = zone.GetExpansionSpaceRect(Zone.Side.Top, cellsGrid, true);
-        }
-        // Horizontal
-        else if(aspect < zone.DesiredAspect && (side == Zone.Side.Left || side == Zone.Side.Right))
-        {
-            if(TryGrowFromSide(side, zone, cellsGrid))
-            {
-                return true;
-            }
-        }
-*/
-
-
-        var largestFreeSpace = zone.GetLargestExpansionSpaceRect(cellsGrid, false); // INTERESSANTE, usar essa função sem checar espaço total gera formas retangulares, mas é mias custoso do q checar os aspect antes
+        /*
+        // INTERESSANTE, usar essa função sem checar espaço total gera formas retangulares, mas é mias custoso do q checar os aspect antes
+        var largestFreeSpace = zone.GetLargestExpansionSpaceRect(cellsGrid, false);
         if(largestFreeSpace.isFullLine)
         {
             return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.side, cellsGrid);
@@ -324,10 +224,8 @@ public partial class MethodGrowth : FPGenerationMethod
         {
             return false;
         }
+        */
 
-
-
-        /*
         float aspect = zone.GetZoneAspect();
 
         // Guid.NewGuid() provides a way to get unique randon numbers. Create a array with the directions
@@ -361,19 +259,30 @@ public partial class MethodGrowth : FPGenerationMethod
                 }
             }
         }
-        */
 
         return false; // can't grow.
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zone"></param>
+    /// <param name="cellsGrid"></param>
+    /// <returns></returns>
     bool GrowZoneLShape(Zone zone, CellsGrid cellsGrid)
     {
         //return GrowRectUntilLargestIsL(zone, cellsGrid);
         return GrowRectThenGrowL(zone, cellsGrid);
     }
 
-    // L expansion variation 1
+
+    /// <summary>
+    /// L expansion variation 1
+    /// </summary>
+    /// <param name="zone"></param>
+    /// <param name="cellsGrid"></param>
+    /// <returns></returns>
     bool GrowRectUntilLargestIsL(Zone zone, CellsGrid cellsGrid)
     {
         // expand L if is L
@@ -402,7 +311,13 @@ public partial class MethodGrowth : FPGenerationMethod
         }
     }
 
-    // L expansion variation 2
+
+    /// <summary>
+    /// L expansion variation 2
+    /// </summary>
+    /// <param name="zone"></param>
+    /// <param name="cellsGrid"></param>
+    /// <returns></returns>
     bool GrowRectThenGrowL(Zone zone, CellsGrid cellsGrid)
     {
         // expand L if is L
@@ -440,30 +355,41 @@ public partial class MethodGrowth : FPGenerationMethod
     }
 
 
-    // ============================================================================================================================
-
-    bool GrowOnAnySide(Zone zone, CellsGrid cellsGrid)
+    /// <summary>
+    /// OBS: the direction paramenter is taking in mind a randomization of the order of try.
+    /// </summary>
+    /// <param name="side"></param>
+    /// <param name="zone"></param>
+    /// <param name="cellsGrid"></param>
+    /// <returns></returns>
+    bool TryGrowFromSide(Zone.Side side, Zone zone, CellsGrid cellsGrid)
     {
+        if(zone.GetExpansionSpaceRect(side, cellsGrid, false).isFullLine)
+        {
+            return zone.TryExpandShapeRect(side, cellsGrid);
+        }
+        
         return false;
     }
 
-    bool GrowOnSideWithMoreSpace(Zone zone, CellsGrid cellsGrid)
-    {
-        return false;
-    }
+#endregion
 
+
+#region ========== ZONE SELECTION ==========
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     List<Zone> GetNextZonesToGrowList() // TODO: "set" zones to grow list
     {
-        if(zonesToSubdivide.Count == 0)
+        if(_zonesToSubdivide.Count == 0)
         {
             return null;
         }
 
-        // Zone to sub div has the final shape, bake the borders.
-        zonesToSubdivide[0].SetBorderCells(_floorPlanManager.CellsGrid);
-
-        var childZones = zonesToSubdivide[0]._childZones;
-        zonesToSubdivide.RemoveAt(0);
+        var childZones = _zonesToSubdivide[0]._childZones;
+        _zonesToSubdivide.RemoveAt(0);
 
         for(int i = 0; i < childZones.Count; i++)
         {
@@ -475,31 +401,62 @@ public partial class MethodGrowth : FPGenerationMethod
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zonesToGrow"></param>
+    void UpdateZonesWeights(List<Zone> zonesToGrow)
+    {
+        _zonesWeights = new WeightedArray(zonesToGrow.Count);
+
+        for(int i = 0; i < zonesToGrow.Count; i++)
+        {
+            Zone zone = zonesToGrow[i];
+            _zonesWeights.AddAt(i, zone.AreaRatio);
+        }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zonesToGrow"></param>
+    /// <returns></returns>
+    Zone GetNextZone(List<Zone> zonesToGrow)
+    {
+        //return zonesToGrow[Utils.RandomRange(0, zonesToGrow.Count)];
+
+        if(_zonesWeights.GetRandomWeightedElement(zonesToGrow.ToArray(), out Zone zone))
+        {
+            return zone;
+        }
+
+        Debug.LogError("Unable to get a zone.");
+        return null;
+    }
+
+#endregion
+
+
+#region ========== ZONES PLOTTING ==========
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zone"></param>
+    /// <param name="zonesToGrow"></param>
     void PlotFirstZoneCell(Zone zone, List<Zone> zonesToGrow)
     {
         if(zone._parentZone != null)
         {
-            /*
-            // Random selection
-            int index = Utils.RandomRange(0, zone._parentZone._cells.Count);
-            Cell cell = null;
-            try
-            {
-                if(zone._parentZone._cells.Count == 0) Debug.LogError("Parent zone has no cells!");
-
-                cell = zone._parentZone._cells[index];
-            }
-            catch
-            {
-                Debug.LogError($"{zone._parentZone._cells.Count}, {index}");
-            }
-            _floorPlanManager.CellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
-            */
-            
             // Weighted selection
             CalculateWeights(zone, zonesToGrow);
-            //if(_cellsWeights.GetRandomWeightedElement(zone._parentZone.Cells, out Cell cell))
+            
+            #if DEBUG
             if(_cellsWeights.GetRandomWeightedElement(_floorPlanManager.CellsGrid.Cells, out Cell cell))
+            #else
+            if(_cellsWeights.GetRandomWeightedElement(zone._parentZone.Cells, out Cell cell))
+            #endif
             {
                 _floorPlanManager.CellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
             }
@@ -514,64 +471,31 @@ public partial class MethodGrowth : FPGenerationMethod
     }
 
 
-    Zone GetNextZone(List<Zone> zonesToGrow)
-    {
-        //return zonesToGrow[Utils.RandomRange(0, zonesToGrow.Count)];
-
-        if(_zonesWeights.GetRandomWeightedElement(zonesToGrow.ToArray(), out Zone zone))
-        {
-            return zone;
-        }
-
-        Debug.LogError("Unable to get a zone.");
-        return null;
-    }
-
-
-    // OBS: the direction paramenter is taking in mind a randomization of the order of try.
-    bool TryGrowFromSide(Zone.Side side, Zone zone, CellsGrid cellsGrid)
-    {
-        if(zone.GetExpansionSpaceRect(side, cellsGrid, false).isFullLine)
-        {
-            return zone.TryExpandShapeRect(side, cellsGrid);
-        }
-        
-        return false;
-    }
-
-
-
-    void PlayModeStateChanged(PlayModeStateChange state)
-    {
-        if(state == PlayModeStateChange.ExitingPlayMode)
-        {
-            _cts.Cancel();
-        }
-    }
-
-
-    // -> a celula(ZONA) que vai ser colocada,
-    // -> as zonas ja exitentes, as bordas, as portas, as janelas(celulas presentes com caracteristicas que interferen no peso)
-    // <- peso da celula
-    // TODO: peso para entrada e zonas primas.
-    // TODO: se celulas mais distantes teram valores de borda sobre escritos, deve se ter um melhor desenpenho al checar peso de adjacencia antes e pular aqueles com valor 0(talvez).
-    // TODO: tratamento peso 0 final em todas celulas.
+    /// <summary>
+    /// -> a celula(ZONA) que vai ser colocada,
+    /// -> as zonas ja exitentes, as bordas, as portas, as janelas(celulas presentes com caracteristicas que interferen no peso)
+    /// <- peso da celula
+    /// TODO: peso para entrada e zonas primas.
+    /// TODO: se celulas mais distantes teram valores de borda sobre escritos, deve se ter um melhor desenpenho al checar peso de adjacencia antes e pular aqueles com valor 0(talvez).
+    /// TODO: tratamento peso 0 final em todas celulas.
+    /// </summary>
+    /// <param name="zoneToPlot"></param>
+    /// <param name="plottedZones"></param>
     void CalculateWeights(Zone zoneToPlot, List<Zone> plottedZones = null)
     {
-        //Debug.Log($"Plotting zone: {zoneToPlot.ZoneId}");
-
         CellsGrid cellsGrid = _floorPlanManager.CellsGrid;
         Zone parentZone = zoneToPlot._parentZone;
-        Cell[] cellsToCalc =  _floorPlanManager.CellsGrid.Cells;//parentZone.Cells;
+        
+        #if DEBUG
+        Cell[] cellsToCalc = _floorPlanManager.CellsGrid.Cells;
+        #else
+        Cell[] cellsToCalc =  parentZone.Cells;
+        #endif
+
         _cellsWeights = new WeightedArray(cellsToCalc.Length);
 
-        float adjacencyWeightMultiplier = 1;
-        float borderWeightMultiplier = 1;
-
         int desiredZoneSqSize = Mathf.CeilToInt(Mathf.Sqrt(zoneToPlot.AreaRatio * cellsGrid.Area)); // Ceiling to round up to a size that can fit it.
-        int desiredZoneDim = Mathf.CeilToInt(zoneToPlot.AreaRatio * cellsGrid.DiagonalMagnitudeRounded);
         int minimumBorderDistance = desiredZoneSqSize / 4;
-        
 
         for(int i = 0; i < cellsToCalc.Length; i++)
         {
@@ -586,33 +510,104 @@ public partial class MethodGrowth : FPGenerationMethod
             }
 
             
-            // Calculate the smaller distance from borders.
-            float smallerDistance = float.MaxValue;
-            foreach(Cell borderCell in parentZone.BorderCells)
+            // ================================== BORDERS WEIGHTS
+            if(!_ignoreBorderWeights)
             {
-                float distance = Mathf.Round((borderCell.GridPosition - cell.GridPosition).magnitude);
-                if(distance < smallerDistance)
-                    smallerDistance = distance;
+                // Calculate the smaller distance from borders.
+                float smallerDistance = float.MaxValue;
+                foreach(Cell borderCell in parentZone.BorderCells)
+                {
+                    float distance = Mathf.Round((borderCell.GridPosition - cell.GridPosition).magnitude);
+                    if(distance < smallerDistance) smallerDistance = distance;
+                }
+
+                // Calculate de weight from borders using the desired size of the zone sides on a function defined by a animation curve.
+                if(smallerDistance < minimumBorderDistance || smallerDistance > desiredZoneSqSize)
+                {
+                    // Smaller distance > expected side size, the cell is too far.
+                    weight = 0;
+                }
+                else
+                {
+                    // The value to be obtained is between a minimum and maximum based on zone to plot desired size.
+                    weight = _borderDistanceCurve.Evaluate(smallerDistance / desiredZoneSqSize) * _borderWeightMultiplier; // += ?
+                }
             }
 
-            // Calculate de weight from borders using the desired size of the zone sides on a function defined by a animation curve.
-            if(smallerDistance < minimumBorderDistance || smallerDistance > desiredZoneSqSize) // (smallerDistance > desiredZoneSqSize) smaller distance > expected side size, the cell is too far.
-            {
-                weight = 0;
-            }
-            else
-            {
-                weight = _borderDistanceCurve.Evaluate(smallerDistance / desiredZoneSqSize) * borderWeightMultiplier; // The value to be obtained is between a minimum and maximum based on zone to plot desired size.
-            }
 
+            // ================================== GROWN BAKED ADJACENT UNCLE ZONES WEIGHTS
+            // Calculate the weight for zones the are already baked that this one should be adjacent.
+            // Because the way the algorithm iterates it will not guarantee that cousin zones can enter this, only uncle or older.
+            if(!_ignoreAdjacentWeights)
+            {
+                foreach(Zone adjacentZone in zoneToPlot.AdjacentZones)
+                {
+                    // Skip sister zone.
+                    // TODO: Maybe can be done together with plotted zones phase, when using cousin zones in calculus.
+                    if(zoneToPlot.IsSister(adjacentZone))
+                    {
+                        continue;
+                    }
+
+                    Zone zoneToCalculate;
+
+                    // Adjacent zone is not full grown, skip it.
+                    if(!adjacentZone.IsBaked)
+                    {
+                        if(!adjacentZone.ParentZone.IsBaked)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            zoneToCalculate = adjacentZone.ParentZone;
+                        }
+                    }
+                    else
+                    {
+                        zoneToCalculate = adjacentZone;
+                    }
+
+                    // Skip the zone if it is not a uncle zone. Will not interfere in sister adjacency since the sister must be
+                    // not baked(only first cell plotted).
+                    /*
+                    if(adjacentZone.ParentZone != parentZone.ParentZone) // Uncle check
+                    {
+                        Debug.LogError("Adjacent baked zone is not uncle. Check the settings.");
+                        continue;
+                    }
+                    */
+
+
+                    float smallerDistance = float.MaxValue;
+                    foreach(Cell borderCell in zoneToCalculate.BorderCells)
+                    {
+                        float distance = Mathf.Round((borderCell.GridPosition - cell.GridPosition).magnitude);
+                        if(distance < smallerDistance) smallerDistance = distance;
+                    }
+
+                    if(smallerDistance < minimumBorderDistance || smallerDistance > desiredZoneSqSize)
+                    {
+                        weight = 0;
+                    }
+                    else
+                    {
+                        //weight = _borderDistanceCurve.Evaluate(smallerDistance / desiredZoneSqSize) * _borderWeightMultiplier;
+                        //weight += _borderDistanceCurve.Evaluate(smallerDistance / desiredZoneSqSize) * _borderWeightMultiplier;
+                        weight *= _borderDistanceCurve.Evaluate(smallerDistance / desiredZoneSqSize) * _borderWeightMultiplier;
+                    }
+                }
+            }
             
+
+            // ================================== PLOTTED SISTER ZONES WEIGHTS
             // Distance from adjacent or non adjacent.
             if(plottedZones != null)
             {
                 foreach(Zone plottedZone in plottedZones)
                 {
-                    if(plottedZone.OriginCell == null) // Plotted zone actually is not plotted.
-                        continue;
+                    // Plotted zone actually is not plotted.
+                    if(plottedZone.OriginCell == null) continue;
 
                     float distance = Mathf.Round((plottedZone.OriginCell.GridPosition - cell.GridPosition).magnitude);
                     float expectedAdjacentZoneSide = Mathf.Ceil(MathF.Sqrt(plottedZone.AreaRatio * cellsGrid.Area)) / 2;
@@ -640,7 +635,7 @@ public partial class MethodGrowth : FPGenerationMethod
                         }
                         else
                         {
-                            weight -= _adjacencyDistanceCurve.Evaluate(normToTotalRadius);
+                            //weight -= _adjacencyDistanceCurve.Evaluate(normToTotalRadius);
                         }
                     }
                     else if(zoneToPlot.IsAdjacent(plottedZone)) // normToTotalRadius > 1
@@ -650,7 +645,7 @@ public partial class MethodGrowth : FPGenerationMethod
                     // else don't change the weight.
 
                     weight = Mathf.Clamp(weight, 0, float.MaxValue);
-                    weight = weight * adjacencyWeightMultiplier;
+                    weight = weight * _adjacencyWeightMultiplier;
                 }
             }
 
@@ -658,19 +653,26 @@ public partial class MethodGrowth : FPGenerationMethod
             _cellsWeights.AddAt(i, weight);
         }
 
-        
+        Debug.Log($"=============<color=yellow>{zoneToPlot.ZoneId}</color>");
         Utils.PrintArrayAsGrid(cellsGrid.Dimensions.x, cellsGrid.Dimensions.y, _cellsWeights.Values);
     }
 
+#endregion
 
-    void UpdateZonesWeights(List<Zone> zonesToGrow)
+    
+#region ========== AUXILIARY METHODS ==========
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="state"></param>
+    void PlayModeStateChanged(PlayModeStateChange state)
     {
-        _zonesWeights = new WeightedArray(zonesToGrow.Count);
-
-        for(int i = 0; i < zonesToGrow.Count; i++)
+        if(state == PlayModeStateChange.ExitingPlayMode)
         {
-            Zone zone = zonesToGrow[i];
-            _zonesWeights.AddAt(i, zone.AreaRatio);
+            _cts.Cancel();
         }
     }
+
+#endregion
 }

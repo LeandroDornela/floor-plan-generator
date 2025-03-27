@@ -57,19 +57,6 @@ public class BuildingGenerator : MonoBehaviour
         //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
     }
 
-    [ProButton]
-    public void GenerateBuildingLoopSync()
-    {
-        if(!Application.isPlaying) return;
-        counter = 0;
-        while(counter < totalToTest)
-        {
-            _floorPlanGenerator.GenerateFloorPlanSync(_buildingDataManager.GetTestingFloorPlanConfig());
-            counter++;
-            //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
-        }
-    }
-
     void OnDrawGizmos()
     {
         _floorPlanGenerator?.OnDrawGizmos();

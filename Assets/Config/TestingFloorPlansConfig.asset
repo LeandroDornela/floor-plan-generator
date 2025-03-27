@@ -13,8 +13,122 @@ MonoBehaviour:
   m_Name: TestingFloorPlansConfig
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
+  - FloorPlanId: Plan 2 - uncle w test
+    GridDimensions: {x: 15, y: 10}
+    ZonesConfigs:
+      _serializedList:
+      - Key: red
+        Value:
+          ParentZoneId: 
+          AreaRatio: 1
+          _presetArea: 
+      - Key: blue
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.434
+          _presetArea: 
+      - Key: green
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.502
+          _presetArea: 
+      - Key: cian
+        Value:
+          ParentZoneId: green
+          AreaRatio: 0.094
+          _presetArea: 
+      - Key: mag
+        Value:
+          ParentZoneId: green
+          AreaRatio: 0.094
+          _presetArea: 
+      - Key: yel
+        Value:
+          ParentZoneId: blue
+          AreaRatio: 0.25
+          _presetArea: 
+      - Key: vomito
+        Value:
+          ParentZoneId: blue
+          AreaRatio: 0.469
+          _presetArea: 
+      - Key: oran
+        Value:
+          ParentZoneId: green
+          AreaRatio: 0.1
+          _presetArea: 
+      - Key: purple
+        Value:
+          ParentZoneId: green
+          AreaRatio: 0.1
+          _presetArea: 
+    Adjacencies:
+      _serializedList:
+      - Key: green
+        Value:
+        - blue
+      - Key: cian
+        Value:
+        - yel
+        - oran
+        - purple
+        - mag
+    ZonesAreasPresets:
+      _serializedList: []
+  - FloorPlanId: Plan 1
+    GridDimensions: {x: 20, y: 20}
+    ZonesConfigs:
+      _serializedList:
+      - Key: red
+        Value:
+          ParentZoneId: 
+          AreaRatio: 1
+          _presetArea: 
+      - Key: green
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.208
+          _presetArea: 
+      - Key: blue
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.053
+          _presetArea: 
+      - Key: cian
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.049
+          _presetArea: 
+      - Key: mag
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.049
+          _presetArea: 
+      - Key: yel
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.038
+          _presetArea: 
+      - Key: oran
+        Value:
+          ParentZoneId: red
+          AreaRatio: 0.049
+          _presetArea: 
+    Adjacencies:
+      _serializedList:
+      - Key: green
+        Value:
+        - blue
+        - cian
+        - mag
+        - yel
+      - Key: blue
+        Value:
+        - cian
+    ZonesAreasPresets:
+      _serializedList: []
   - FloorPlanId: Real
-    GridDimensions: {x: 20, y: 10}
+    GridDimensions: {x: 10, y: 5}
     ZonesConfigs:
       _serializedList:
       - Key: red
@@ -50,7 +164,7 @@ MonoBehaviour:
       - Key: vomito
         Value:
           ParentZoneId: yel
-          AreaRatio: 0.01
+          AreaRatio: 0.064
           _presetArea: 
       - Key: oran
         Value:
@@ -62,53 +176,6 @@ MonoBehaviour:
       - Key: green
         Value:
         - blue
-    ZonesAreasPresets:
-      _serializedList: []
-  - FloorPlanId: Plan 1
-    GridDimensions: {x: 10, y: 10}
-    ZonesConfigs:
-      _serializedList:
-      - Key: red
-        Value:
-          ParentZoneId: 
-          AreaRatio: 1
-          _presetArea: 
-      - Key: green
-        Value:
-          ParentZoneId: red
-          AreaRatio: 0.01
-          _presetArea: 
-      - Key: blue
-        Value:
-          ParentZoneId: red
-          AreaRatio: 0.01
-          _presetArea: 
-      - Key: cian
-        Value:
-          ParentZoneId: red
-          AreaRatio: 0.01
-          _presetArea: 
-      - Key: mag
-        Value:
-          ParentZoneId: red
-          AreaRatio: 0.01
-          _presetArea: 
-      - Key: yel
-        Value:
-          ParentZoneId: red
-          AreaRatio: 0.01
-          _presetArea: 
-      - Key: oran
-        Value:
-          ParentZoneId: red
-          AreaRatio: 0.01
-          _presetArea: 
-    Adjacencies:
-      _serializedList:
-      - Key: green
-        Value:
-        - blue
-        - cian
     ZonesAreasPresets:
       _serializedList: []
   - FloorPlanId: Plan 0

@@ -100,24 +100,6 @@ public class FloorPlanGenerator
         return true;
     }
 
-    public bool GenerateFloorPlanSync(FloorPlanConfig floorPlanConfig)
-    {
-        if(_running)
-        {
-            Debug.LogWarning("Generation in process, please wait.");
-            return false;
-        }
-
-        Init(floorPlanConfig);
-
-        _running = true;
-        //_currentMethod.RunSync();
-        _generationMethod.RunSync();
-        _running = false;
-
-        return true;
-    }
-
     public void OnDrawGizmos()
     {
         //_currentMethod?.OnDrawGizmos();

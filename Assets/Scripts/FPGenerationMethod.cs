@@ -38,11 +38,6 @@ public class FPGenerationMethod : ScriptableObject
         return false;
     }
 
-    public virtual bool RunSync()
-    {
-        return false;
-    }
-
     public virtual void OnDrawGizmos()
     {
         

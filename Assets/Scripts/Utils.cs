@@ -33,8 +33,8 @@ public class Utils
     {
         if(width * height != data.Length)
         {
-            Debug.LogError("Size mismatch.");
-            return;
+            Debug.LogWarning("Size mismatch.");
+            //return;
         }
 
         /*
@@ -67,7 +67,18 @@ public class Utils
                 //if(j == width - 1 && i == height - 1) result += $"{val:0.00}";
                 //else result += $"{val:0.00} ";
                 
-                int val = Mathf.CeilToInt(data[i * width + j] * 255);
+                int index = i * width + j;
+                int val;
+
+                if(index < data.Length)
+                {
+                    val = Mathf.CeilToInt(data[index] * 255);
+                }
+                else
+                {
+                    val = 0;
+                }
+                
                 string col;
 
                 if(val > 255)
