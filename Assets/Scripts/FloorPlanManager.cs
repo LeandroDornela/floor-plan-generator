@@ -74,14 +74,14 @@ public struct ZoneConfig
     }
 }
 
+
+/// <summary>
+/// All floor plan grid changes must pass trough this class.
+/// </summary>
 public class FloorPlanManager
 {
     private CellsGrid _cellsGrid;
-    // RUNTIME DATA
-    [Obsolete]private List<Zone> _rootZones;// TODO Não sei qual melhor opção para a raiz, mas ter apenas 1 root, correspondente a area total parece ser uma opção melhor.
-                                            // <!--
-                                            // order:-20
-                                            // -->
+    [Obsolete]private List<Zone> _rootZones;// TODO Não sei qual melhor opção para a raiz, mas ter apenas 1 root, correspondente a area total parece ser uma opção melhor
     private Zone _rootZone;
     private Dictionary<string, Zone> _zonesInstances;
     private bool _initialized = false;
@@ -127,7 +127,7 @@ public class FloorPlanManager
         // Create all zones.
         foreach(var zone in zonesConfigs)
         {
-            _zonesInstances.Add(zone.Key, new Zone(zone.Key, zone.Value.AreaRatio));
+            _zonesInstances.Add(zone.Key, new Zone(this, zone.Key, zone.Value.AreaRatio));
         }
 
         // Set the parents and children of the zones.
@@ -174,5 +174,54 @@ public class FloorPlanManager
                 }
             }
         }
+    }
+
+
+    public bool AssignCellToZone(int x, int y, Zone zone)
+    {
+        if(zone == null)
+        {
+            Debug.LogError("Invalid zone.");
+            return false;
+        }
+
+        if(_cellsGrid.GetCell(x, y, out Cell cell))
+        {
+            // Remove previous set cell zone.
+            if(cell.Zone != null)
+            {
+                cell.Zone.RemoveCell(cell);
+            }
+
+            zone.AddCell(cell);
+            cell.SetZone(zone);
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    public bool AssignCellToZone(Cell cell, Zone zone)
+    {
+        if(cell == null || zone == null)
+        {
+            Debug.LogError("Invalid cell or zone.");
+            return false;
+        }
+
+        // Remove previous set cell zone.
+        if(cell.Zone != null)
+        {
+            cell.Zone.RemoveCell(cell);
+        }
+
+        zone.AddCell(cell);
+        cell.SetZone(zone);
+
+        return true;
     }
 }

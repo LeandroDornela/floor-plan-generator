@@ -25,6 +25,9 @@ public class Zone // similar a uma estrutura de nos em arvore
     }
 
     // PRIVATE
+    private FloorPlanManager _floorPlanManager;
+
+
     private string _zoneId;
     private float _areaRatio;
     private float _desiredAspect = 1; // 1 is square
@@ -73,8 +76,9 @@ public class Zone // similar a uma estrutura de nos em arvore
     public bool HasChildrenZones => _childZones?.Count > 0;
     
 
-    public Zone(string zoneId, float areaRatio)
+    public Zone(FloorPlanManager floorPlanManager, string zoneId, float areaRatio)
     {
+        _floorPlanManager = floorPlanManager;
         _zoneId = zoneId;
         _areaRatio = areaRatio;
         _parentZone = null;
@@ -208,9 +212,9 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// </summary>
     /// <param name="cellsGrid"></param>
     /// <returns></returns>
-    public bool HasDesiredArea(CellsGrid cellsGrid)
+    public bool HasDesiredArea()
     {
-        return Area >= _areaRatio * cellsGrid.Area;
+        return Area >= _areaRatio * _floorPlanManager.CellsGrid.Area;
     }
 
     
@@ -288,7 +292,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// When zone has the final shape, convert lists to arrays, update and set values.
     /// </summary>
     /// <param name="cellsGrid"></param>
-    public void Bake(CellsGrid cellsGrid)
+    public void Bake()
     {
         if(_isBaked)
         {
@@ -298,7 +302,7 @@ public class Zone // similar a uma estrutura de nos em arvore
 
         _cellsArray = _cellsList.ToArray();
 
-        SetBorderCells(cellsGrid);
+        SetBorderCells();
 
         _isBaked = true;
     }
@@ -308,7 +312,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// 
     /// </summary>
     /// <param name="cellsGrid"></param>
-    void SetBorderCells(CellsGrid cellsGrid)
+    void SetBorderCells()
     {
         if(_borderCells != null && _borderCells.Length > 0)
         {
@@ -316,7 +320,7 @@ public class Zone // similar a uma estrutura de nos em arvore
             return;
         }
 
-        _borderCells = FindBorderCells(cellsGrid);
+        _borderCells = FindBorderCells(_floorPlanManager.CellsGrid);
     }
 
 
@@ -429,7 +433,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <param name="side"></param>
     /// <param name="cellsGrid"></param>
     /// <returns></returns>
-    public bool TryExpandShapeRect(Side side, CellsGrid cellsGrid)
+    public bool TryExpandShapeRect(Side side)
     {
         if(_isLShaped)
         {
@@ -437,7 +441,7 @@ public class Zone // similar a uma estrutura de nos em arvore
             return false;
         }
 
-        return TryExpand(_zoneBorders[side], cellsGrid);
+        return TryExpand(_zoneBorders[side]);
     }
     
 
@@ -447,21 +451,21 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <param name="cellsGrid"></param>
     /// <param name="checkSpace"></param>
     /// <returns></returns>
-    public bool TryExpandShapeL(CellsGrid cellsGrid, bool checkSpace = true)
+    public bool TryExpandShapeL(bool checkSpace = true)
     {
         if(checkSpace)
         {
-            var expSpace = GetExpansionSpace(_lBorderCells, cellsGrid, false);
+            var expSpace = GetExpansionSpace(_lBorderCells, _floorPlanManager.CellsGrid, false);
 
             if(expSpace.isFullLine)
             {
-                return TryExpand(_lBorderCells, cellsGrid);
+                return TryExpand(_lBorderCells);
             }
             else return false;
         }
         else
         {
-            return TryExpand(_lBorderCells, cellsGrid);
+            return TryExpand(_lBorderCells);
         }
     }
 
@@ -736,7 +740,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <param name="cellsLineDesc"></param>
     /// <param name="cellsGrid"></param>
     /// <returns></returns>
-    bool TryExpand(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid)
+    bool TryExpand(CellsLineDescription cellsLineDesc)
     {
         int amount = 1;
         Vector4 tMatrix = _coordTransMatrices[cellsLineDesc.Side]; // Transformation matrix
@@ -747,7 +751,7 @@ public class Zone // similar a uma estrutura de nos em arvore
             int x = cellsLineDesc.FirstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z;
             int y = cellsLineDesc.FirstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w;
 
-            if(cellsGrid.GetCell(x, y, out Cell cell))
+            if(_floorPlanManager.CellsGrid.GetCell(x, y, out Cell cell))
             {
                 if(!CellIsAvailable(cell))
                 {
@@ -760,7 +764,7 @@ public class Zone // similar a uma estrutura de nos em arvore
                 return false;
             }
 
-            if(!cellsGrid.AssignCellToZone(x, y, this))
+            if(!_floorPlanManager.AssignCellToZone(cell, this))
             {
                 return false;
             }
@@ -812,38 +816,12 @@ public class Zone // similar a uma estrutura de nos em arvore
 
 
 #region ================================================== AUX FUNCS ==================================================
-    int CountAvailableCells(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid, Vector4 tMatrix, bool reverse, int maxExpansionSpace = 0)
-    {
-        int count = 0;
-        int start = reverse ? cellsLineDesc.NumberOfCells - 1 : 0;
-        int end = reverse ? -1 : cellsLineDesc.NumberOfCells;
-        int step = reverse ? -1 : 1;
-
-        for(int i = start; i != end; i += step)
-        {
-            if(cellsGrid.GetCell(cellsLineDesc.FirstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
-                                 cellsLineDesc.FirstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
-                                 out Cell cell))
-            {
-                if(CellIsAvailable(cell))
-                {
-                    count++;
-                }
-                else break;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        return count;
-    }
-    
+   
     bool CellIsAvailable(Cell cell)
     {
         return cell.Zone == _parentZone;
     }
+
 #endregion
 
 #region ================================================== DEBUG ==================================================

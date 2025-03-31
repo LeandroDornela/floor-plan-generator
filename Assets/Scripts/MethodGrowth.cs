@@ -11,6 +11,7 @@ using System.Linq;
 [CreateAssetMenu(fileName = "DefaultGrowthMethod", menuName = "Scriptable Objects/Generation Methods/Default Growth")]
 public partial class MethodGrowth : FPGenerationMethod
 {
+    // DATA
     [Header("Weights")]
     public AnimationCurve _borderDistanceCurve;
     public AnimationCurve _adjacencyDistanceCurve;
@@ -27,6 +28,7 @@ public partial class MethodGrowth : FPGenerationMethod
     public bool _ignoreBorderWeights = false;
     public bool _ignoreAdjacentWeights = false;
 
+    // RUN TIME 
     private CancellationTokenSource _cts;
     private Zone _currentZone;
     private List<Zone> _zonesToSubdivide; // TODO: QUEUE
@@ -95,10 +97,11 @@ public partial class MethodGrowth : FPGenerationMethod
             else if (corner == 4 && cell.GridPosition.x > 3 && cell.GridPosition.x < 10 && cell.GridPosition.y > 3 && cell.GridPosition.y < 10) continue;
             // corner == 5, full area
 
-            cellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, _floorPlanManager.RootZone);
+            //_floorPlanManager.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, _floorPlanManager.RootZone);
+            _floorPlanManager.AssignCellToZone(cell, _floorPlanManager.RootZone);
         }
 
-        _floorPlanManager.RootZone.Bake(cellsGrid);
+        _floorPlanManager.RootZone.Bake();
         _zonesToSubdivide.Add(_floorPlanManager.RootZone);
         
         while(_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
@@ -171,7 +174,7 @@ public partial class MethodGrowth : FPGenerationMethod
             // Prepare the next set of zones to grow.
             foreach(Zone zone in _grownZones)
             {
-                zone.Bake(cellsGrid);
+                zone.Bake();
 
                 if(zone.HasChildrenZones)
                 {
@@ -206,7 +209,7 @@ public partial class MethodGrowth : FPGenerationMethod
     {
         //return DEBUG_GrowSequential(zone, cellsGrid);
 
-        if(zone.HasDesiredArea(cellsGrid) && !_ignoreDesiredAreaInRect)
+        if(zone.HasDesiredArea() && !_ignoreDesiredAreaInRect)
         {
             return false;
         }
@@ -286,7 +289,7 @@ public partial class MethodGrowth : FPGenerationMethod
         // expand L if is L
         if(zone.IsLShaped)
         {
-            return zone.TryExpandShapeL(cellsGrid);
+            return zone.TryExpandShapeL();
         }
 
         var largestFreeSpace = zone.GetLargestExpansionSpaceRect(cellsGrid);
@@ -301,11 +304,11 @@ public partial class MethodGrowth : FPGenerationMethod
         if(!largestFreeSpace.isFullLine)
         {
             zone.SetAsLShaped(largestFreeSpace.freeLineDescription);
-            return zone.TryExpandShapeL(cellsGrid);
+            return zone.TryExpandShapeL();
         }
         else
         {
-            return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.Side, cellsGrid);
+            return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.Side);
         }
     }
 
@@ -321,7 +324,7 @@ public partial class MethodGrowth : FPGenerationMethod
         // expand L if is L
         if(zone.IsLShaped)
         {
-            return zone.TryExpandShapeL(cellsGrid);
+            return zone.TryExpandShapeL();
         }
 
         // Go on all sides randomly trying to expand
@@ -330,7 +333,7 @@ public partial class MethodGrowth : FPGenerationMethod
         {
             if(zone.GetExpansionSpaceRect(side, cellsGrid).isFullLine)
             {
-                if(zone.TryExpandShapeRect(side, cellsGrid))
+                if(zone.TryExpandShapeRect(side))
                 {
                     return true;
                 }
@@ -348,7 +351,7 @@ public partial class MethodGrowth : FPGenerationMethod
             Debug.LogWarning("At this point it should not have a full border available.");
         }
         zone.SetAsLShaped(largestFreeSide.freeLineDescription);
-        return zone.TryExpandShapeL(cellsGrid);
+        return zone.TryExpandShapeL();
 
     }
 
@@ -364,7 +367,7 @@ public partial class MethodGrowth : FPGenerationMethod
     {
         if(zone.GetExpansionSpaceRect(side, cellsGrid, false).isFullLine)
         {
-            return zone.TryExpandShapeRect(side, cellsGrid);
+            return zone.TryExpandShapeRect(side);
         }
         
         return false;
@@ -456,7 +459,8 @@ public partial class MethodGrowth : FPGenerationMethod
             if(_cellsWeights.GetRandomWeightedElement(zone._parentZone.Cells, out Cell cell))
             #endif
             {
-                _floorPlanManager.CellsGrid.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
+                //_floorPlanManager.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
+                _floorPlanManager.AssignCellToZone(cell, zone);
             }
         }
         else
@@ -464,7 +468,7 @@ public partial class MethodGrowth : FPGenerationMethod
             Vector2Int position = new Vector2Int(Utils.RandomRange(0, _floorPlanManager.CellsGrid.Dimensions.x),
                                                  Utils.RandomRange(0, _floorPlanManager.CellsGrid.Dimensions.y));
             
-            _floorPlanManager.CellsGrid.AssignCellToZone(position.x, position.y, zone);
+            _floorPlanManager.AssignCellToZone(position.x, position.y, zone);
         }
     }
 

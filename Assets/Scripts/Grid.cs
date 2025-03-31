@@ -116,42 +116,4 @@ public class CellsGrid // using class to facilitate passing values by reference
         }
         return result;
     }
-
-
-    public bool AssignCellToZone(int x, int y, Zone zone)
-    {
-        if(GetCell(x, y, out Cell cell))
-        {
-            // Remove previous set cell zone.
-            if(cell.Zone != null)
-            {
-                cell.Zone.RemoveCell(cell);
-            }
-
-            zone.AddCell(cell);
-            cell.SetZone(zone);
-
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-
-    // O uso de Actions para isso reduz performance, prefira itera��o direta. TODO verificar se � possivel passar a expres�o lambda direto sem uso de Actions e se isso � mais rapido.
-    // USE DE REF COM ACTIONS N�O � PERMITIDO
-    // <!--
-    // order:-40
-    // -->
-    /*
-    public void ForEachCellOnGrid(Action<T> action)
-    {
-        for(int i = 0; i < _cells.Length; i++)
-        {
-            action(ref _cells[i]);
-        }
-    }
-    */
 }
