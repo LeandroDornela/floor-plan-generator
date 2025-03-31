@@ -37,31 +37,16 @@ public partial class MethodGrowth : FPGenerationMethod
     // Quando uma zona n pode mais crescer na iteração atual é armazenada aqui.
     // Depois retorna para crescer usando outra logical, 'L' ou 'free'
     private List<Zone> _grownZones;
-
     private WeightedArray _cellsWeights;
     private WeightedArray _zonesWeights;
 
-   
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="floorPlanManager"></param>
-    /// <returns></returns>
-    public override bool Init(FloorPlanManager floorPlanManager)
-    {
-        base.Init(floorPlanManager);
-
-        _cts = new CancellationTokenSource();
-
-        return _initialized;
-    }
 
     
     /// <summary>
     /// TODO: receber a grid e tudo mais como parametros
     /// </summary>
     /// <returns></returns>
-    public override async UniTask<bool> Run(FloorPlanGenSceneDebugger sceneDebugger)
+    public override async UniTask<bool> Run(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger)
     {
         
         if(!EditorApplication.isPlaying)
@@ -70,13 +55,15 @@ public partial class MethodGrowth : FPGenerationMethod
             return false;
         }
 
+        _cts = new CancellationTokenSource();
+
         EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
         _zonesToSubdivide = new List<Zone>();
         _zonesToGrow = new List<Zone>();
         _grownZones = new List<Zone>();
 
-        CellsGrid cellsGrid = _floorPlanManager.CellsGrid;
+        CellsGrid cellsGrid = floorPlanManager.CellsGrid;
 
         // TODO: temporario.
         // Setup da zona raiz.
@@ -88,7 +75,7 @@ public partial class MethodGrowth : FPGenerationMethod
         int a = Utils.RandomRange(2,10);
         int b = Utils.RandomRange(2,10);
         
-        foreach(Cell cell in cellsGrid._cells)
+        foreach(Cell cell in cellsGrid.Cells)
         {
             if(corner == 0 && cell.GridPosition.x > a && cell.GridPosition.y > b) continue;
             else if (corner == 1 && cell.GridPosition.x < a && cell.GridPosition.y < b) continue;
@@ -98,16 +85,16 @@ public partial class MethodGrowth : FPGenerationMethod
             // corner == 5, full area
 
             //_floorPlanManager.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, _floorPlanManager.RootZone);
-            _floorPlanManager.AssignCellToZone(cell, _floorPlanManager.RootZone);
+            floorPlanManager.AssignCellToZone(cell, floorPlanManager.RootZone);
         }
 
-        _floorPlanManager.RootZone.Bake();
-        _zonesToSubdivide.Add(_floorPlanManager.RootZone);
+        floorPlanManager.RootZone.Bake();
+        _zonesToSubdivide.Add(floorPlanManager.RootZone);
         
         while(_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
         {
             // Get the child zones from the next zone to subdivide.
-            _zonesToGrow = GetNextZonesToGrowList();
+            _zonesToGrow = GetNextZonesToGrowList(floorPlanManager);
             UpdateZonesWeights(_zonesToGrow);
 
             //TriggerOnCellsGridChanged(cellsGrid);
@@ -382,7 +369,7 @@ public partial class MethodGrowth : FPGenerationMethod
     /// 
     /// </summary>
     /// <returns></returns>
-    List<Zone> GetNextZonesToGrowList() // TODO: "set" zones to grow list
+    List<Zone> GetNextZonesToGrowList(FloorPlanManager floorPlanManager) // TODO: "set" zones to grow list
     {
         if(_zonesToSubdivide.Count == 0)
         {
@@ -395,7 +382,7 @@ public partial class MethodGrowth : FPGenerationMethod
         for(int i = 0; i < childZones.Count; i++)
         {
             Zone zone = childZones[i];
-            PlotFirstZoneCell(zone, childZones); // TODO: move to outside the method
+            PlotFirstZoneCell(zone, childZones, floorPlanManager); // TODO: move to outside the method
         }
 
         return  childZones;
@@ -446,29 +433,29 @@ public partial class MethodGrowth : FPGenerationMethod
     /// </summary>
     /// <param name="zone"></param>
     /// <param name="zonesToGrow"></param>
-    void PlotFirstZoneCell(Zone zone, List<Zone> zonesToGrow)
+    void PlotFirstZoneCell(Zone zone, List<Zone> zonesToGrow, FloorPlanManager floorPlanManager)
     {
         if(zone.ParentZone != null)
         {
             // Weighted selection
-            CalculateWeights(zone, zonesToGrow);
+            CalculateWeights(zone, zonesToGrow, floorPlanManager);
             
             #if DEBUG
-            if(_cellsWeights.GetRandomWeightedElement(_floorPlanManager.CellsGrid.Cells, out Cell cell))
+            if(_cellsWeights.GetRandomWeightedElement(floorPlanManager.CellsGrid.Cells, out Cell cell))
             #else
             if(_cellsWeights.GetRandomWeightedElement(zone._parentZone.Cells, out Cell cell))
             #endif
             {
                 //_floorPlanManager.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
-                _floorPlanManager.AssignCellToZone(cell, zone);
+                floorPlanManager.AssignCellToZone(cell, zone);
             }
         }
         else
         {
-            Vector2Int position = new Vector2Int(Utils.RandomRange(0, _floorPlanManager.CellsGrid.Dimensions.x),
-                                                 Utils.RandomRange(0, _floorPlanManager.CellsGrid.Dimensions.y));
+            Vector2Int position = new Vector2Int(Utils.RandomRange(0, floorPlanManager.CellsGrid.Dimensions.x),
+                                                 Utils.RandomRange(0, floorPlanManager.CellsGrid.Dimensions.y));
             
-            _floorPlanManager.AssignCellToZone(position.x, position.y, zone);
+            floorPlanManager.AssignCellToZone(position.x, position.y, zone);
         }
     }
 
@@ -483,13 +470,13 @@ public partial class MethodGrowth : FPGenerationMethod
     /// </summary>
     /// <param name="zoneToPlot"></param>
     /// <param name="plottedZones"></param>
-    void CalculateWeights(Zone zoneToPlot, List<Zone> plottedZones = null)
+    void CalculateWeights(Zone zoneToPlot, List<Zone> plottedZones, FloorPlanManager floorPlanManager)
     {
-        CellsGrid cellsGrid = _floorPlanManager.CellsGrid;
+        CellsGrid cellsGrid = floorPlanManager.CellsGrid;
         Zone parentZone = zoneToPlot.ParentZone;
         
         #if DEBUG
-        Cell[] cellsToCalc = _floorPlanManager.CellsGrid.Cells;
+        Cell[] cellsToCalc = floorPlanManager.CellsGrid.Cells;
         #else
         Cell[] cellsToCalc =  parentZone.Cells;
         #endif
