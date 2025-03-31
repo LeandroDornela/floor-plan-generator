@@ -16,11 +16,9 @@ public partial class MethodGrowth
         return false;
     }
 
-
+    /*
     public override void OnDrawGizmos()
     {
-        return;
-
         Vector3 from = new Vector3();
         Vector3 to = new Vector3();
         CellsLineDescription zb = _zoneBorder_TEMP;
@@ -87,4 +85,5 @@ public partial class MethodGrowth
             }
         }
     }
+    */
 }

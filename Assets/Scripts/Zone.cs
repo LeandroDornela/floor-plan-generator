@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /*------------------>x
 |       Top
@@ -12,87 +9,6 @@ y       [v][-][-][v]
         [o][>][>][>]
         Bottom
 */
-
-// OBS: Seguindo o padão da grid, leitura esquerda->direita, cima->baixo
-/// <summary>
-/// 
-/// </summary>
-public class CellsLineDescription
-{
-    public Vector2Int firstCellCoord;
-    public int numberOfCells;
-    public Zone.Side side;
-    public int totalDistanceExpanded;
-
-    public CellsLineDescription(int firstCellX, int firstCellY, int numberOfCells, Zone.Side side)
-    {
-        this.firstCellCoord = new Vector2Int(firstCellX, firstCellY);
-        this.numberOfCells = numberOfCells;
-        this.side = side;
-        this.totalDistanceExpanded = 0;
-    }
-
-    public void AddCells(int amount)
-    {
-        numberOfCells += amount;
-    }
-
-    public void MoveUp(int amount)
-    {
-        firstCellCoord.y -= amount;
-
-        if(side == Zone.Side.Top)
-        {
-            totalDistanceExpanded++;
-        }
-        else if(side == Zone.Side.Bottom)
-        {
-            totalDistanceExpanded--;
-        }
-    }
-
-    public void MoveDown(int amount)
-    {
-        firstCellCoord.y += amount;
-
-        if(side == Zone.Side.Top)
-        {
-            totalDistanceExpanded--;
-        }
-        else if(side == Zone.Side.Bottom)
-        {
-            totalDistanceExpanded++;
-        }
-    }
-
-    public void MoveLeft(int amount)
-    {
-        firstCellCoord.x -= amount;
-
-        if(side == Zone.Side.Left)
-        {
-            totalDistanceExpanded++;
-        }
-        else if(side == Zone.Side.Right)
-        {
-            totalDistanceExpanded--;
-        }
-    }
-
-    public void MoveRight(int amount)
-    {
-        firstCellCoord.x += amount;
-
-        if(side == Zone.Side.Left)
-        {
-            totalDistanceExpanded--;
-        }
-        else if(side == Zone.Side.Right)
-        {
-            totalDistanceExpanded++;
-        }
-    }
-}
 
 
 /// <summary>
@@ -108,35 +24,42 @@ public class Zone // similar a uma estrutura de nos em arvore
         Right = 3
     }
 
-    // Runtime
-    public List<Cell> _cells; // Celulas atualmente associadas a zona.
-    // Runtime const
+    // PRIVATE
     private string _zoneId;
-    public string ZoneId => _zoneId;
     private float _areaRatio;
-    public float AreaRatio => _areaRatio;
-    public Zone _parentZone;
-    public Zone ParentZone => _parentZone;
-    public List<Zone> _childZones;
-    public List<Zone> _adjacentZones;
-    public Zone[] AdjacentZones => _adjacentZones.ToArray();
-
     private float _desiredAspect = 1; // 1 is square
-    public float DesiredAspect => _desiredAspect;
+    private Zone _parentZone;
+    private Dictionary<string, Zone> _childZones;
+    private Dictionary<string, Zone> _adjacentZones;
+    
 
-    //Borders descriptions
+    private List<Cell> _cellsList; // Celulas atualmente associadas a zona.
     private Dictionary<Side, CellsLineDescription> _zoneBorders;
-
-    // L shape description
+    private CellsLineDescription _lBorderCells;
+    private Cell[] _cellsArray; // Baked
+    private Cell[] _borderCells; // Baked
+    
     private bool _isLShaped = false;
-    public bool IsLShaped => _isLShaped;
-    public CellsLineDescription _lBorderCells;
+    private bool _isBaked = false;
 
-    // Get the zone are in cells units.
-    public int Area => _cells.Count;
-    public Cell[] Cells => _cells.ToArray();
+    // Coord transformation matrix, used to compact the methods that have different behavior base on the border of the shape.
+    private readonly Dictionary<Side, Vector4> _coordTransMatrices = new Dictionary<Side, Vector4>{
+    {Side.Top, new Vector4(1,0,0,-1)},
+    {Side.Bottom, new Vector4(1,0,0,1)},
+    {Side.Left, new Vector4(0,1,-1,0)},
+    {Side.Right, new Vector4(0,1,1,0)}};
+    
 
-    private Cell[] _borderCells;
+    // PUBLIC PROP
+    public string ZoneId => _zoneId;
+    public float AreaRatio => _areaRatio;
+    public float DesiredAspect => _desiredAspect;
+    public int Area => _cellsList.Count; // Get the zone area in cells units.
+    public Cell OriginCell => (_cellsList != null && _cellsList.Count > 0)? _cellsList[0] : null;
+    public Zone ParentZone => _parentZone;
+    public Dictionary<string, Zone> ChildZones => _childZones;
+    public Dictionary<string, Zone> AdjacentZones => _adjacentZones;
+    public Cell[] Cells => _cellsArray;
     public Cell[] BorderCells
     {
         get
@@ -145,20 +68,9 @@ public class Zone // similar a uma estrutura de nos em arvore
             return _borderCells;
         }
     }
-
-    public Cell OriginCell => (_cells != null && _cells.Count > 0)? _cells[0] : null;
-
-    private bool _isBaked = false;
+    public bool IsLShaped => _isLShaped;
     public bool IsBaked => _isBaked;
-
-    // Coord transformation matrix, used to compact the methods that have different behavior base on the border of the shape.
-    private readonly Dictionary<Side, Vector4> _coordTransMatrices = new Dictionary<Side, Vector4>
-    {{Side.Top, new Vector4(1,0,0,-1)},
-    {Side.Bottom, new Vector4(1,0,0,1)},
-    {Side.Left, new Vector4(0,1,-1,0)},
-    {Side.Right, new Vector4(0,1,1,0)}};
-
-    private int _minimumCellsToExpand = 1;
+    public bool HasChildrenZones => _childZones?.Count > 0;
     
 
     public Zone(string zoneId, float areaRatio)
@@ -166,21 +78,12 @@ public class Zone // similar a uma estrutura de nos em arvore
         _zoneId = zoneId;
         _areaRatio = areaRatio;
         _parentZone = null;
-        _cells = new List<Cell>();
-        _childZones = new List<Zone>();
-        _adjacentZones = new List<Zone>();
+        _cellsList = new List<Cell>();
+        _childZones = new Dictionary<string, Zone>();
+        _adjacentZones = new Dictionary<string, Zone>();
     }
 
-
-    private Zone(string zoneId, Zone parentZone)
-    {
-        _zoneId = zoneId;
-        _parentZone = parentZone;
-
-        _cells = new List<Cell>();
-    }
-
-
+#region =========== CELLS AND FAMILY ZONES SETTING ===========
     /// <summary>
     /// 
     /// </summary>
@@ -194,14 +97,14 @@ public class Zone // similar a uma estrutura de nos em arvore
             return false;
         }
 
-        if(_cells.Contains(cell))
+        if(_cellsList.Contains(cell))
         {
             Debug.LogError("Trying to add an exiting cell.");
             return false;
         }
 
         // Set up the borders.
-        if(_cells.Count == 0) // First cell
+        if(_cellsList.Count == 0) // First cell
         {
             _zoneBorders = new Dictionary<Side, CellsLineDescription>
             {
@@ -212,7 +115,7 @@ public class Zone // similar a uma estrutura de nos em arvore
             };
         }
 
-        _cells.Add(cell);
+        _cellsList.Add(cell);
         return true;
     }
 
@@ -230,9 +133,9 @@ public class Zone // similar a uma estrutura de nos em arvore
             return false;
         }
 
-        if(_cells.Contains(cell))
+        if(_cellsList.Contains(cell))
         {
-            return _cells.Remove(cell);
+            return _cellsList.Remove(cell);
         }
         else
         {
@@ -255,14 +158,7 @@ public class Zone // similar a uma estrutura de nos em arvore
             return false;
         }
 
-        if(_childZones.Contains(childZone))
-        {
-            Debug.LogWarning("Trying to add an exiting child.");
-            return false;
-        }
-
-        _childZones.Add(childZone);
-        return true;
+        return _childZones.TryAdd(childZone.ZoneId, childZone);
     }
 
 
@@ -279,13 +175,7 @@ public class Zone // similar a uma estrutura de nos em arvore
             return false;
         }
 
-        if(_adjacentZones.Contains(adjacentZone))
-        {
-            Debug.LogError("Trying to add an existing adjacent zone.");
-        }
-
-        _adjacentZones.Add(adjacentZone);
-        return true;
+        return _adjacentZones.TryAdd(adjacentZone.ZoneId, adjacentZone);
     }
 
 
@@ -308,6 +198,44 @@ public class Zone // similar a uma estrutura de nos em arvore
         }
     }
 
+#endregion
+
+
+#region =========== GETS/CHECKS ===========
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cellsGrid"></param>
+    /// <returns></returns>
+    public bool HasDesiredArea(CellsGrid cellsGrid)
+    {
+        return Area >= _areaRatio * cellsGrid.Area;
+    }
+
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zoneToTest"></param>
+    /// <returns></returns>
+    public bool IsAdjacent(Zone zoneToTest)
+    {
+        return _adjacentZones.ContainsKey(zoneToTest.ZoneId);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zoneToTest"></param>
+    /// <returns></returns>
+    public bool IsSister(Zone zoneToTest)
+    {
+        return _parentZone == zoneToTest.ParentZone;
+    }
+
+
     /// <summary>
     /// (top cells) / (left cells);
     /// (if smaller 1): zone is taller than wide;
@@ -318,71 +246,13 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <returns>Current zone aspect ratio.</returns>
     public float GetZoneAspect()
     {
-        return (float)_zoneBorders[Side.Top].numberOfCells / _zoneBorders[Side.Left].numberOfCells;
+        return (float)_zoneBorders[Side.Top].NumberOfCells / _zoneBorders[Side.Left].NumberOfCells;
     }
 
+#endregion
 
-    /// <summary>
-    /// Expensive. Cache the return when possible.
-    /// "Find" to make clear it will look for the border cells.
-    /// TODO: Optimize.
-    /// </summary>
-    /// <returns></returns>
-    Cell[] FindBorderCells(CellsGrid cellsGrid)
-    {
-        if(_cells == null || _cells.Count == 0)
-        {
-            return default;
-        }
 
-        List<Cell> borderCells = new List<Cell>();
-
-        foreach(Cell cell in _cells)
-        {
-            Cell neighborCell;
-
-            for(int x = -1; x <= 1; x++)
-            {
-                for(int y = -1; y <= 1; y++)
-                {
-                    if(x == 0 && y == 0) continue;
-
-                    if(!cellsGrid.GetCell(cell.GridPosition.x + x, cell.GridPosition.y + y, out neighborCell) ||
-                      (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
-                    {
-                        borderCells.Add(cell);
-                    }
-                }
-            }
-
-            /*
-            // top
-            if(!cellsGrid.GetCell(cell.GridPosition.x, cell.GridPosition.y - 1, out neighborCell) )
-            {
-                // invalid grid pos, is a grid border so is also zone border.
-                borderCells.Add(cell);
-            }
-            // bottom
-            else if(!cellsGrid.GetCell(cell.GridPosition.x, cell.GridPosition.y + 1, out neighborCell) || (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
-            {
-                borderCells.Add(cell);
-            }
-            // left
-            else if(!cellsGrid.GetCell(cell.GridPosition.x - 1, cell.GridPosition.y, out neighborCell) || (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
-            {
-                borderCells.Add(cell);
-            }
-            // right
-            else if(!cellsGrid.GetCell(cell.GridPosition.x + 1, cell.GridPosition.y, out neighborCell) || (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
-            {
-                borderCells.Add(cell);
-            }
-            */
-        }
-
-        return borderCells.ToArray();
-    }
-
+#region =========== GENERA SETS/STATE CHANGE
 
     /// <summary>
     /// 
@@ -409,13 +279,36 @@ public class Zone // similar a uma estrutura de nos em arvore
         return true;
     }
 
+#endregion
 
-    public bool HasDesiredArea(CellsGrid cellsGrid)
+
+#region =========== BAKING ===========
+
+    /// <summary>
+    /// When zone has the final shape, convert lists to arrays, update and set values.
+    /// </summary>
+    /// <param name="cellsGrid"></param>
+    public void Bake(CellsGrid cellsGrid)
     {
-        return Area >= _areaRatio * cellsGrid.Area;
+        if(_isBaked)
+        {
+            Debug.LogError("Zone is already baked.");
+            return;
+        }
+
+        _cellsArray = _cellsList.ToArray();
+
+        SetBorderCells(cellsGrid);
+
+        _isBaked = true;
     }
 
-    private void SetBorderCells(CellsGrid cellsGrid)
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cellsGrid"></param>
+    void SetBorderCells(CellsGrid cellsGrid)
     {
         if(_borderCells != null && _borderCells.Length > 0)
         {
@@ -427,32 +320,44 @@ public class Zone // similar a uma estrutura de nos em arvore
     }
 
 
-    // TODO: use dictionary for adjacent zones.
-    public bool IsAdjacent(Zone zoneToTest)
+    /// <summary>
+    /// Expensive. Cache the return when possible.
+    /// "Find" to make clear it will look for the border cells.
+    /// TODO: Optimize.
+    /// </summary>
+    /// <returns></returns>
+    Cell[] FindBorderCells(CellsGrid cellsGrid)
     {
-        return _adjacentZones.Contains(zoneToTest);
-    }
-
-    public bool IsSister(Zone zoneToTest)
-    {
-        return _parentZone == zoneToTest.ParentZone;
-    }
-
-
-    // TODO: bake needed properties.
-    // When zone has the final shape, convert lists to arrays, update and set values.
-    public void Bake(CellsGrid cellsGrid)
-    {
-        if(_isBaked)
+        if(_cellsArray == null || _cellsArray.Length == 0)
         {
-            Debug.LogError("Zone is already baked.");
-            return;
+            return default;
         }
 
-        SetBorderCells(cellsGrid);
+        List<Cell> borderCells = new List<Cell>();
 
-        _isBaked = true;
+        foreach(Cell cell in _cellsArray)
+        {
+            Cell neighborCell;
+
+            for(int x = -1; x <= 1; x++)
+            {
+                for(int y = -1; y <= 1; y++)
+                {
+                    if(x == 0 && y == 0) continue;
+
+                    if(!cellsGrid.GetCell(cell.GridPosition.x + x, cell.GridPosition.y + y, out neighborCell) ||
+                      (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
+                    {
+                        borderCells.Add(cell);
+                    }
+                }
+            }
+        }
+
+        return borderCells.ToArray();
     }
+
+#endregion
 
 
 #region ================================================== PUBLIC EXPANSION METHODS ==================================================
@@ -498,8 +403,8 @@ public class Zone // similar a uma estrutura de nos em arvore
                 }
                 else
                 {
-                    int newSideTotalSpace = newSide.freeLineDescription.numberOfCells * newSide.distance;
-                    int largestFreeSideTotalSpace = largestFreeSide.line.numberOfCells * largestFreeSide.distance;
+                    int newSideTotalSpace = newSide.freeLineDescription.NumberOfCells * newSide.distance;
+                    int largestFreeSideTotalSpace = largestFreeSide.line.NumberOfCells * largestFreeSide.distance;
 
                     if(newSideTotalSpace > largestFreeSideTotalSpace)
                     {
@@ -584,7 +489,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         //  z: direction of expansion in X,
         //  w: direction of expansion in Y)
 
-        if(cellsLineDesc.numberOfCells == 0)
+        if(cellsLineDesc.NumberOfCells == 0)
         {
             // [-][-][-][-][-] free line
             // [o][o][o][o][o] original line
@@ -595,8 +500,8 @@ public class Zone // similar a uma estrutura de nos em arvore
         int lastToFirst_Count = 0; // from last to first cell in line.
         int maxExpansionSpace = 0;
         // The return free line is to be used only as container of information about the line to be expanded, don't refer to real borders to avoid external modification.
-        CellsLineDescription freeLine = new CellsLineDescription(cellsLineDesc.firstCellCoord.x, cellsLineDesc.firstCellCoord.y, 0, cellsLineDesc.side);
-        Vector4 tMatrix = _coordTransMatrices[cellsLineDesc.side]; // Transformation matrix
+        CellsLineDescription freeLine = new CellsLineDescription(cellsLineDesc.FirstCellCoord.x, cellsLineDesc.FirstCellCoord.y, 0, cellsLineDesc.Side);
+        Vector4 tMatrix = _coordTransMatrices[cellsLineDesc.Side]; // Transformation matrix
 
 
         // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Check from FIRST to LAST cell of the line 
@@ -606,10 +511,10 @@ public class Zone // similar a uma estrutura de nos em arvore
         // Return immediately a failure result if find a invalid cell(a cell out of the grid).
         // Or just stop iteration when find a cell that is not available to change zone, since
         // it MUST be a continuos line.
-        for(int i = 0; i < cellsLineDesc.numberOfCells; i++)
+        for(int i = 0; i < cellsLineDesc.NumberOfCells; i++)
         {
-            if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z,
-                                 cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w,
+            if(cellsGrid.GetCell(cellsLineDesc.FirstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z,
+                                 cellsLineDesc.FirstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w,
                                  out Cell cell))
             {
                 if(CellIsAvailable(cell))
@@ -635,13 +540,13 @@ public class Zone // similar a uma estrutura de nos em arvore
         if(firstToLast_Count > 0)
         {
             // Have space to expand on the direction.
-            freeLine.numberOfCells = firstToLast_Count;
+            freeLine.NumberOfCells = firstToLast_Count;
             maxExpansionSpace = 1; // At least one line free.
         }
 
         // =============== Check the all other valid lines on the sequence if requested.
         // Iterate on the lines "on top" of the free line to check how many of the same size are free to expansion.
-        if(fullSpaceSearch && freeLine.numberOfCells > 0)
+        if(fullSpaceSearch && freeLine.NumberOfCells > 0)
         {
             int currentLineNumCells;
             int safeCounter = 0; // Redundance to avoid infinity loops.
@@ -652,10 +557,10 @@ public class Zone // similar a uma estrutura de nos em arvore
             {
                 currentLineNumCells = 0;
 
-                for(int i = 0; i < freeLine.numberOfCells; i++)
+                for(int i = 0; i < freeLine.NumberOfCells; i++)
                 {
-                    if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
-                                         cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
+                    if(cellsGrid.GetCell(cellsLineDesc.FirstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
+                                         cellsLineDesc.FirstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
                                          out Cell cell))
                     {
                         if(CellIsAvailable(cell))
@@ -676,7 +581,7 @@ public class Zone // similar a uma estrutura de nos em arvore
 
                 if(done) break; // Break the while loop.
 
-                if(currentLineNumCells == freeLine.numberOfCells)
+                if(currentLineNumCells == freeLine.NumberOfCells)
                 {
                     maxExpansionSpace++;
                 }
@@ -692,7 +597,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         // =============== Check partial result, possible return.
         // Is a full line so the other direction will not be larger. Return the result.
         // If not, check if the other side is larger.
-        if(firstToLast_Count == cellsLineDesc.numberOfCells)
+        if(firstToLast_Count == cellsLineDesc.NumberOfCells)
         {
             // [o][o][o][o][o] free line
             // [o][o][o][o][o] original line
@@ -708,10 +613,10 @@ public class Zone // similar a uma estrutura de nos em arvore
         // Return immediately a failure result if find a invalid cell(a cell out of the grid).
         // Or just stop iteration when find a cell that is not available to change zone, since
         // it MUST be a continuos line.
-        for(int i = cellsLineDesc.numberOfCells - 1; i >= 0; i--)
+        for(int i = cellsLineDesc.NumberOfCells - 1; i >= 0; i--)
         {
-            if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z,
-                                 cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w,
+            if(cellsGrid.GetCell(cellsLineDesc.FirstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z,
+                                 cellsLineDesc.FirstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w,
                                  out Cell cell))
             {
                 if(CellIsAvailable(cell))
@@ -753,12 +658,12 @@ public class Zone // similar a uma estrutura de nos em arvore
             return (null, false, 0);
         }
         
-        freeLine.numberOfCells = lastToFirst_Count;
+        freeLine.NumberOfCells = lastToFirst_Count;
         maxExpansionSpace = 1;
 
         // =============== Check the all other valid lines on the sequence if requested.
         // Iterate on the lines "on top" of the free line to check how many of the same size are free to expansion.
-        if(fullSpaceSearch && freeLine.numberOfCells > 0)
+        if(fullSpaceSearch && freeLine.NumberOfCells > 0)
         {
             int currentLineNumCells;
             int safeCounter = 0; // Redundance to avoid infinity loops.
@@ -769,10 +674,10 @@ public class Zone // similar a uma estrutura de nos em arvore
             {
                 currentLineNumCells = 0;
 
-                for(int i = cellsLineDesc.numberOfCells - 1; i >= cellsLineDesc.numberOfCells - freeLine.numberOfCells; i--)
+                for(int i = cellsLineDesc.NumberOfCells - 1; i >= cellsLineDesc.NumberOfCells - freeLine.NumberOfCells; i--)
                 {
-                    if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
-                                         cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
+                    if(cellsGrid.GetCell(cellsLineDesc.FirstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
+                                         cellsLineDesc.FirstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
                                          out Cell cell))
                     {
                         if(CellIsAvailable(cell))
@@ -793,7 +698,7 @@ public class Zone // similar a uma estrutura de nos em arvore
 
                 if(done) break;
 
-                if(currentLineNumCells == freeLine.numberOfCells)
+                if(currentLineNumCells == freeLine.NumberOfCells)
                 {
                     maxExpansionSpace++;
                 }
@@ -809,13 +714,15 @@ public class Zone // similar a uma estrutura de nos em arvore
         // After doing all possible checks, return the largest free line. At this point
         // it will be a line smaller than original line and stating from the last cell.
         // Update the first cell since at this point it still the first from the original nile, and now should be a cell in the middle.
-        if(freeLine.side == Side.Top || freeLine.side == Side.Bottom)
+        if(freeLine.Side == Side.Top || freeLine.Side == Side.Bottom)
         {
-            freeLine.firstCellCoord.x = cellsLineDesc.firstCellCoord.x + cellsLineDesc.numberOfCells - freeLine.numberOfCells;
+            freeLine.FirstCellCoord = new Vector2Int(cellsLineDesc.FirstCellCoord.x + cellsLineDesc.NumberOfCells - freeLine.NumberOfCells,
+                                                     freeLine.FirstCellCoord.y);
         }
         else
         {
-            freeLine.firstCellCoord.y = cellsLineDesc.firstCellCoord.y + cellsLineDesc.numberOfCells - freeLine.numberOfCells;
+            freeLine.FirstCellCoord = new Vector2Int(freeLine.FirstCellCoord.x,
+                                                     cellsLineDesc.FirstCellCoord.y + cellsLineDesc.NumberOfCells - freeLine.NumberOfCells);
         }
         // [-][-][-][o][o] free line
         // [o][o][o][o][o] original line
@@ -832,13 +739,13 @@ public class Zone // similar a uma estrutura de nos em arvore
     bool TryExpand(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid)
     {
         int amount = 1;
-        Vector4 tMatrix = _coordTransMatrices[cellsLineDesc.side]; // Transformation matrix
+        Vector4 tMatrix = _coordTransMatrices[cellsLineDesc.Side]; // Transformation matrix
 
         // Assign the cells to the zone.
-        for(int i = 0; i < cellsLineDesc.numberOfCells; i++)
+        for(int i = 0; i < cellsLineDesc.NumberOfCells; i++)
         {
-            int x = cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z;
-            int y = cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w;
+            int x = cellsLineDesc.FirstCellCoord.x + i * (int)tMatrix.x + (int)tMatrix.z;
+            int y = cellsLineDesc.FirstCellCoord.y + i * (int)tMatrix.y + (int)tMatrix.w;
 
             if(cellsGrid.GetCell(x, y, out Cell cell))
             {
@@ -860,7 +767,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         }
 
 
-        switch(cellsLineDesc.side)
+        switch(cellsLineDesc.Side)
         {
             case Side.Top:
                 if(_isLShaped) _lBorderCells.MoveUp(amount);
@@ -908,14 +815,14 @@ public class Zone // similar a uma estrutura de nos em arvore
     int CountAvailableCells(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid, Vector4 tMatrix, bool reverse, int maxExpansionSpace = 0)
     {
         int count = 0;
-        int start = reverse ? cellsLineDesc.numberOfCells - 1 : 0;
-        int end = reverse ? -1 : cellsLineDesc.numberOfCells;
+        int start = reverse ? cellsLineDesc.NumberOfCells - 1 : 0;
+        int end = reverse ? -1 : cellsLineDesc.NumberOfCells;
         int step = reverse ? -1 : 1;
 
         for(int i = start; i != end; i += step)
         {
-            if(cellsGrid.GetCell(cellsLineDesc.firstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
-                                 cellsLineDesc.firstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
+            if(cellsGrid.GetCell(cellsLineDesc.FirstCellCoord.x + i * (int)tMatrix.x + (maxExpansionSpace + 1)*(int)tMatrix.z,
+                                 cellsLineDesc.FirstCellCoord.y + i * (int)tMatrix.y + (maxExpansionSpace + 1)*(int)tMatrix.w,
                                  out Cell cell))
             {
                 if(CellIsAvailable(cell))
@@ -946,7 +853,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         foreach(var border in _zoneBorders)
         {
             var result = GetExpansionSpace(border.Value, cellsGrid, true);
-            Debug.Log($"zid:{ZoneId} side:{result.freeLineDescription?.side} space:{result.distance} cells:{result.freeLineDescription?.numberOfCells}");
+            Debug.Log($"zid:{ZoneId} side:{result.freeLineDescription?.Side} space:{result.distance} cells:{result.freeLineDescription?.NumberOfCells}");
         }
         Debug.Log("--------------------------------");
     }

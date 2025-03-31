@@ -90,7 +90,7 @@ public class MethodFloodFillWeighted : FPGenerationMethod
 
         foreach(var zone in _floorPlanManager.RootZones)
         {
-            Debug.Log($"zone {zone.ZoneId}: {zone._cells.Count}");
+            Debug.Log($"zone {zone.ZoneId}: {zone.Cells.Length}");
         }
 
         return true;

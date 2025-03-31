@@ -160,7 +160,7 @@ public class FloorPlanManager
         foreach(var zone in _zonesInstances)
         {
             // If is a root.
-            if(zone.Value._parentZone == null)
+            if(zone.Value.ParentZone == null)
             {
                 _rootZones.Add(zone.Value);
 

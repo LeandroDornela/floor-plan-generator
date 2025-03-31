@@ -39,7 +39,7 @@ public class Cell // dando preferencia para classes para passar por ref
         while(currentZone != null)
         {
             parentZones.Add(currentZone);
-            currentZone = currentZone._parentZone;
+            currentZone = currentZone.ParentZone;
         }
 
         return parentZones;

@@ -39,8 +39,6 @@ public partial class MethodGrowth : FPGenerationMethod
     private WeightedArray _cellsWeights;
     private WeightedArray _zonesWeights;
 
-    private CellsLineDescription _zoneBorder_TEMP;
-
    
     /// <summary>
     /// 
@@ -175,7 +173,7 @@ public partial class MethodGrowth : FPGenerationMethod
             {
                 zone.Bake(cellsGrid);
 
-                if(zone._childZones?.Count > 0)
+                if(zone.HasChildrenZones)
                 {
                     _zonesToSubdivide.Add(zone);
                 }
@@ -307,7 +305,7 @@ public partial class MethodGrowth : FPGenerationMethod
         }
         else
         {
-            return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.side, cellsGrid);
+            return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.Side, cellsGrid);
         }
     }
 
@@ -388,7 +386,7 @@ public partial class MethodGrowth : FPGenerationMethod
             return null;
         }
 
-        var childZones = _zonesToSubdivide[0]._childZones;
+        List<Zone> childZones = _zonesToSubdivide[0].ChildZones.Values.ToList();
         _zonesToSubdivide.RemoveAt(0);
 
         for(int i = 0; i < childZones.Count; i++)
@@ -447,7 +445,7 @@ public partial class MethodGrowth : FPGenerationMethod
     /// <param name="zonesToGrow"></param>
     void PlotFirstZoneCell(Zone zone, List<Zone> zonesToGrow)
     {
-        if(zone._parentZone != null)
+        if(zone.ParentZone != null)
         {
             // Weighted selection
             CalculateWeights(zone, zonesToGrow);
@@ -484,7 +482,7 @@ public partial class MethodGrowth : FPGenerationMethod
     void CalculateWeights(Zone zoneToPlot, List<Zone> plottedZones = null)
     {
         CellsGrid cellsGrid = _floorPlanManager.CellsGrid;
-        Zone parentZone = zoneToPlot._parentZone;
+        Zone parentZone = zoneToPlot.ParentZone;
         
         #if DEBUG
         Cell[] cellsToCalc = _floorPlanManager.CellsGrid.Cells;
@@ -540,7 +538,7 @@ public partial class MethodGrowth : FPGenerationMethod
             // Because the way the algorithm iterates it will not guarantee that cousin zones can enter this, only uncle or older.
             if(!_ignoreAdjacentWeights)
             {
-                foreach(Zone adjacentZone in zoneToPlot.AdjacentZones)
+                foreach(Zone adjacentZone in zoneToPlot.AdjacentZones.Values)
                 {
                     // Skip sister zone.
                     // TODO: Maybe can be done together with plotted zones phase, when using cousin zones in calculus.
