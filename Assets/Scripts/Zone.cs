@@ -372,7 +372,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <param name="cellsGrid"></param>
     /// <param name="fullSpaceSearch"></param>
     /// <returns></returns>
-    public (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetExpansionSpaceRect(Side side, CellsGrid cellsGrid, bool fullSpaceSearch = false) // TODO: talvez mudar apra "get RECTangular exp space"
+    public (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetExpansionSpaceRect(Side side, bool fullSpaceSearch) // TODO: talvez mudar apra "get RECTangular exp space"
     {
         if(_isLShaped)
         {
@@ -380,12 +380,12 @@ public class Zone // similar a uma estrutura de nos em arvore
             return default;
         }
 
-        return GetExpansionSpace(_zoneBorders[side], cellsGrid, fullSpaceSearch);
+        return GetExpansionSpace(_zoneBorders[side], _floorPlanManager.CellsGrid, fullSpaceSearch);
     }
 
 
     // the return can be a possible L shape border.
-    public (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetLargestExpansionSpaceRect(CellsGrid cellsGrid, bool fullSpaceSearch = false)
+    public (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetLargestExpansionSpaceRect(bool fullSpaceSearch)
     {
         if(_isLShaped)
         {
@@ -397,7 +397,7 @@ public class Zone // similar a uma estrutura de nos em arvore
 
         foreach(var border in _zoneBorders)
         {
-            var newSide = GetExpansionSpace(border.Value, cellsGrid, fullSpaceSearch);
+            var newSide = GetExpansionSpace(border.Value, _floorPlanManager.CellsGrid, fullSpaceSearch);
 
             if(newSide.freeLineDescription != null)
             {
@@ -414,7 +414,7 @@ public class Zone // similar a uma estrutura de nos em arvore
                     {
                         largestFreeSide = newSide;
                     }
-                    else if(newSideTotalSpace == largestFreeSideTotalSpace && Utils.RandomBool())
+                    else if(newSideTotalSpace == largestFreeSideTotalSpace && Utils.Random.RandomBool())
                     {
                         largestFreeSide = newSide;
                     }
@@ -451,7 +451,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <param name="cellsGrid"></param>
     /// <param name="checkSpace"></param>
     /// <returns></returns>
-    public bool TryExpandShapeL(bool checkSpace = true)
+    public bool TryExpandShapeL(bool checkSpace)
     {
         if(checkSpace)
         {
@@ -482,7 +482,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <param name="cellsGrid"></param>
     /// <param name="fullSpaceSearch"></param>
     /// <returns></returns>
-    (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetExpansionSpace(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid, bool fullSpaceSearch = false)
+    (CellsLineDescription freeLineDescription, bool isFullLine, int distance) GetExpansionSpace(CellsLineDescription cellsLineDesc, CellsGrid cellsGrid, bool fullSpaceSearch)
     {
         //[mx][mz] * [i]
         //[my][mw]   [1]
@@ -645,7 +645,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         // If the free section on this direction is smaller than the first, or if is equal randomize if will send it.
         // return the first.
         // TODO: when equal and deciding at this point will skip the deep check, making possible a higher space not been check.
-        if(lastToFirst_Count < firstToLast_Count || (lastToFirst_Count == firstToLast_Count && Utils.RandomBool())) // lastToFirst_Count == 0 CAN PASS IT, checking bellow.
+        if(lastToFirst_Count < firstToLast_Count || (lastToFirst_Count == firstToLast_Count && Utils.Random.RandomBool())) // lastToFirst_Count == 0 CAN PASS IT, checking bellow.
         {
             // [o][o][-][-][-] free line
             // [o][o][o][o][o] original line

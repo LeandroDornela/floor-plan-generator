@@ -50,7 +50,7 @@ public class WeightedArray
     /// </summary>
     public int GetRandomWeightedIndex()
     {
-        float summationToFind = Utils.RandomRange(0, _summation);
+        float summationToFind = Utils.Random.RandomRange(0, _summation);
 
         float localSummation = 0;
         for(int i = 0; i < _array.Length; i++)

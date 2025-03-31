@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84379372ac0bb44d987ffd404559c44, type: 3}
   m_Name: DefaultGrowthMethod
   m_EditorClassIdentifier: 
-  _initialized: 1
   _borderDistanceCurve:
     serializedVersion: 2
     m_Curve:
@@ -84,7 +83,7 @@ MonoBehaviour:
   delay: 0.01
   _ignoreDesiredAreaInRect: 0
   _stopAtInitialPlot: 0
-  _skipToFinalResult: 1
+  _skipToFinalResult: 0
   _randomInitialArea: 0
   _ignoreBorderWeights: 0
   _ignoreAdjacentWeights: 0

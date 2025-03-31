@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 /*
@@ -49,22 +48,31 @@ public class CellsGrid // using class to facilitate passing values by reference
             for(int x = 0; x < dimensions.x; x++)
             {
                 _cells[index] = new Cell(x, y);
-                if(x == 8 || x == 12)
-                {
-                    _cells[index].atributos.Add("parede", "sim");
-                }
-
                 index++;
             }
         }
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     public bool IsValidPosition(int x, int y)
     {
         return x >= 0 && x < _dimensions.x && y >= 0 && y < _dimensions.y;
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="cell"></param>
+    /// <returns></returns>
     public bool GetCell(int x, int y, out Cell cell)
     {
         if(IsValidPosition(x, y))
@@ -80,20 +88,22 @@ public class CellsGrid // using class to facilitate passing values by reference
         }
     }
 
-    public void SetCell(int x, int y, Cell value)
-    {
-        Cell cell;
-        if (GetCell(x, y, out cell))
-        {
-            cell = value;
-        }
-    }
 
+#region DEBUG
+
+    /// <summary>
+    /// 
+    /// </summary>
     public void PrintGrid()
     {
         Debug.Log(GridToString());
     }
 
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public string GridToString()
     {
         string result = "\n";
@@ -115,4 +125,6 @@ public class CellsGrid // using class to facilitate passing values by reference
         }
         return result;
     }
+
+#endregion
 }

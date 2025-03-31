@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using TMPro.EditorUtilities;
 
 
 [System.Serializable]
@@ -46,9 +47,8 @@ public partial class MethodGrowth : FPGenerationMethod
     /// TODO: receber a grid e tudo mais como parametros
     /// </summary>
     /// <returns></returns>
-    public override async UniTask<bool> Run(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger)
-    {
-        
+    public override async UniTask<bool> Run(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger, int seed)
+    {   
         if(!EditorApplication.isPlaying)
         {
             Debug.LogError("Don't use it outside play mode.");
@@ -56,6 +56,8 @@ public partial class MethodGrowth : FPGenerationMethod
         }
 
         _cts = new CancellationTokenSource();
+
+        Utils.Random.SetSeed(seed);
 
         EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
@@ -69,11 +71,11 @@ public partial class MethodGrowth : FPGenerationMethod
         // Setup da zona raiz.
         int corner;
         if(_randomInitialArea)
-            corner = Utils.RandomRange(0,6);
+            corner = Utils.Random.RandomRange(0,6);
         else
             corner = 5;
-        int a = Utils.RandomRange(2,10);
-        int b = Utils.RandomRange(2,10);
+        int a = Utils.Random.RandomRange(2, 10);
+        int b = Utils.Random.RandomRange(2, 10);
         
         foreach(Cell cell in cellsGrid.Cells)
         {
@@ -179,6 +181,7 @@ public partial class MethodGrowth : FPGenerationMethod
         //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token, cancelImmediately: true);
         await UniTask.WaitForEndOfFrame();
         _cts.Dispose();
+        Utils.Random.CleanSeed();
 
         return true;
     }
@@ -218,7 +221,8 @@ public partial class MethodGrowth : FPGenerationMethod
 
         // Guid.NewGuid() provides a way to get unique randon numbers. Create a array with the directions
         // and sort it using the guids.
-        var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>().OrderBy(d => Guid.NewGuid());
+        //var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>().OrderBy(d => Guid.NewGuid());// NOT AFFECTED BY RANDOM SEED.
+        var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>();
 
         foreach(var side in sides)
         {
@@ -276,10 +280,10 @@ public partial class MethodGrowth : FPGenerationMethod
         // expand L if is L
         if(zone.IsLShaped)
         {
-            return zone.TryExpandShapeL();
+            return zone.TryExpandShapeL(true);
         }
 
-        var largestFreeSpace = zone.GetLargestExpansionSpaceRect(cellsGrid);
+        var largestFreeSpace = zone.GetLargestExpansionSpaceRect(true);
 
         // No side to expand
         if(largestFreeSpace.distance == 0)
@@ -291,7 +295,7 @@ public partial class MethodGrowth : FPGenerationMethod
         if(!largestFreeSpace.isFullLine)
         {
             zone.SetAsLShaped(largestFreeSpace.freeLineDescription);
-            return zone.TryExpandShapeL();
+            return zone.TryExpandShapeL(true);
         }
         else
         {
@@ -311,14 +315,15 @@ public partial class MethodGrowth : FPGenerationMethod
         // expand L if is L
         if(zone.IsLShaped)
         {
-            return zone.TryExpandShapeL();
+            return zone.TryExpandShapeL(true);
         }
 
         // Go on all sides randomly trying to expand
-        var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>().OrderBy(d => Guid.NewGuid());
+        //var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>().OrderBy(d => Guid.NewGuid());
+        var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>();
         foreach(var side in sides)
         {
-            if(zone.GetExpansionSpaceRect(side, cellsGrid).isFullLine)
+            if(zone.GetExpansionSpaceRect(side, true).isFullLine)
             {
                 if(zone.TryExpandShapeRect(side))
                 {
@@ -328,7 +333,7 @@ public partial class MethodGrowth : FPGenerationMethod
         }
 
         // If wasn't able to expand any side, try to start L
-        var largestFreeSide = zone.GetLargestExpansionSpaceRect(cellsGrid);
+        var largestFreeSide = zone.GetLargestExpansionSpaceRect(true);
         if(largestFreeSide.distance == 0) // No free side
         {
             return false;
@@ -338,7 +343,7 @@ public partial class MethodGrowth : FPGenerationMethod
             Debug.LogWarning("At this point it should not have a full border available.");
         }
         zone.SetAsLShaped(largestFreeSide.freeLineDescription);
-        return zone.TryExpandShapeL();
+        return zone.TryExpandShapeL(true);
 
     }
 
@@ -352,7 +357,7 @@ public partial class MethodGrowth : FPGenerationMethod
     /// <returns></returns>
     bool TryGrowFromSide(Zone.Side side, Zone zone, CellsGrid cellsGrid)
     {
-        if(zone.GetExpansionSpaceRect(side, cellsGrid, false).isFullLine)
+        if(zone.GetExpansionSpaceRect(side, false).isFullLine)
         {
             return zone.TryExpandShapeRect(side);
         }
@@ -452,8 +457,8 @@ public partial class MethodGrowth : FPGenerationMethod
         }
         else
         {
-            Vector2Int position = new Vector2Int(Utils.RandomRange(0, floorPlanManager.CellsGrid.Dimensions.x),
-                                                 Utils.RandomRange(0, floorPlanManager.CellsGrid.Dimensions.y));
+            Vector2Int position = new Vector2Int(Utils.Random.RandomRange(0, floorPlanManager.CellsGrid.Dimensions.x),
+                                                 Utils.Random.RandomRange(0, floorPlanManager.CellsGrid.Dimensions.y));
             
             floorPlanManager.AssignCellToZone(position.x, position.y, zone);
         }

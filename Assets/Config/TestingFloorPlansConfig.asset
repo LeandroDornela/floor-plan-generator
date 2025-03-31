@@ -77,12 +77,12 @@ MonoBehaviour:
       - Key: blue
         Value:
           ParentZoneId: red
-          AreaRatio: 0.434
+          AreaRatio: 0.5
           _presetArea: 
       - Key: green
         Value:
           ParentZoneId: red
-          AreaRatio: 0.502
+          AreaRatio: 0.5
           _presetArea: 
       - Key: cian
         Value:

@@ -3,20 +3,51 @@ using UnityEngine;
 
 public class Utils
 {
-    public static bool RandomBool()
+    public class Random
     {
-        return Random.Range(0, 2) == 0;
+        private static bool _useSeed = false;
+        private static int _seed = 0;
+
+        static void CheckUseSeed()
+        {
+            if(_useSeed)
+            {
+                UnityEngine.Random.InitState(_seed);
+                _seed++;
+            }
+        }
+
+        public static void SetSeed(int seed)
+        {
+            _useSeed = true;
+            _seed = seed;
+        }
+
+        public static void CleanSeed()
+        {
+            _useSeed = false;
+            _seed = 0;
+        }
+
+        public static bool RandomBool(bool forceIgnoreSeed = false)
+        {
+            if(!forceIgnoreSeed) CheckUseSeed();
+            return UnityEngine.Random.Range(0, 2) == 0;
+        }
+
+        public static int RandomRange(int min, int max, bool forceIgnoreSeed = false)
+        {
+            if(!forceIgnoreSeed) CheckUseSeed();
+            return UnityEngine.Random.Range(min, max);
+        }
+
+        public static float RandomRange(float min, float max, bool forceIgnoreSeed = false)
+        {
+            if(!forceIgnoreSeed) CheckUseSeed();
+            return UnityEngine.Random.Range(min, max);
+        }
     }
 
-    public static int RandomRange(int min, int max)
-    {
-        return Random.Range(min, max);
-    }
-
-    public static float RandomRange(float min, float max)
-    {
-        return Random.Range(min, max);
-    }
 
     public static Vector2Int ArrayIndexToMatrix(int index, int size_x)
     {

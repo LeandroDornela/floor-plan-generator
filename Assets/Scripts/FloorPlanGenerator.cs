@@ -1,5 +1,6 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System;
 
 public enum FPGenerationMethodType
 {
@@ -13,6 +14,8 @@ public enum FPGenerationMethodType
 [System.Serializable]
 public class FloorPlanGenerator
 {
+    public bool _useSeed = false;
+    public int _seed = 0;
     public FloorPlanManager _floorPlanManager;
     [SerializeField, NaughtyAttributes.Expandable] private FPGenerationMethod _generationMethod;
     public FPGenerationMethod CurrentMethod => _generationMethod;
@@ -37,15 +40,13 @@ public class FloorPlanGenerator
         if(_sceneDebugger != null)
         {
             if (_enableDebug == true) _sceneDebugger.Init(this, floorPlanConfig);
-            else Object.Destroy(_sceneDebugger);
+            else UnityEngine.Object.Destroy(_sceneDebugger);
         }
 
-
-        _generationMethod.Init();
-
-
         _initialized = true;
+
         Debug.Log("Ready to generate floor plan.");
+
         return _initialized;
     }
 
@@ -60,12 +61,8 @@ public class FloorPlanGenerator
         Init(floorPlanConfig);
 
         _running = true;
-        
-        //_floorPlanManager.CellsGrid.PrintGrid();
-        //await _currentMethod.Run();
-        await _generationMethod.Run(_floorPlanManager, _sceneDebugger);
-        //_floorPlanManager.CellsGrid.PrintGrid();
-
+        if(!_useSeed) _seed = (int)DateTime.Now.Ticks;
+        await _generationMethod.Run(_floorPlanManager, _sceneDebugger, _seed);
         _running = false;
 
         return true;
@@ -73,7 +70,6 @@ public class FloorPlanGenerator
 
     public void OnDrawGizmos()
     {
-        //_currentMethod?.OnDrawGizmos();
         _generationMethod?.OnDrawGizmos();
     }
 }
