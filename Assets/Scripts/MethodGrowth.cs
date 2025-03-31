@@ -59,7 +59,7 @@ public partial class MethodGrowth : FPGenerationMethod
     /// TODO: receber a grid e tudo mais como parametros
     /// </summary>
     /// <returns></returns>
-    public override async UniTask<bool> Run()
+    public override async UniTask<bool> Run(FloorPlanGenSceneDebugger sceneDebugger)
     {
         
         if(!EditorApplication.isPlaying)
@@ -127,7 +127,7 @@ public partial class MethodGrowth : FPGenerationMethod
 
                 if(!_skipToFinalResult)
                 {
-                    TriggerOnCellsGridChanged(cellsGrid);
+                    sceneDebugger.OnCellsGridChanged(cellsGrid);
                     await UniTask.WaitForSeconds(delay + 0.1f, cancellationToken: _cts.Token);
                 }
             }
@@ -157,7 +157,7 @@ public partial class MethodGrowth : FPGenerationMethod
 
                 if(!_skipToFinalResult)
                 {
-                    TriggerOnCellsGridChanged(cellsGrid);
+                    sceneDebugger.OnCellsGridChanged(cellsGrid);
                     await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
                 }
             }
@@ -185,7 +185,7 @@ public partial class MethodGrowth : FPGenerationMethod
 
         EditorApplication.playModeStateChanged -= PlayModeStateChanged;
 
-        TriggerOnCellsGridChanged(cellsGrid);
+        sceneDebugger.OnCellsGridChanged(cellsGrid);
         //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token, cancelImmediately: true);
         await UniTask.WaitForEndOfFrame();
         _cts.Dispose();

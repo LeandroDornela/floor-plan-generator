@@ -31,7 +31,7 @@ public class MethodFloodFill : FPGenerationMethod
         return _initialized;
     }
 
-    public async override UniTask<bool> Run()
+    public async override UniTask<bool> Run(FloorPlanGenSceneDebugger sceneDebugger)
     {
         /*
         if(!EditorApplication.isPlaying)
@@ -78,7 +78,7 @@ public class MethodFloodFill : FPGenerationMethod
         _cells.Add(cell);
         zone.AddCell(cell);
 
-        TriggerOnCellChanged(cell);
+        //TriggerOnCellChanged(cell);
     }
 
 
@@ -109,7 +109,7 @@ public class MethodFloodFill : FPGenerationMethod
             // Add vizinho para checagem dos seus vizinhos
             _cells.Add(vizinho);
 
-            TriggerOnCellChanged(vizinho);
+            //TriggerOnCellChanged(vizinho);
         }
     }
 /*

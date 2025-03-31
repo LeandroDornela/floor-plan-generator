@@ -63,8 +63,6 @@ public class FloorPlanGenerator
                                                  // -->
         */
 
-        _generationMethod.Init(_floorPlanManager);
-
 
         // ====== Visual debugger setup ======
         if(_sceneDebugger != null)
@@ -72,6 +70,10 @@ public class FloorPlanGenerator
             if (_enableDebug == true) _sceneDebugger.Init(this, floorPlanConfig);
             else Object.Destroy(_sceneDebugger);
         }
+
+
+        _generationMethod.Init(_floorPlanManager);
+
 
         _initialized = true;
         Debug.Log("Ready to generate floor plan.");
@@ -92,7 +94,7 @@ public class FloorPlanGenerator
         
         //_floorPlanManager.CellsGrid.PrintGrid();
         //await _currentMethod.Run();
-        await _generationMethod.Run();
+        await _generationMethod.Run(_sceneDebugger);
         //_floorPlanManager.CellsGrid.PrintGrid();
 
         _running = false;

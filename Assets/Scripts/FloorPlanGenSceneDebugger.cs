@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
-using UnityEditor;
 using UnityEngine;
 
-public class FloorPlanGenSceneDebugger : MonoBehaviour
+
+public sealed class FloorPlanGenSceneDebugger : MonoBehaviour
 {
     public SerializedDictionary<string, Color> _debugColors;
     private FloorPlanGenerator _floorPlanGenerator;
@@ -13,6 +13,8 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     private bool _initialized = false;
 
     private string _gridPreview;
+
+
 
     public void Init(FloorPlanGenerator floorPlanGenerator, FloorPlanConfig floorPlanConfig)
     {
@@ -24,13 +26,7 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
 
         _dimmensions = floorPlanConfig.GridDimensions;
 
-        // Registo to grid update events.
-        _floorPlanGenerator.CurrentMethod.OnCellsGridChanged += OnCellsGridChanged;
-        _floorPlanGenerator.CurrentMethod.OnCellChanged += OnCellChanged;
-        
-
         InstantiateCellsGraphics();
-
 
         _initialized = true;
     }
@@ -86,7 +82,7 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     }
 
 
-    void OnCellsGridChanged(CellsGrid cellsGrid)
+    public void OnCellsGridChanged(CellsGrid cellsGrid)
     {
         if(!_initialized) { return; }
 
@@ -107,7 +103,7 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     }
 
 
-    void OnCellChanged(Cell cell)
+    public void OnCellChanged(Cell cell)
     {
         if(!_initialized) { return; }
 
@@ -121,14 +117,5 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     {
         if(!_initialized) { return; }
         //Handles.Label(Vector3.zero, _gridPreview);
-    }
-
-
-    void OnDisable()
-    {
-        if(!_initialized) { return; }
-
-        _floorPlanGenerator.CurrentMethod.OnCellsGridChanged -= OnCellsGridChanged;
-        _floorPlanGenerator.CurrentMethod.OnCellChanged -= OnCellChanged;
     }
 }

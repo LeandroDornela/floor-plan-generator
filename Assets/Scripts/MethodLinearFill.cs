@@ -11,7 +11,7 @@ public class MethodLinearFill : FPGenerationMethod
     private bool _fastMode = false;
     private CancellationTokenSource _cts;
 
-    public async override UniTask<bool> Run()
+    public async override UniTask<bool> Run(FloorPlanGenSceneDebugger sceneDebugger)
     {
         /*
         if(!EditorApplication.isPlaying)
@@ -75,7 +75,7 @@ public class MethodLinearFill : FPGenerationMethod
 
         counter++;
 
-        TriggerOnCellChanged(cell);
+        //TriggerOnCellChanged(cell);
     }
 /*
     void PlayModeStateChanged(PlayModeStateChange state)
