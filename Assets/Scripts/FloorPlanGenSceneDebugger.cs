@@ -16,7 +16,7 @@ public sealed class FloorPlanGenSceneDebugger : MonoBehaviour
 
 
 
-    public void Init(FloorPlanGenerator floorPlanGenerator, FloorPlanConfig floorPlanConfig)
+    public void Init(FloorPlanGenerator floorPlanGenerator, FloorPlanData floorPlanConfig)
     {
         if(_initialized) return;
 

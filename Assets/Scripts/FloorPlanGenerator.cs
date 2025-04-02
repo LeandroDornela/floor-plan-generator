@@ -27,7 +27,7 @@ public class FloorPlanGenerator
     private bool _initialized = false;
     private bool _running = false;
 
-    private bool Init(FloorPlanConfig floorPlanConfig)
+    private bool Init(FloorPlanData floorPlanConfig)
     {
         Debug.Log("Initializing floor plan generator.");
 
@@ -50,7 +50,7 @@ public class FloorPlanGenerator
         return _initialized;
     }
 
-    public async UniTask<bool> GenerateFloorPlan(FloorPlanConfig floorPlanConfig)
+    public async UniTask<bool> GenerateFloorPlan(FloorPlanData floorPlanConfig)
     {
         if(_running)
         {

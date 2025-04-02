@@ -14,44 +14,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
   - FloorPlanId: Plan 1
-    GridDimensions: {x: 20, y: 20}
+    GridDimensions: {x: 15, y: 15}
     ZonesConfigs:
       _serializedList:
       - Key: red
         Value:
-          ParentZoneId: 
-          AreaRatio: 1
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0.5
+          _presetArea: {fileID: 2800000, guid: b42ee4e18c7dd9a458dfc7f64048db94, type: 3}
       - Key: green
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.208
-          _presetArea: 
+          _parentZoneId: red
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
       - Key: blue
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.053
-          _presetArea: 
+          _parentZoneId: red
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
       - Key: cian
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.049
-          _presetArea: 
+          _parentZoneId: red
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
       - Key: mag
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.049
-          _presetArea: 
+          _parentZoneId: red
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
       - Key: yel
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.038
-          _presetArea: 
+          _parentZoneId: red
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
       - Key: oran
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.049
-          _presetArea: 
+          _parentZoneId: red
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
     Adjacencies:
       _serializedList:
       - Key: green
@@ -71,49 +71,49 @@ MonoBehaviour:
       _serializedList:
       - Key: red
         Value:
-          ParentZoneId: 
-          AreaRatio: 1
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: blue
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.5
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: green
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.5
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: cian
         Value:
-          ParentZoneId: green
-          AreaRatio: 0.094
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: mag
         Value:
-          ParentZoneId: green
-          AreaRatio: 0.094
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: yel
         Value:
-          ParentZoneId: blue
-          AreaRatio: 0.25
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: vomito
         Value:
-          ParentZoneId: blue
-          AreaRatio: 0.469
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: oran
         Value:
-          ParentZoneId: green
-          AreaRatio: 0.1
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: purple
         Value:
-          ParentZoneId: green
-          AreaRatio: 0.1
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
     Adjacencies:
       _serializedList:
       - Key: green
@@ -133,44 +133,44 @@ MonoBehaviour:
       _serializedList:
       - Key: red
         Value:
-          ParentZoneId: 
-          AreaRatio: 1
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: green
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.5
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: blue
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.5
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: cian
         Value:
-          ParentZoneId: green
-          AreaRatio: 0.25
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: mag
         Value:
-          ParentZoneId: green
-          AreaRatio: 0.25
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: yel
         Value:
-          ParentZoneId: blue
-          AreaRatio: 0.25
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: vomito
         Value:
-          ParentZoneId: yel
-          AreaRatio: 0.064
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: oran
         Value:
-          ParentZoneId: yel
-          AreaRatio: 0.85
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
     Adjacencies:
       _serializedList:
       - Key: green
@@ -184,54 +184,54 @@ MonoBehaviour:
       _serializedList:
       - Key: red
         Value:
-          ParentZoneId: 
-          AreaRatio: 1
-          _presetArea: 1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: green
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.445
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: blue
         Value:
-          ParentZoneId: red
-          AreaRatio: 1
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: cian
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.37
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: mag
         Value:
-          ParentZoneId: red
-          AreaRatio: 0.347
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: yel
         Value:
-          ParentZoneId: green
-          AreaRatio: 1
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: vomito
         Value:
-          ParentZoneId: green
-          AreaRatio: 0.01
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: oran
         Value:
-          ParentZoneId: blue
-          AreaRatio: 0.01
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: purple
         Value:
-          ParentZoneId: blue
-          AreaRatio: 1
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
       - Key: pink
         Value:
-          ParentZoneId: blue
-          AreaRatio: 0.01
-          _presetArea: 
+          _parentZoneId: 
+          _areaRatio: 0
+          _presetArea: {fileID: 0}
     Adjacencies:
       _serializedList:
       - Key: green

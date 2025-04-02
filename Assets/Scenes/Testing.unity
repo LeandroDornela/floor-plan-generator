@@ -501,12 +501,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _floorPlanGenerator._useSeed
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _floorPlanGenerator._enableDebug
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _buildingDataManager.floorPlanConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: b33759ecf40d9e0459947f5a801b157e, type: 2}
     - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: _floorPlanGenerator._generationMethod
       value: 

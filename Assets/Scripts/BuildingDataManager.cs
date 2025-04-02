@@ -5,16 +5,11 @@ using UnityEngine;
 [Serializable]
 public class BuildingDataManager
 {
-    [SerializeField] private TestingFloorPlansConfig testingFloorPlansConfig;
+    [SerializeField] private IFloorPlanConfig floorPlanConfig; // TODO: must be in a moment a building config.
 
-    [Obsolete]
-    public FloorPlanConfig GetTestingFloorPlanConfig(int index = 0)
+
+    public FloorPlanData GetFloorPlanData()
     {
-        FloorPlanConfig config;
-        config.GridDimensions = testingFloorPlansConfig.FloorPlanConfigs[index].GridDimensions;
-        config.ZonesConfigs = testingFloorPlansConfig.FloorPlanConfigs[index].ZonesConfigs;
-        config.Adjacencies = testingFloorPlansConfig.FloorPlanConfigs[index].Adjacencies;
-
-        return config;
+        return floorPlanConfig.GetFloorPlanData();
     }
 }

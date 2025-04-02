@@ -5,7 +5,7 @@ using UnityEngine;
 /*
     Estrutura hierarquica atual.
 
-    -Root0
+    -Root
         -Exterior
         -Interior
             -Publico
@@ -14,65 +14,7 @@ using UnityEngine;
             -Privado
                 -Quarto
                 -Banheiro
-    ------------------------------------
-    -Root0
-        -Interior
-            -Publico
-                -Sala
-                -Cozinha
-            -Privado
-                -Quarto
-                -Banheiro
-    -Root1
-        -Exterior
-            -Piscina
-            -Jardim
-    */
-
-public struct FloorPlanConfig
-{
-    public Vector2Int GridDimensions;
-    public Dictionary<string, ZoneConfig> ZonesConfigs;
-    public Dictionary<string, string[]> Adjacencies;
-
-    public bool IsValid()
-    {
-        if(GridDimensions.x <= 0 || GridDimensions.y <= 0) return false;
-        if(ZonesConfigs == null || ZonesConfigs.Count == 0) return false;
-        if(Adjacencies == null || Adjacencies.Count == 0) return false;
-
-        return true;
-    }
-}
-
-[Serializable]
-public struct ZoneConfig
-{
-    public string ParentZoneId;
-    [Range(0.01f, 1)] public float AreaRatio;
-    
-    [Obsolete]
-    [SerializeField] private string _presetArea;
-
-    public bool IsValid()
-    {
-        return ParentZoneId != string.Empty;
-    }
-
-    [Obsolete]
-    public int[] PresetArea()
-    {
-        string[] area = _presetArea.Split(',');
-        int[] presetArea = new int[area.Length];
-
-        for(int i = 0; i < area.Length; i++)
-        {
-            presetArea[i] = int.Parse(area[i]);
-        }
-
-        return presetArea;
-    }
-}
+*/
 
 
 /// <summary>
@@ -96,7 +38,7 @@ public class FloorPlanManager
     public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
 
 
-    public bool Init(FloorPlanConfig floorPlanConfig)
+    public bool Init(FloorPlanData floorPlanConfig)
     {
         Debug.Log("Initializing floor plan manager.");
 
@@ -120,7 +62,7 @@ public class FloorPlanManager
     }
 
 
-    void CreateZonesHierarchy(Dictionary<string, ZoneConfig> zonesConfigs, Dictionary<string, string[]> adjacencies)
+    void CreateZonesHierarchy(Dictionary<string, ZoneData> zonesConfigs, Dictionary<string, string[]> adjacencies)
     {
         _zonesInstances = new Dictionary<string, Zone>();
 

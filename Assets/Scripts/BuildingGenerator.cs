@@ -32,28 +32,17 @@ public class BuildingGenerator : MonoBehaviour
         counter = 0;
         while(counter < totalToTest)
         {
-            await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
+            await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetFloorPlanData());
             counter++;
             //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
         }
-    }
-
-    public async UniTask<bool> TEST()
-    {
-        List<int> list = new List<int>();
-        for(int i = 0; i <= 10000000; i++)
-        {
-            list.Add(i);
-        }
-        await UniTask.WaitForSeconds(0.01f);
-        return true;
     }
 
     [ProButton]
     public async void GenerateBuildingAsync()
     {
         if(!Application.isPlaying) return;
-        await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetTestingFloorPlanConfig());
+        await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetFloorPlanData());
         //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
     }
 
