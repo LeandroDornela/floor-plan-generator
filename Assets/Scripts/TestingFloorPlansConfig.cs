@@ -39,7 +39,6 @@ public struct TestZoneConfig
 
         for(int i = 0; i < colors.Length; i++)
         {
-            Debug.Log(colors[i]);
             if(colors[i].r == 0)
             {
                 result[i] = 0;
@@ -50,11 +49,12 @@ public struct TestZoneConfig
             }
         }
 
+        /*
         string a = "";
         int k = 0;
-        for(int j = 0; j < gridDimensions.x; j++)
+        for(int j = 0; j < gridDimensions.y; j++)
         {
-            for(int i = 0; i < gridDimensions.y; i++)
+            for(int i = 0; i < gridDimensions.x; i++)
             {
                 a += $"{result[k]} "; 
                 k++;
@@ -62,6 +62,7 @@ public struct TestZoneConfig
             a += "\n";
         }
         Debug.Log(a);
+        */
 
         return result;
     }

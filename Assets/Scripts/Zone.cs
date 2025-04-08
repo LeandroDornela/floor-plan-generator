@@ -67,7 +67,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         get
         {
-            if(_borderCells == null || _borderCells.Length == 0) Debug.LogError($"{ZoneId}: Border Cells is not set.");
+            if(_borderCells == null || _borderCells.Length == 0) DebugError("Border Cells is not set.");
             return _borderCells;
         }
     }
@@ -97,13 +97,13 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(cell == null)
         {
-            Debug.LogError("Trying to add a null cell.");
+            DebugError("Trying to add a null cell.");
             return false;
         }
 
         if(_cellsList.Contains(cell))
         {
-            Debug.LogError("Trying to add an exiting cell.");
+            DebugError("Trying to add an exiting cell.");
             return false;
         }
 
@@ -133,7 +133,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(cell == null)
         {
-            Debug.LogError("Trying to remove a null cell.");
+            DebugError("Trying to remove a null cell.");
             return false;
         }
 
@@ -143,7 +143,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         }
         else
         {
-            Debug.LogError("The cell isn't in the zone.");
+            DebugError("The cell isn't in the zone.");
             return false;
         }
     }
@@ -158,7 +158,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(childZone == null)
         {
-            Debug.LogError("Trying to add a null child.");
+            DebugError("Trying to add a null child.");
             return false;
         }
 
@@ -175,7 +175,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(adjacentZone == null)
         {
-            Debug.LogError("Trying to add a null adjacent zone.");
+            DebugError("Trying to add a null adjacent zone.");
             return false;
         }
 
@@ -197,7 +197,7 @@ public class Zone // similar a uma estrutura de nos em arvore
         }
         else
         {
-            Debug.LogError("Parent zone can't be overridden.");
+            DebugError("Parent zone can't be overridden.");
             return false;
         }
     }
@@ -267,13 +267,13 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(lBorder == null)
         {
-            Debug.LogError("L border can't be null");
+            DebugError("L border can't be null");
             return false;
         }
 
         if(_isLShaped)
         {
-            Debug.LogError("Zone is already L shaped.");
+            DebugError("Zone is already L shaped.");
             return false;
         }
 
@@ -296,7 +296,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(_isBaked)
         {
-            Debug.LogError("Zone is already baked.");
+            DebugError("Zone is already baked.");
             return;
         }
 
@@ -305,6 +305,8 @@ public class Zone // similar a uma estrutura de nos em arvore
         SetBorderCells();
 
         _isBaked = true;
+
+        DebugLog("Baked.");
     }
 
 
@@ -316,10 +318,12 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(_borderCells != null && _borderCells.Length > 0)
         {
-            Debug.LogError("Border cells is already defined.");
+            DebugError("Border cells is already defined.");
             return;
         }
 
+        // NOTE: Why find the cells instead of using the sides to get the border?
+        // Cause whe L grow the side stop to represent the borders precisely.
         _borderCells = FindBorderCells(_floorPlanManager.CellsGrid);
     }
 
@@ -376,7 +380,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(_isLShaped)
         {
-            Debug.LogError("Don't use when L-shaped.");
+            DebugError("Don't use when L-shaped.");
             return default;
         }
 
@@ -389,7 +393,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(_isLShaped)
         {
-            Debug.LogError("Don't use when L-shaped.");
+            DebugError("Don't use when L-shaped.");
             return default;
         }
 
@@ -437,7 +441,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     {
         if(_isLShaped)
         {
-            Debug.LogError("Trying to use rectangular expansion in L-Shaped zone.");
+            DebugError("Trying to use rectangular expansion in L-Shaped zone.");
             return false;
         }
 
@@ -742,6 +746,12 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// <returns></returns>
     bool TryExpand(CellsLineDescription cellsLineDesc)
     {
+        if(_isBaked)
+        {
+            // Baked zones can't be expanded.
+            return false;
+        }
+
         int amount = 1;
         Vector4 tMatrix = _coordTransMatrices[cellsLineDesc.Side]; // Transformation matrix
 
@@ -755,12 +765,12 @@ public class Zone // similar a uma estrutura de nos em arvore
             {
                 if(!CellIsAvailable(cell))
                 {
-                    Debug.LogWarning($"Cell already have a zone in same hierarchy level. Cell zone: {cell.Zone}");
+                    DebugWarning($"Cell already have a zone in same hierarchy level. Cell zone: {cell.Zone}");
                 }
             }
             else
             {
-                Debug.LogError($"Trying to assign a cell in a invalid Grid position.({x},{y})");
+                DebugError($"Trying to assign a cell in a invalid Grid position.({x},{y})");
                 return false;
             }
 
@@ -834,6 +844,21 @@ public class Zone // similar a uma estrutura de nos em arvore
             Debug.Log($"zid:{ZoneId} side:{result.freeLineDescription?.Side} space:{result.distance} cells:{result.freeLineDescription?.NumberOfCells}");
         }
         Debug.Log("--------------------------------");
+    }
+
+    void DebugLog(string text)
+    {
+        Debug.Log($"{_zoneId}: {text}");
+    }
+
+    void DebugWarning(string text)
+    {
+        Debug.LogWarning($"{_zoneId}: {text}");
+    }
+
+    void DebugError(string text)
+    {
+        Debug.LogError($"{_zoneId}: {text}");
     }
 #endregion
 }

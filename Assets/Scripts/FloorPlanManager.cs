@@ -54,7 +54,7 @@ public class FloorPlanManager
 
         _cellsGrid = new CellsGrid(floorPlanConfig.GridDimensions);
 
-        CreateZonesHierarchy(floorPlanConfig.ZonesConfigs, floorPlanConfig.Adjacencies);
+        CreateZonesHierarchy(floorPlanConfig.ZonesConfigs, floorPlanConfig.Adjacencies, _cellsGrid);
 
         _initialized = true;
 
@@ -62,7 +62,7 @@ public class FloorPlanManager
     }
 
 
-    void CreateZonesHierarchy(Dictionary<string, ZoneData> zonesConfigs, Dictionary<string, string[]> adjacencies)
+    void CreateZonesHierarchy(Dictionary<string, ZoneData> zonesConfigs, Dictionary<string, string[]> adjacencies, CellsGrid cellsGrid)
     {
         _zonesInstances = new Dictionary<string, Zone>();
 
@@ -114,6 +114,67 @@ public class FloorPlanManager
                 {
                     Debug.LogError("Only one root zone is allowed. Add a parent to all zones except the root.");
                 }
+            }
+        }
+
+
+        // After all zones created and parents assigned, check for preset area.
+        foreach(var zone in _zonesInstances)
+        {
+            CheckAndAssignPresetArea(zone.Value, zonesConfigs[zone.Key], cellsGrid);
+        }
+    }
+
+
+    void CheckAndAssignPresetArea(Zone zone, ZoneData zoneData, CellsGrid cellsGrid)
+    {
+        if(zone == null || cellsGrid == null)
+        {
+            Debug.LogError("Zone or grid unassigned.");
+        }
+
+
+        if(zoneData.HasPresetArea)
+        {
+            // Validate preset area size.
+            if(zoneData.PresetArea.Length != cellsGrid.Cells.Length)
+            {
+                Debug.LogError("Preset area number of cells don't match the grid number of cells.");
+                return;
+            }
+
+            // Assign the correct cell grid cells to the zone.
+            for(int y = 0; y < cellsGrid.Dimensions.y; y++)
+            {
+                for(int x = 0; x < cellsGrid.Dimensions.x; x++)
+                {
+                    if(zoneData.PresetArea[Utils.MatrixToArrayIndex(x, y, cellsGrid.Dimensions.x)] == 1)
+                    {
+                        AssignCellToZone(x, y, zone);
+                    }
+                }
+            }
+
+            zone.Bake();
+        }
+        else // If zone don't have a preset area and is the root. Assign all cells by default.
+        {
+            // Validate root zone.
+            if(_rootZone == null)
+            {
+                Debug.LogError("Root zone undefined.");
+                return;
+            }
+
+            // Check if is root and assign cells.
+            if(zone == _rootZone)
+            {
+                foreach(Cell cell in cellsGrid.Cells)
+                {
+                    AssignCellToZone(cell, zone);
+                }
+
+                zone.Bake();
             }
         }
     }

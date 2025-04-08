@@ -49,14 +49,14 @@ public class Utils
     }
 
 
-    public static Vector2Int ArrayIndexToMatrix(int index, int size_x)
+    public static Vector2Int ArrayIndexToMatrix(int index, int width)
     {
-        return new Vector2Int(index / size_x, index % size_x);
+        return new Vector2Int(index / width, index % width);
     }
 
-    public static int MatrixToArrayIndex(int x, int y, int size_x)
+    public static int MatrixToArrayIndex(int x, int y, int width)
     {
-        return size_x * y + x;
+        return width * y + x;
     }
 
 

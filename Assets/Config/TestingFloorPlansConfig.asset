@@ -14,43 +14,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
   - FloorPlanId: Plan 1
-    GridDimensions: {x: 15, y: 15}
+    GridDimensions: {x: 30, y: 30}
     ZonesConfigs:
       _serializedList:
       - Key: red
         Value:
           _parentZoneId: 
-          _areaRatio: 0.5
+          _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: b42ee4e18c7dd9a458dfc7f64048db94, type: 3}
       - Key: green
         Value:
           _parentZoneId: red
-          _areaRatio: 0.5
-          _presetArea: {fileID: 0}
+          _areaRatio: 0.3
+          _presetArea: {fileID: 2800000, guid: 953a1960b3b1f8249985401cc78601b6, type: 3}
       - Key: blue
         Value:
           _parentZoneId: red
-          _areaRatio: 0.5
+          _areaRatio: 0.2
           _presetArea: {fileID: 0}
       - Key: cian
         Value:
           _parentZoneId: red
-          _areaRatio: 0.5
+          _areaRatio: 0.2
           _presetArea: {fileID: 0}
       - Key: mag
         Value:
           _parentZoneId: red
-          _areaRatio: 0.5
+          _areaRatio: 0.3
           _presetArea: {fileID: 0}
       - Key: yel
         Value:
-          _parentZoneId: red
-          _areaRatio: 0.5
+          _parentZoneId: green
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
       - Key: oran
         Value:
-          _parentZoneId: red
-          _areaRatio: 0.5
+          _parentZoneId: green
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
     Adjacencies:
       _serializedList:

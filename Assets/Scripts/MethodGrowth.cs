@@ -5,7 +5,6 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using TMPro.EditorUtilities;
 
 
 [System.Serializable]
@@ -69,6 +68,7 @@ public partial class MethodGrowth : FPGenerationMethod
 
         // TODO: temporario.
         // Setup da zona raiz.
+        /*
         int corner;
         if(_randomInitialArea)
             corner = Utils.Random.RandomRange(0,6);
@@ -91,6 +91,7 @@ public partial class MethodGrowth : FPGenerationMethod
         }
 
         floorPlanManager.RootZone.Bake();
+        */
         _zonesToSubdivide.Add(floorPlanManager.RootZone);
         
         while(_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
@@ -381,14 +382,28 @@ public partial class MethodGrowth : FPGenerationMethod
             return null;
         }
 
-        List<Zone> childZones = _zonesToSubdivide[0].ChildZones.Values.ToList();
-        _zonesToSubdivide.RemoveAt(0);
+        //List<Zone> childZones = _zonesToSubdivide[0].ChildZones.Values.ToList();
+        List<Zone> childZones = new List<Zone>();
 
-        for(int i = 0; i < childZones.Count; i++)
+        //for(int i = 0; i < childZones.Count; i++)
+        foreach(var child in _zonesToSubdivide[0].ChildZones.Values)
         {
-            Zone zone = childZones[i];
-            PlotFirstZoneCell(zone, childZones, floorPlanManager); // TODO: move to outside the method
+            Zone zone = child;
+
+            // Check if the child is already baked. What means that it has a predefined
+            // area (Why? were is were you set the zones to grow, if its baked, it can't grow).
+            if(zone.IsBaked)
+            {
+                _zonesToSubdivide.Add(zone);
+            }
+            else
+            {
+                childZones.Add(zone);
+                PlotFirstZoneCell(zone, childZones, floorPlanManager); // TODO: move to outside the method
+            }
         }
+
+        _zonesToSubdivide.RemoveAt(0);
 
         return  childZones;
     }
@@ -647,8 +662,8 @@ public partial class MethodGrowth : FPGenerationMethod
             _cellsWeights.AddAt(i, weight);
         }
 
-        Debug.Log($"=============<color=yellow>{zoneToPlot.ZoneId}</color>");
-        Utils.PrintArrayAsGrid(cellsGrid.Dimensions.x, cellsGrid.Dimensions.y, _cellsWeights.Values);
+        //Debug.Log($"=============<color=yellow>{zoneToPlot.ZoneId}</color>");
+        //Utils.PrintArrayAsGrid(cellsGrid.Dimensions.x, cellsGrid.Dimensions.y, _cellsWeights.Values);
     }
 
 #endregion

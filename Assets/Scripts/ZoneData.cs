@@ -9,6 +9,8 @@ public struct ZoneData
     public string ParentZoneId => _parentZoneId;
     public float AreaRatio => _areaRatio;
     public int[] PresetArea => _presetArea;
+
+    public bool HasPresetArea => _presetArea?.Length > 0;
     
 
     public ZoneData(string parentZoneId, float areaRatio, int[] presetArea)
