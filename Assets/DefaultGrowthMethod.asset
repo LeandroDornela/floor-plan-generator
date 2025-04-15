@@ -83,7 +83,7 @@ MonoBehaviour:
   delay: 0.01
   _ignoreDesiredAreaInRect: 0
   _stopAtInitialPlot: 0
-  _skipToFinalResult: 1
+  _skipToFinalResult: 0
   _randomInitialArea: 0
   _ignoreBorderWeights: 0
   _ignoreAdjacentWeights: 0

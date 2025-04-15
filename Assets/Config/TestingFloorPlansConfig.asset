@@ -26,7 +26,7 @@ MonoBehaviour:
         Value:
           _parentZoneId: red
           _areaRatio: 0.3
-          _presetArea: {fileID: 2800000, guid: 953a1960b3b1f8249985401cc78601b6, type: 3}
+          _presetArea: {fileID: 2800000, guid: 0a3fa9861879cc7469ef16c79d25dcb6, type: 3}
       - Key: blue
         Value:
           _parentZoneId: red

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,14 +22,13 @@ using UnityEngine;
 public class FloorPlanManager
 {
     private CellsGrid _cellsGrid;
-    [Obsolete]private List<Zone> _rootZones;// TODO Não sei qual melhor opção para a raiz, mas ter apenas 1 root, correspondente a area total parece ser uma opção melhor
+    
     private Zone _rootZone;
     private Dictionary<string, Zone> _zonesInstances;
     private bool _initialized = false;
 
 
     public CellsGrid CellsGrid => _cellsGrid;
-    [Obsolete]public List<Zone> RootZones => _rootZones;
     /// <summary>
     /// The util floor plan zone, grid's cells outside this zone will not be used by the algorith.
     /// </summary>
@@ -38,6 +36,11 @@ public class FloorPlanManager
     public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="floorPlanConfig"></param>
+    /// <returns></returns>
     public bool Init(FloorPlanData floorPlanConfig)
     {
         Debug.Log("Initializing floor plan manager.");
@@ -48,8 +51,6 @@ public class FloorPlanManager
             return false;
         }
         
-
-        _rootZones = new List<Zone>(); // a list of all the first zones of the hierarchy.
         _zonesInstances = new Dictionary<string, Zone>(); // a list/dictionary of all the zones instances, identified by the zone id.
 
         _cellsGrid = new CellsGrid(floorPlanConfig.GridDimensions);
@@ -62,6 +63,12 @@ public class FloorPlanManager
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zonesConfigs"></param>
+    /// <param name="adjacencies"></param>
+    /// <param name="cellsGrid"></param>
     void CreateZonesHierarchy(Dictionary<string, ZoneData> zonesConfigs, Dictionary<string, string[]> adjacencies, CellsGrid cellsGrid)
     {
         _zonesInstances = new Dictionary<string, Zone>();
@@ -104,8 +111,6 @@ public class FloorPlanManager
             // If is a root.
             if(zone.Value.ParentZone == null)
             {
-                _rootZones.Add(zone.Value);
-
                 if(_rootZone == null)
                 {
                     _rootZone = zone.Value;
@@ -126,16 +131,37 @@ public class FloorPlanManager
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="zone"></param>
+    /// <param name="zoneData"></param>
+    /// <param name="cellsGrid"></param>
     void CheckAndAssignPresetArea(Zone zone, ZoneData zoneData, CellsGrid cellsGrid)
     {
         if(zone == null || cellsGrid == null)
         {
             Debug.LogError("Zone or grid unassigned.");
+            return;
         }
 
 
         if(zoneData.HasPresetArea)
         {
+            // Check if the zone can be predefined.
+            // This validation can be done before, checking the in data.
+            // To simplify and avoid problems, only the root zone or his children can be predefined.
+            // The children predefined area must be inside the root.
+            // Why? Think on the scenario, the area A with no predefined area have a child B with a predefined area
+            // at the moment of grow area A it must expand to include the cells set to B, what is not guaranteed. One
+            // way to do it would be recursively assign the cells of B to the parent A and its parents and permit A
+            // expansion since expansion is initially blocked to predefined areas.
+            if(zone.ParentZone != _rootZone && zone != _rootZone)
+            {
+                Debug.LogError($"Only the root zone and it's children can be predefined. Zone: {zone.ZoneId}");
+                return;
+            }
+
             // Validate preset area size.
             if(zoneData.PresetArea.Length != cellsGrid.Cells.Length)
             {
@@ -150,14 +176,16 @@ public class FloorPlanManager
                 {
                     if(zoneData.PresetArea[Utils.MatrixToArrayIndex(x, y, cellsGrid.Dimensions.x)] == 1)
                     {
-                        AssignCellToZone(x, y, zone);
+                        // Assign the cell to the zone, but only if it is inside the zone's parent. Avoid adding cells
+                        // outside the current context.
+                        TryAssignCellToZone(x, y, zone);
                     }
                 }
             }
 
             zone.Bake();
         }
-        else // If zone don't have a preset area and is the root. Assign all cells by default.
+        else // ROOT DEFAULT. If zone don't have a preset area and is the root. Assign all cells by default.
         {
             // Validate root zone.
             if(_rootZone == null)
@@ -180,6 +208,13 @@ public class FloorPlanManager
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="zone"></param>
+    /// <returns></returns>
     public bool AssignCellToZone(int x, int y, Zone zone)
     {
         if(zone == null)
@@ -190,6 +225,8 @@ public class FloorPlanManager
 
         if(_cellsGrid.GetCell(x, y, out Cell cell))
         {
+            // TODO: Replace by "return AssignCellToZone(cell, zone);"
+            
             // Remove previous set cell zone.
             if(cell.Zone != null)
             {
@@ -208,6 +245,12 @@ public class FloorPlanManager
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <param name="zone"></param>
+    /// <returns></returns>
     public bool AssignCellToZone(Cell cell, Zone zone)
     {
         if(cell == null || zone == null)
@@ -226,5 +269,31 @@ public class FloorPlanManager
         cell.SetZone(zone);
 
         return true;
+    }
+
+
+    /// <summary>
+    /// The same as AssignCellToZone but check if the cell belongs to zone's parent.
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <param name="zone"></param>
+    /// <returns></returns>
+    public bool TryAssignCellToZone(int x, int y, Zone zone)
+    {
+        if(_cellsGrid.GetCell(x, y, out Cell cell))
+        {
+            if(cell.Zone == zone.ParentZone)
+            {
+                return AssignCellToZone(cell, zone);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 }
