@@ -55,10 +55,9 @@ public partial class MethodGrowth : FPGenerationMethod
         }
 
         _cts = new CancellationTokenSource();
+        EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
         Utils.Random.SetSeed(seed);
-
-        EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
         _zonesToSubdivide = new List<Zone>();
         _zonesToGrow = new List<Zone>();
@@ -66,32 +65,7 @@ public partial class MethodGrowth : FPGenerationMethod
 
         CellsGrid cellsGrid = floorPlanManager.CellsGrid;
 
-        // TODO: temporario.
-        // Setup da zona raiz.
-        /*
-        int corner;
-        if(_randomInitialArea)
-            corner = Utils.Random.RandomRange(0,6);
-        else
-            corner = 5;
-        int a = Utils.Random.RandomRange(2, 10);
-        int b = Utils.Random.RandomRange(2, 10);
-        
-        foreach(Cell cell in cellsGrid.Cells)
-        {
-            if(corner == 0 && cell.GridPosition.x > a && cell.GridPosition.y > b) continue;
-            else if (corner == 1 && cell.GridPosition.x < a && cell.GridPosition.y < b) continue;
-            else if (corner == 2 && cell.GridPosition.x > a && cell.GridPosition.y < b) continue;
-            else if (corner == 3 && cell.GridPosition.x < a && cell.GridPosition.y > b) continue;
-            else if (corner == 4 && cell.GridPosition.x > 3 && cell.GridPosition.x < 10 && cell.GridPosition.y > 3 && cell.GridPosition.y < 10) continue;
-            // corner == 5, full area
-
-            //_floorPlanManager.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, _floorPlanManager.RootZone);
-            floorPlanManager.AssignCellToZone(cell, floorPlanManager.RootZone);
-        }
-
-        floorPlanManager.RootZone.Bake();
-        */
+        // Add root zone to subdivision.
         _zonesToSubdivide.Add(floorPlanManager.RootZone);
         
         while(_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
@@ -506,12 +480,15 @@ public partial class MethodGrowth : FPGenerationMethod
         int desiredZoneSqSize = Mathf.CeilToInt(Mathf.Sqrt(zoneToPlot.AreaRatio * cellsGrid.Area)); // Ceiling to round up to a size that can fit it.
         int minimumBorderDistance = desiredZoneSqSize / 4;
 
+        bool hasAnAvailableCell = false; // Will be tru if at least on cell in the grid have a weight != of 0.
+
         for(int i = 0; i < cellsToCalc.Length; i++)
         {
             Cell cell = cellsToCalc[i];
             float weight = 0;
 
             // Cell outside the current parent zone, the context zone.
+            // Safe check. For when testing using the full grid.
             if(cell.Zone != parentZone)
             {
                 _cellsWeights.AddAt(i, 0);
@@ -544,7 +521,7 @@ public partial class MethodGrowth : FPGenerationMethod
             }
 
 
-            // ================================== GROWN BAKED ADJACENT UNCLE ZONES WEIGHTS
+            // ================================== BAKED ADJACENT UNCLE ZONES WEIGHTS
             // Calculate the weight for zones the are already baked that this one should be adjacent.
             // Because the way the algorithm iterates it will not guarantee that cousin zones can enter this, only uncle or older.
             if(!_ignoreAdjacentWeights)
@@ -553,6 +530,8 @@ public partial class MethodGrowth : FPGenerationMethod
                 {
                     // Skip sister zone.
                     // TODO: Maybe can be done together with plotted zones phase, when using cousin zones in calculus.
+                    // TODO: Not sure if should always be skipped. Sister zones can have a predefined area what can result in unexpected
+                    // weights around the plotted predefined sister. In sister weight add if sister is baked, calculate weights of borders.
                     if(zoneToPlot.IsSister(adjacentZone))
                     {
                         continue;
@@ -609,8 +588,11 @@ public partial class MethodGrowth : FPGenerationMethod
             }
             
 
-            // ================================== PLOTTED SISTER ZONES WEIGHTS
-            // Distance from adjacent or non adjacent.
+            // ================================== PLOTTED SISTER* ZONES WEIGHTS
+            // * Is expected that "plottedZones" have the sisters of a zone since the plot phase happens over the children of a zone,
+            // not over multiple zones or hierarchy levels.
+
+            // Calculate the weights of zones that have only the initial cell plotted, adjacent or not.
             if(plottedZones != null)
             {
                 foreach(Zone plottedZone in plottedZones)
@@ -660,6 +642,35 @@ public partial class MethodGrowth : FPGenerationMethod
 
 
             _cellsWeights.AddAt(i, weight);
+
+            if(weight != 0 && hasAnAvailableCell == false)
+            {
+                hasAnAvailableCell = true;
+            }
+        }
+
+        
+        if(!hasAnAvailableCell)
+        {
+            Debug.LogWarning($"{zoneToPlot.ZoneId} can't be plotted, setting all valid positions to weight 1 to continue the execution. Please try changing the area ratios.");
+
+            for(int i = 0; i < cellsToCalc.Length; i++)
+            {
+                if(cellsToCalc[i].Zone == parentZone)
+                {
+                    _cellsWeights.AddAt(i, 1);
+
+                    if(hasAnAvailableCell == false)
+                    {
+                        hasAnAvailableCell = true;
+                    }
+                }
+            }
+        }
+
+        if(!hasAnAvailableCell)
+        {
+            Debug.LogError($"No valid positions to plot the zone {zoneToPlot.ZoneId}.");
         }
 
         //Debug.Log($"=============<color=yellow>{zoneToPlot.ZoneId}</color>");
