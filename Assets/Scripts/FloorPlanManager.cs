@@ -15,7 +15,8 @@ using UnityEngine;
                 -Banheiro
 */
 
-
+namespace BuildingGenerator
+{
 /// <summary>
 /// All floor plan grid changes must pass trough this class.
 /// </summary>
@@ -296,4 +297,5 @@ public class FloorPlanManager
             return false;
         }
     }
+}
 }

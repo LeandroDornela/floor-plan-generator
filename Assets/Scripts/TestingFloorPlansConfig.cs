@@ -2,10 +2,9 @@ using UnityEngine;
 using System;
 using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
-using com.cyborgAssets.inspectorButtonPro;
-using System.Linq;
 
-
+namespace BuildingGenerator
+{
 [Serializable]
 public struct TestZoneConfig
 {
@@ -111,4 +110,5 @@ public class TestingFloorPlansConfig : IFloorPlanConfig
         // Create a FloorPlanData from a TestFloorPlanConfig.
         return new FloorPlanData(dims, zonesConfigs, adj);
     }
+}
 }

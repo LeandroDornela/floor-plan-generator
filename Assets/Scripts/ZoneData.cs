@@ -1,5 +1,5 @@
-using UnityEngine;
-
+namespace BuildingGenerator
+{
 public struct ZoneData
 {
     private string _parentZoneId;
@@ -19,4 +19,5 @@ public struct ZoneData
         _areaRatio = areaRatio;
         _presetArea = presetArea;
     }
+}
 }

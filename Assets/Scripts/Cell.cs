@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+namespace BuildingGenerator
+{
 public class Cell // dando preferencia para classes para passar por ref
 {
     private Zone _zone;
@@ -44,4 +45,5 @@ public class Cell // dando preferencia para classes para passar por ref
 
         return parentZones;
     }
+}
 }

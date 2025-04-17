@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+namespace BuildingGenerator
+{
 public struct FloorPlanData
 {
     public Vector2Int GridDimensions;
@@ -22,4 +24,5 @@ public struct FloorPlanData
         ZonesConfigs = zonesConfigs;
         Adjacencies = adjacencies;
     }
+}
 }

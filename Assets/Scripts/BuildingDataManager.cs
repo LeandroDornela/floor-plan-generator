@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
 
-
+namespace BuildingGenerator
+{
 [Serializable]
 public class BuildingDataManager
 {
@@ -12,4 +13,5 @@ public class BuildingDataManager
     {
         return floorPlanConfig.GetFloorPlanData();
     }
+}
 }

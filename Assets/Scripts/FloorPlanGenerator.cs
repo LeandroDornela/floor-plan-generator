@@ -2,15 +2,9 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
 
-public enum FPGenerationMethodType
+
+namespace BuildingGenerator
 {
-    LinearFill,
-    FloodFill,
-    FloodFillWeighted,
-    Growth
-}
-
-
 [System.Serializable]
 public class FloorPlanGenerator
 {
@@ -72,4 +66,5 @@ public class FloorPlanGenerator
     {
         _generationMethod?.OnDrawGizmos();
     }
+}
 }

@@ -10,7 +10,8 @@ y       [v][-][-][v]
         Bottom
 */
 
-
+namespace BuildingGenerator
+{
 /// <summary>
 /// OBS: Seguindo o padão da grid, leitura esquerda->direita, cima->baixo
 /// </summary>
@@ -96,4 +97,5 @@ public class CellsLineDescription
             _totalDistanceExpanded++;
         }
     }
+}
 }

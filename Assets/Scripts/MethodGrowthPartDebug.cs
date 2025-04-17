@@ -1,6 +1,6 @@
-using UnityEngine;
-using UnityEditor;
 
+namespace BuildingGenerator
+{
 public partial class MethodGrowth
 {
     public bool DEBUG_GrowSequential(Zone zone, CellsGrid cellsGrid)
@@ -86,4 +86,5 @@ public partial class MethodGrowth
         }
     }
     */
+}
 }

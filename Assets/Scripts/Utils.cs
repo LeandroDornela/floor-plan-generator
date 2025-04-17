@@ -1,6 +1,7 @@
-//using Unity.Mathematics;
 using UnityEngine;
 
+namespace BuildingGenerator
+{
 public class Utils
 {
     public class Random
@@ -135,4 +136,5 @@ public class Utils
         
         Debug.Log(result);
     }
+}
 }

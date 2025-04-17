@@ -10,7 +10,8 @@ y       [v][-][-][v]
         Bottom
 */
 
-
+namespace BuildingGenerator
+{
 /// <summary>
 /// 
 /// </summary>
@@ -861,4 +862,5 @@ public class Zone // similar a uma estrutura de nos em arvore
         Debug.LogError($"{_zoneId}: {text}");
     }
 #endregion
+}
 }

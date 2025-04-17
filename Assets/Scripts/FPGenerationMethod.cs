@@ -1,6 +1,8 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
+namespace BuildingGenerator
+{
 public class FPGenerationMethod : ScriptableObject
 {
     public virtual async UniTask<bool> Run(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger, int seed)
@@ -12,4 +14,5 @@ public class FPGenerationMethod : ScriptableObject
     {
         
     }
+}
 }

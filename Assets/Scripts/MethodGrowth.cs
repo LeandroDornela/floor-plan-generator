@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 
 
+namespace BuildingGenerator
+{
 [System.Serializable]
 [CreateAssetMenu(fileName = "DefaultGrowthMethod", menuName = "Scriptable Objects/Generation Methods/Default Growth")]
 public partial class MethodGrowth : FPGenerationMethod
@@ -434,11 +436,11 @@ public partial class MethodGrowth : FPGenerationMethod
             // Weighted selection
             CalculateWeights(zone, zonesToGrow, floorPlanManager);
             
-            #if DEBUG
+#if DEBUG
             if(_cellsWeights.GetRandomWeightedElement(floorPlanManager.CellsGrid.Cells, out Cell cell))
-            #else
+#else
             if(_cellsWeights.GetRandomWeightedElement(zone._parentZone.Cells, out Cell cell))
-            #endif
+#endif
             {
                 //_floorPlanManager.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
                 floorPlanManager.AssignCellToZone(cell, zone);
@@ -469,11 +471,11 @@ public partial class MethodGrowth : FPGenerationMethod
         CellsGrid cellsGrid = floorPlanManager.CellsGrid;
         Zone parentZone = zoneToPlot.ParentZone;
         
-        #if DEBUG
+#if DEBUG
         Cell[] cellsToCalc = floorPlanManager.CellsGrid.Cells;
-        #else
+#else
         Cell[] cellsToCalc =  parentZone.Cells;
-        #endif
+#endif
 
         _cellsWeights = new WeightedArray(cellsToCalc.Length);
 
@@ -695,4 +697,5 @@ public partial class MethodGrowth : FPGenerationMethod
     }
 
 #endregion
+}
 }

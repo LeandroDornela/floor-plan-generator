@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+namespace BuildingGenerator
+{
 // Encapsula um meio de executar um metodo de forma assincrona com um intervalo de execução.
 public class AsyncTicker : MonoBehaviour
 {
@@ -41,14 +43,5 @@ public class AsyncTicker : MonoBehaviour
             DestroyImmediate(gameObject);
         }
     }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+}
 }

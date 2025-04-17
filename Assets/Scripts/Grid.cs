@@ -19,6 +19,8 @@ Y V
  */
 
 
+namespace BuildingGenerator
+{
 public class CellsGrid // using class to facilitate passing values by reference
 {
     private readonly Vector2Int _dimensions; // dimen��es da grade.
@@ -127,4 +129,5 @@ public class CellsGrid // using class to facilitate passing values by reference
     }
 
 #endregion
+}
 }

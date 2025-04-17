@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
-
+namespace BuildingGenerator
+{
 public sealed class FloorPlanGenSceneDebugger : MonoBehaviour
 {
     public SerializedDictionary<string, Color> _debugColors;
@@ -118,4 +119,5 @@ public sealed class FloorPlanGenSceneDebugger : MonoBehaviour
         if(!_initialized) { return; }
         //Handles.Label(Vector3.zero, _gridPreview);
     }
+}
 }

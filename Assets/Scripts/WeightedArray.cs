@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace BuildingGenerator
+{
 public class WeightedArray
 {
     private float[] _array;
@@ -86,4 +88,5 @@ public class WeightedArray
         result = default;
         return false;
     }
+}
 }

@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
 using com.cyborgAssets.inspectorButtonPro;
-using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
+namespace BuildingGenerator
+{
 public class BuildingGenerator : MonoBehaviour
 {
     // OBS: Uma varialvel com a ref de uma classe serializada exposta no editor "nunca" será nula.
@@ -52,4 +51,5 @@ public class BuildingGenerator : MonoBehaviour
 
         Handles.Label(transform.position, counter.ToString());
     }
+}
 }

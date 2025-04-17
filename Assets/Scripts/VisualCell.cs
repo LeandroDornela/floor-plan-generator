@@ -1,5 +1,7 @@
 using UnityEngine;
 
+namespace BuildingGenerator
+{
 public class VisualCell : MonoBehaviour
 {
     public Renderer _renderer;
@@ -46,4 +48,5 @@ public class VisualCell : MonoBehaviour
             _renderer.material.color = new Color(origCol.r, origCol.g, origCol.b, 1f);
         }
     }
+}
 }
