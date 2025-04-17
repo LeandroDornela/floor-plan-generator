@@ -25,24 +25,32 @@ public class BuildingGenerator : MonoBehaviour
     }
 
     [ProButton]
-    public async void GenerateBuildingLoopAsync()
+    public async void GenerateBuildingLoopStepByStep()
     {
         if(!Application.isPlaying) return;
         counter = 0;
         while(counter < totalToTest)
         {
-            await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetFloorPlanData());
+            await _floorPlanGenerator.DEBUG_GenerateFloorPlan(_buildingDataManager.GetFloorPlanData());
             counter++;
             //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
         }
     }
 
     [ProButton]
-    public async void GenerateBuildingAsync()
+    public async void GenerateBuildingStepByStep()
     {
         if(!Application.isPlaying) return;
-        await _floorPlanGenerator.GenerateFloorPlan(_buildingDataManager.GetFloorPlanData());
+        await _floorPlanGenerator.DEBUG_GenerateFloorPlan(_buildingDataManager.GetFloorPlanData());
         //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
+    }
+
+    [ProButton]
+    public async void GenerateBuilding(int amount)
+    {
+        if(!Application.isPlaying) return;
+
+        await _floorPlanGenerator.GenerateFloorPlans(_buildingDataManager.GetFloorPlanData(), amount);
     }
 
     void OnDrawGizmos()

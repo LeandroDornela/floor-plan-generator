@@ -43,13 +43,115 @@ public partial class MethodGrowth : FPGenerationMethod
     private WeightedArray _zonesWeights;
 
 
+    /// <summary>
+    /// SYNC METHOD
+    /// </summary>
+    /// <param name="floorPlanManager"></param>
+    /// <param name="sceneDebugger"></param>
+    /// <param name="seed"></param>
+    /// <returns></returns>
+    public override bool Run(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger, int seed)
+    {   
+#if DEBUG
+         Debug.LogWarning("Running in Debug mode.");
+#endif
+        
+        if(!EditorApplication.isPlaying)
+        {
+            Debug.LogError("Don't use it outside play mode.");
+            return false;
+        }
+
+        Utils.Random.SetSeed(seed);
+
+        _zonesToSubdivide = new List<Zone>();
+        _zonesToGrow = new List<Zone>();
+        _grownZones = new List<Zone>();
+
+        CellsGrid cellsGrid = floorPlanManager.CellsGrid;
+
+        // Add root zone to subdivision.
+        _zonesToSubdivide.Add(floorPlanManager.RootZone);
+        
+        while(_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
+        {
+            // Get the child zones from the next zone to subdivide.
+            _zonesToGrow = GetNextZonesToGrowList(floorPlanManager);
+            UpdateZonesWeights(_zonesToGrow);
+
+            if(_stopAtInitialPlot) break;
+
+
+            // >>>>>>>>>>> begin main grow logic
+            // =========================================================== LOOP CRESCIMENTO RECT
+            while(_zonesToGrow.Count > 0)
+            {
+                _currentZone = GetNextZone(_zonesToGrow);
+
+                if(!GrowZoneRect(_currentZone, cellsGrid))
+                {
+                    _zonesToGrow.Remove(_currentZone);
+                    UpdateZonesWeights(_zonesToGrow);
+                    _grownZones.Add(_currentZone);
+                }
+            }
+
+
+            _zonesToGrow = new List<Zone>(_grownZones);
+            UpdateZonesWeights(_zonesToGrow);
+            _grownZones.Clear();
+            
+            
+            // ======================================================== LOOP L
+            // LOOP CRESCIMENTO L
+            while(_zonesToGrow.Count > 0)
+            {
+                _currentZone = GetNextZone(_zonesToGrow);
+                
+                if(!GrowZoneLShape(_currentZone, cellsGrid))
+                {
+                    _zonesToGrow.Remove(_currentZone);
+                    UpdateZonesWeights(_zonesToGrow);
+                    _grownZones.Add(_currentZone);
+                }
+            }
+
+
+            // ======================================================== CRESCIMENTO LIVRE(espaços restantes)
+            // while free spaces.
+
+            // <<<<<<<<<< end main grow logic
+
+            // Prepare the next set of zones to grow.
+            foreach(Zone zone in _grownZones)
+            {
+                zone.Bake();
+
+                if(zone.HasChildrenZones)
+                {
+                    _zonesToSubdivide.Add(zone);
+                }
+            }
+
+            _grownZones.Clear();
+        }
+        
+        Utils.Random.CleanSeed();
+
+        return true;
+    }
+
     
     /// <summary>
-    /// TODO: receber a grid e tudo mais como parametros
+    /// ASYNC METHOD
     /// </summary>
     /// <returns></returns>
-    public override async UniTask<bool> Run(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger, int seed)
+    public override async UniTask<bool> DEBUG_RunStepByStep(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger, int seed)
     {   
+#if DEBUG
+         Debug.LogWarning("Running in Debug mode.");
+#endif
+        
         if(!EditorApplication.isPlaying)
         {
             Debug.LogError("Don't use it outside play mode.");
@@ -162,6 +264,8 @@ public partial class MethodGrowth : FPGenerationMethod
 
         return true;
     }
+
+
 
 
 #region ========== GROWTH STEPS METHODS ==========

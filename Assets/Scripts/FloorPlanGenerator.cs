@@ -1,6 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 
 
 namespace BuildingGenerator
@@ -10,7 +11,7 @@ public class FloorPlanGenerator
 {
     public bool _useSeed = false;
     public int _seed = 0;
-    public FloorPlanManager _floorPlanManager;
+    public FloorPlanManager _currentFloorPlan;
     [SerializeField, NaughtyAttributes.Expandable] private FPGenerationMethod _generationMethod;
     public FPGenerationMethod CurrentMethod => _generationMethod;
 
@@ -21,13 +22,15 @@ public class FloorPlanGenerator
     private bool _initialized = false;
     private bool _running = false;
 
-    private bool Init(FloorPlanData floorPlanConfig)
+    private List<FloorPlanManager> _generatedFloorPlans;
+
+    private bool PrepareNewGeneration(FloorPlanData floorPlanConfig)
     {
         Debug.Log("Initializing floor plan generator.");
 
         // ====== Floor plan manager setup ======
-        _floorPlanManager = new FloorPlanManager();
-        _floorPlanManager.Init(floorPlanConfig); // TODO check init success
+        _currentFloorPlan = new FloorPlanManager();
+        _currentFloorPlan.Init(floorPlanConfig); // TODO check init success
 
 
         // ====== Visual debugger setup ======
@@ -44,6 +47,24 @@ public class FloorPlanGenerator
         return _initialized;
     }
 
+    public async UniTask<bool> DEBUG_GenerateFloorPlan(FloorPlanData floorPlanConfig)
+    {
+        if(_running)
+        {
+            Debug.LogWarning("Generation in process, please wait.");
+            return false;
+        }
+
+        PrepareNewGeneration(floorPlanConfig);
+
+        _running = true;
+        if(!_useSeed) _seed = (int)DateTime.Now.Ticks;
+        await _generationMethod.DEBUG_RunStepByStep(_currentFloorPlan, _sceneDebugger, _seed);
+        _running = false;
+
+        return true;
+    }
+
     public async UniTask<bool> GenerateFloorPlan(FloorPlanData floorPlanConfig)
     {
         if(_running)
@@ -52,13 +73,35 @@ public class FloorPlanGenerator
             return false;
         }
 
-        Init(floorPlanConfig);
+        _running = true;
+            PrepareNewGeneration(floorPlanConfig);
+            if(!_useSeed) _seed = (int)DateTime.Now.Ticks;
+            _generationMethod.Run(_currentFloorPlan, _sceneDebugger, _seed);
+            _sceneDebugger.OnCellsGridChanged(_currentFloorPlan.CellsGrid);
+        _running = false;
+
+        await UniTask.NextFrame();
+        return true;
+    }
+
+    public async UniTask<bool> GenerateFloorPlans(FloorPlanData floorPlanConfig, int amount)
+    {
+        if(_running)
+        {
+            Debug.LogWarning("Generation in process, please wait.");
+            return false;
+        }
 
         _running = true;
         if(!_useSeed) _seed = (int)DateTime.Now.Ticks;
-        await _generationMethod.Run(_floorPlanManager, _sceneDebugger, _seed);
+        for(int i = 0; i < amount; i++)
+        {
+            PrepareNewGeneration(floorPlanConfig);
+             _generationMethod.Run(_currentFloorPlan, _sceneDebugger, _seed);
+        }
         _running = false;
 
+        await UniTask.NextFrame();
         return true;
     }
 

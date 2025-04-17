@@ -61,7 +61,7 @@ public sealed class FloorPlanGenSceneDebugger : MonoBehaviour
         _cellsGraphicsInstances = new List<VisualCell>();
 
         // Instancia as celulas.
-        foreach (var cell in _floorPlanGenerator._floorPlanManager.CellsGrid.Cells)
+        foreach (var cell in _floorPlanGenerator._currentFloorPlan.CellsGrid.Cells)
         {
             VisualCell visualCell = Instantiate(_cellGraphicsPrefab,
                                                 new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y),
@@ -87,7 +87,7 @@ public sealed class FloorPlanGenSceneDebugger : MonoBehaviour
     {
         if(!_initialized) { return; }
 
-        _gridPreview = _floorPlanGenerator._floorPlanManager.CellsGrid.GridToString();
+        _gridPreview = _floorPlanGenerator._currentFloorPlan.CellsGrid.GridToString();
         
         for(int i = 0; i < cellsGrid.Cells.Length; i++)
         {
@@ -108,7 +108,7 @@ public sealed class FloorPlanGenSceneDebugger : MonoBehaviour
     {
         if(!_initialized) { return; }
 
-        _gridPreview = _floorPlanGenerator._floorPlanManager.CellsGrid.GridToString();
+        _gridPreview = _floorPlanGenerator._currentFloorPlan.CellsGrid.GridToString();
         int index = Utils.MatrixToArrayIndex(cell.GridPosition.x, cell.GridPosition.y, _dimmensions.x);
         _cellsGraphicsInstances[index].SetColor(_debugColors[cell.Zone.ZoneId]);
     }
