@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace BuildingGenerator
@@ -26,11 +27,13 @@ public class VisualCell : MonoBehaviour
         _renderer.material.color = Color.black;
     }
 
-    public void SetColor(Color color)
+    public void SetColor(Color color, Cell cell)
     {
         if(_renderer == null) { _renderer = GetComponent<Renderer> (); }
         //_renderer.material.color = _renderer.material.color + color/100;
         _renderer.material.color = color;
+
+        _cell = cell;
     }
 
     public void SetSelectedState(bool state)
@@ -48,5 +51,21 @@ public class VisualCell : MonoBehaviour
             _renderer.material.color = new Color(origCol.r, origCol.g, origCol.b, 1f);
         }
     }
-}
+
+        void OnDrawGizmos()
+        {
+            string zoneId;
+
+            if(_cell != null && _cell.Zone != null)
+            {
+                zoneId = _cell.Zone.ZoneId;
+            }
+            else
+            {
+                zoneId = "";
+            }
+
+            Handles.Label(transform.position, $"[{transform.position.x}, {Mathf.Abs(transform.position.z)}]\n{zoneId}");
+        }
+    }
 }

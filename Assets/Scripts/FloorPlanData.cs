@@ -5,6 +5,7 @@ namespace BuildingGenerator
 {
 public struct FloorPlanData
 {
+    public string FloorPlanId;
     public Vector2Int GridDimensions;
     public Dictionary<string, ZoneData> ZonesConfigs;
     public Dictionary<string, string[]> Adjacencies;
@@ -18,8 +19,9 @@ public struct FloorPlanData
         return true;
     }
 
-    public FloorPlanData(Vector2Int gridDimensions, Dictionary<string, ZoneData> zonesConfigs, Dictionary<string, string[]> adjacencies)
+    public FloorPlanData(string floorPlanId, Vector2Int gridDimensions, Dictionary<string, ZoneData> zonesConfigs, Dictionary<string, string[]> adjacencies)
     {
+        FloorPlanId = floorPlanId;
         GridDimensions = gridDimensions;
         ZonesConfigs = zonesConfigs;
         Adjacencies = adjacencies;

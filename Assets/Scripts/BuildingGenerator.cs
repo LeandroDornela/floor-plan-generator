@@ -1,6 +1,7 @@
 using com.cyborgAssets.inspectorButtonPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace BuildingGenerator
 {
@@ -10,13 +11,11 @@ public class BuildingGenerator : MonoBehaviour
     [SerializeField] private FloorPlanGenerator _floorPlanGenerator;
     [SerializeField] private BuildingDataManager _buildingDataManager;
 
-    public int totalToTest = 1000;
-
     int counter = 0;
 
     void Start()
     {
-        //GenerateBuildingLoopAsync();
+        
     }
 
     void Update()
@@ -24,34 +23,18 @@ public class BuildingGenerator : MonoBehaviour
         
     }
 
-    [ProButton]
-    public async void GenerateBuildingLoopStepByStep()
-    {
-        if(!Application.isPlaying) return;
-        counter = 0;
-        while(counter < totalToTest)
-        {
-            await _floorPlanGenerator.DEBUG_GenerateFloorPlan(_buildingDataManager.GetFloorPlanData());
-            counter++;
-            //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
-        }
-    }
 
     [ProButton]
-    public async void GenerateBuildingStepByStep()
-    {
-        if(!Application.isPlaying) return;
-        await _floorPlanGenerator.DEBUG_GenerateFloorPlan(_buildingDataManager.GetFloorPlanData());
-        //ScreenCapture.CaptureScreenshot($"{Utils.RandomRange(0, 99999)}.png");
-    }
-
-    [ProButton]
-    public async void GenerateBuilding(int amount)
+    public async void GenerateBuilding(int amount = 1)
     {
         if(!Application.isPlaying) return;
 
-        await _floorPlanGenerator.GenerateFloorPlans(_buildingDataManager.GetFloorPlanData(), amount);
+        var result = await _floorPlanGenerator.GenerateFloorPlans(_buildingDataManager.GetFloorPlanData(), amount);
+        
+        foreach(var plan in result)
+         plan.PrintFloorPlan();
     }
+
 
     void OnDrawGizmos()
     {

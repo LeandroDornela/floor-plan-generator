@@ -1,3 +1,5 @@
+//#define TEST
+
 using UnityEngine;
 using System.Threading;
 using UnityEditor;
@@ -5,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Diagnostics;
 
 
 namespace BuildingGenerator
@@ -42,126 +45,28 @@ public partial class MethodGrowth : FPGenerationMethod
     private WeightedArray _cellsWeights;
     private WeightedArray _zonesWeights;
 
-
-    /// <summary>
-    /// SYNC METHOD
-    /// </summary>
-    /// <param name="floorPlanManager"></param>
-    /// <param name="sceneDebugger"></param>
-    /// <param name="seed"></param>
-    /// <returns></returns>
-    public override bool Run(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger, int seed)
-    {   
-#if DEBUG
-         Debug.LogWarning("Running in Debug mode.");
-#endif
-        
-        if(!EditorApplication.isPlaying)
-        {
-            Debug.LogError("Don't use it outside play mode.");
-            return false;
-        }
-
-        Utils.Random.SetSeed(seed);
-
-        _zonesToSubdivide = new List<Zone>();
-        _zonesToGrow = new List<Zone>();
-        _grownZones = new List<Zone>();
-
-        CellsGrid cellsGrid = floorPlanManager.CellsGrid;
-
-        // Add root zone to subdivision.
-        _zonesToSubdivide.Add(floorPlanManager.RootZone);
-        
-        while(_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
-        {
-            // Get the child zones from the next zone to subdivide.
-            _zonesToGrow = GetNextZonesToGrowList(floorPlanManager);
-            UpdateZonesWeights(_zonesToGrow);
-
-            if(_stopAtInitialPlot) break;
-
-
-            // >>>>>>>>>>> begin main grow logic
-            // =========================================================== LOOP CRESCIMENTO RECT
-            while(_zonesToGrow.Count > 0)
-            {
-                _currentZone = GetNextZone(_zonesToGrow);
-
-                if(!GrowZoneRect(_currentZone, cellsGrid))
-                {
-                    _zonesToGrow.Remove(_currentZone);
-                    UpdateZonesWeights(_zonesToGrow);
-                    _grownZones.Add(_currentZone);
-                }
-            }
-
-
-            _zonesToGrow = new List<Zone>(_grownZones);
-            UpdateZonesWeights(_zonesToGrow);
-            _grownZones.Clear();
-            
-            
-            // ======================================================== LOOP L
-            // LOOP CRESCIMENTO L
-            while(_zonesToGrow.Count > 0)
-            {
-                _currentZone = GetNextZone(_zonesToGrow);
-                
-                if(!GrowZoneLShape(_currentZone, cellsGrid))
-                {
-                    _zonesToGrow.Remove(_currentZone);
-                    UpdateZonesWeights(_zonesToGrow);
-                    _grownZones.Add(_currentZone);
-                }
-            }
-
-
-            // ======================================================== CRESCIMENTO LIVRE(espaços restantes)
-            // while free spaces.
-
-            // <<<<<<<<<< end main grow logic
-
-            // Prepare the next set of zones to grow.
-            foreach(Zone zone in _grownZones)
-            {
-                zone.Bake();
-
-                if(zone.HasChildrenZones)
-                {
-                    _zonesToSubdivide.Add(zone);
-                }
-            }
-
-            _grownZones.Clear();
-        }
-        
-        Utils.Random.CleanSeed();
-
-        return true;
-    }
-
     
     /// <summary>
     /// ASYNC METHOD
     /// </summary>
     /// <returns></returns>
-    public override async UniTask<bool> DEBUG_RunStepByStep(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger, int seed)
+    public override async UniTask<bool> Run(FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger)
     {   
-#if DEBUG
-         Debug.LogWarning("Running in Debug mode.");
+#if TEST
+        UnityEngine.Debug.LogWarning("Running in TEST mode.");
 #endif
+        var watch = System.Diagnostics.Stopwatch.StartNew();
         
+        /*
         if(!EditorApplication.isPlaying)
         {
             Debug.LogError("Don't use it outside play mode.");
             return false;
         }
+        */
 
         _cts = new CancellationTokenSource();
-        EditorApplication.playModeStateChanged += PlayModeStateChanged;
-
-        Utils.Random.SetSeed(seed);
+        //EditorApplication.playModeStateChanged += PlayModeStateChanged;
 
         _zonesToSubdivide = new List<Zone>();
         _zonesToGrow = new List<Zone>();
@@ -171,6 +76,7 @@ public partial class MethodGrowth : FPGenerationMethod
 
         // Add root zone to subdivision.
         _zonesToSubdivide.Add(floorPlanManager.RootZone);
+
         
         while(_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
         {
@@ -178,8 +84,7 @@ public partial class MethodGrowth : FPGenerationMethod
             _zonesToGrow = GetNextZonesToGrowList(floorPlanManager);
             UpdateZonesWeights(_zonesToGrow);
 
-            //TriggerOnCellsGridChanged(cellsGrid);
-            //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
+
             if(_stopAtInitialPlot) break;
 
 
@@ -198,15 +103,13 @@ public partial class MethodGrowth : FPGenerationMethod
 
                 if(!_skipToFinalResult)
                 {
-                    sceneDebugger.OnCellsGridChanged(cellsGrid);
+                    FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(floorPlanManager);
                     await UniTask.WaitForSeconds(delay + 0.1f, cancellationToken: _cts.Token);
                 }
             }
 
 
-            //TriggerOnCellsGridChanged(cellsGrid);
-            //await UniTask.WaitForSeconds(10, cancellationToken: _cts.Token);
-
+            // Prepare for next step.
 
             _zonesToGrow = new List<Zone>(_grownZones);
             UpdateZonesWeights(_zonesToGrow);
@@ -228,7 +131,7 @@ public partial class MethodGrowth : FPGenerationMethod
 
                 if(!_skipToFinalResult)
                 {
-                    sceneDebugger.OnCellsGridChanged(cellsGrid);
+                    FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(floorPlanManager);
                     await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token);
                 }
             }
@@ -240,6 +143,9 @@ public partial class MethodGrowth : FPGenerationMethod
             // <<<<<<<<<< end main grow logic
 
             // Prepare the next set of zones to grow.
+            // "Bake" the zones that finished to grow and add the ones with children(the ones tha will be subdivided)
+            // to the list of zones to be subdivided, the one zone will be pick from this list and their children will
+            // be the 'zones to grow' inside this zone to subdivide.
             foreach(Zone zone in _grownZones)
             {
                 zone.Bake();
@@ -252,15 +158,21 @@ public partial class MethodGrowth : FPGenerationMethod
 
             _grownZones.Clear();
         }
-        
 
-        EditorApplication.playModeStateChanged -= PlayModeStateChanged;
 
-        sceneDebugger.OnCellsGridChanged(cellsGrid);
-        //await UniTask.WaitForSeconds(delay, cancellationToken: _cts.Token, cancelImmediately: true);
-        await UniTask.WaitForEndOfFrame();
+        // After generating all zones, check the connectivity.
+        if(!IsConnectivityConstraintMeet(floorPlanManager))
+        {
+            return false;
+        }
+
+
+        watch.Stop();
+        var elapsedMs = watch.ElapsedMilliseconds;
+        //UnityEngine.Debug.Log(elapsedMs);
+
+        //EditorApplication.playModeStateChanged -= PlayModeStateChanged;
         _cts.Dispose();
-        Utils.Random.CleanSeed();
 
         return true;
     }
@@ -421,7 +333,7 @@ public partial class MethodGrowth : FPGenerationMethod
         }
         if(largestFreeSide.isFullLine) // Just in case
         {
-            Debug.LogWarning("At this point it should not have a full border available.");
+            UnityEngine.Debug.LogWarning("At this point it should not have a full border available.");
         }
         zone.SetAsLShaped(largestFreeSide.freeLineDescription);
         return zone.TryExpandShapeL(true);
@@ -519,7 +431,7 @@ public partial class MethodGrowth : FPGenerationMethod
             return zone;
         }
 
-        Debug.LogError("Unable to get a zone.");
+        UnityEngine.Debug.LogError("Unable to get a zone.");
         return null;
     }
 
@@ -540,10 +452,10 @@ public partial class MethodGrowth : FPGenerationMethod
             // Weighted selection
             CalculateWeights(zone, zonesToGrow, floorPlanManager);
             
-#if DEBUG
+#if TEST
             if(_cellsWeights.GetRandomWeightedElement(floorPlanManager.CellsGrid.Cells, out Cell cell))
 #else
-            if(_cellsWeights.GetRandomWeightedElement(zone._parentZone.Cells, out Cell cell))
+            if(_cellsWeights.GetRandomWeightedElement(zone.ParentZone.Cells, out Cell cell))
 #endif
             {
                 //_floorPlanManager.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
@@ -575,7 +487,7 @@ public partial class MethodGrowth : FPGenerationMethod
         CellsGrid cellsGrid = floorPlanManager.CellsGrid;
         Zone parentZone = zoneToPlot.ParentZone;
         
-#if DEBUG
+#if TEST
         Cell[] cellsToCalc = floorPlanManager.CellsGrid.Cells;
 #else
         Cell[] cellsToCalc =  parentZone.Cells;
@@ -758,7 +670,7 @@ public partial class MethodGrowth : FPGenerationMethod
         
         if(!hasAnAvailableCell)
         {
-            Debug.LogWarning($"{zoneToPlot.ZoneId} can't be plotted, setting all valid positions to weight 1 to continue the execution. Please try changing the area ratios.");
+            UnityEngine.Debug.LogWarning($"{zoneToPlot.ZoneId} can't be plotted, setting all valid positions to weight 1 to continue the execution. Please try changing the area ratios.");
 
             for(int i = 0; i < cellsToCalc.Length; i++)
             {
@@ -776,7 +688,7 @@ public partial class MethodGrowth : FPGenerationMethod
 
         if(!hasAnAvailableCell)
         {
-            Debug.LogError($"No valid positions to plot the zone {zoneToPlot.ZoneId}.");
+            UnityEngine.Debug.LogError($"No valid positions to plot the zone {zoneToPlot.ZoneId}.");
         }
 
         //Debug.Log($"=============<color=yellow>{zoneToPlot.ZoneId}</color>");
@@ -785,9 +697,27 @@ public partial class MethodGrowth : FPGenerationMethod
 
 #endregion
 
+
+// TODO: Ha redundancia na comparação.
+bool IsConnectivityConstraintMeet(FloorPlanManager floorPlanManager)
+{
+    foreach(Zone zone in floorPlanManager.ZonesInstances.Values)
+    {
+        // I the zone don't have adjacent zones, skip it.
+        if(zone.AdjacentZones.Count == 0) continue;
+
+        if(!zone.AreAllAdjacenciesMeet(floorPlanManager.CellsGrid))
+        {
+            UnityEngine.Debug.LogError($"Adjacency constraint not meet for zone {zone.ZoneId}.");
+            return false;
+        }
+    }
+
+    return true;
+}
     
 #region ========== AUXILIARY METHODS ==========
-    
+    /*
     /// <summary>
     /// 
     /// </summary>
@@ -799,7 +729,7 @@ public partial class MethodGrowth : FPGenerationMethod
             _cts.Cancel();
         }
     }
-
+    */
 #endregion
 }
 }

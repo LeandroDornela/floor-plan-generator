@@ -22,6 +22,7 @@ namespace BuildingGenerator
 /// </summary>
 public class FloorPlanManager
 {
+    private string _floorPlanId;
     private CellsGrid _cellsGrid;
     
     private Zone _rootZone;
@@ -29,6 +30,7 @@ public class FloorPlanManager
     private bool _initialized = false;
 
 
+    public string FloorPlanId => _floorPlanId;
     public CellsGrid CellsGrid => _cellsGrid;
     /// <summary>
     /// The util floor plan zone, grid's cells outside this zone will not be used by the algorith.
@@ -37,14 +39,20 @@ public class FloorPlanManager
     public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
 
 
+    public FloorPlanManager(FloorPlanData floorPlanConfig)
+    {
+        Init(floorPlanConfig);
+    }
+
+
     /// <summary>
     /// 
     /// </summary>
     /// <param name="floorPlanConfig"></param>
     /// <returns></returns>
-    public bool Init(FloorPlanData floorPlanConfig)
+    bool Init(FloorPlanData floorPlanConfig)
     {
-        Debug.Log("Initializing floor plan manager.");
+        //Debug.Log("Initializing floor plan manager.");
 
         if(!floorPlanConfig.IsValid())
         {
@@ -52,6 +60,8 @@ public class FloorPlanManager
             return false;
         }
         
+        _floorPlanId = floorPlanConfig.FloorPlanId;
+
         _zonesInstances = new Dictionary<string, Zone>(); // a list/dictionary of all the zones instances, identified by the zone id.
 
         _cellsGrid = new CellsGrid(floorPlanConfig.GridDimensions);
@@ -296,6 +306,36 @@ public class FloorPlanManager
         {
             return false;
         }
+    }
+
+
+    public void PrintFloorPlan()
+    {
+        string result = string.Empty;
+
+        foreach(var cell in CellsGrid.Cells)
+        {
+            result += '|';
+
+            if(cell.Zone == null)
+            {
+                result += "---";
+            }
+            else
+            {
+                if(cell.Zone.ZoneId.Length >= 3)
+                    result += $"{cell.Zone.ZoneId.Substring(0,3)}";
+                else
+                    result += $"{cell.Zone.ZoneId}";
+            }
+
+            if(cell.GridPosition.x == CellsGrid.Dimensions.x - 1)
+            {
+                result += '\n';
+            }
+        }
+
+        Debug.Log(result);
     }
 }
 }

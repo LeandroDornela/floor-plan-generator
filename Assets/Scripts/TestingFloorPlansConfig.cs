@@ -93,6 +93,8 @@ public class TestingFloorPlansConfig : IFloorPlanConfig
     public override FloorPlanData GetFloorPlanData()
     {
         int index = 0;
+
+        var planId = FloorPlanConfigs[index].FloorPlanId;
         
         // Get the grid dimensions.
         var dims = FloorPlanConfigs[index].GridDimensions;
@@ -108,7 +110,7 @@ public class TestingFloorPlansConfig : IFloorPlanConfig
         var adj = FloorPlanConfigs[index].Adjacencies;
 
         // Create a FloorPlanData from a TestFloorPlanConfig.
-        return new FloorPlanData(dims, zonesConfigs, adj);
+        return new FloorPlanData(planId, dims, zonesConfigs, adj);
     }
 }
 }

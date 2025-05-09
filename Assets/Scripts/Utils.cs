@@ -6,46 +6,54 @@ public class Utils
 {
     public class Random
     {
-        private static bool _useSeed = false;
-        private static int _seed = 0;
+        // NOTE: Unity Random doesn't work outside the main thread.
 
-        static void CheckUseSeed()
+        static System.Random random;
+        
+        static void ValidateInstance()
         {
-            if(_useSeed)
+            if(random == null)
             {
-                UnityEngine.Random.InitState(_seed);
-                _seed++;
+                random = new System.Random();
             }
         }
 
         public static void SetSeed(int seed)
         {
-            _useSeed = true;
-            _seed = seed;
+            random = new System.Random(seed);
+
+            //UnityEngine.Random.InitState(seed);
         }
 
-        public static void CleanSeed()
+        public static void ClearSeed()
         {
-            _useSeed = false;
-            _seed = 0;
+            random = new System.Random();
+
+            //UnityEngine.Random.InitState((int)System.DateTime.Now.Ticks);
         }
 
-        public static bool RandomBool(bool forceIgnoreSeed = false)
+        public static bool RandomBool()
         {
-            if(!forceIgnoreSeed) CheckUseSeed();
-            return UnityEngine.Random.Range(0, 2) == 0;
+            ValidateInstance();
+            return random.Next(0, 2) == 0;
+
+            //return UnityEngine.Random.Range(0, 2) == 0;
         }
 
-        public static int RandomRange(int min, int max, bool forceIgnoreSeed = false)
+        public static int RandomRange(int min, int max)
         {
-            if(!forceIgnoreSeed) CheckUseSeed();
-            return UnityEngine.Random.Range(min, max);
+            ValidateInstance();
+            return random.Next(min, max);
+
+            //return UnityEngine.Random.Range(min, max);
         }
 
-        public static float RandomRange(float min, float max, bool forceIgnoreSeed = false)
+        public static float RandomRange(float min, float max)
         {
-            if(!forceIgnoreSeed) CheckUseSeed();
-            return UnityEngine.Random.Range(min, max);
+            ValidateInstance();
+            return (float)random.NextDouble() * (max - min) + min;
+
+            //return UnityEngine.Random.Range(min, max);
         }
     }
 

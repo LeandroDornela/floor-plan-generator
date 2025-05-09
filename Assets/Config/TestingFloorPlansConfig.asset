@@ -17,52 +17,108 @@ MonoBehaviour:
     GridDimensions: {x: 30, y: 30}
     ZonesConfigs:
       _serializedList:
-      - Key: red
+      - Key: A
         Value:
           _parentZoneId: 
           _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: b42ee4e18c7dd9a458dfc7f64048db94, type: 3}
-      - Key: green
+      - Key: B
         Value:
-          _parentZoneId: red
-          _areaRatio: 0.3
-          _presetArea: {fileID: 2800000, guid: 0a3fa9861879cc7469ef16c79d25dcb6, type: 3}
-      - Key: blue
-        Value:
-          _parentZoneId: red
-          _areaRatio: 0.2
-          _presetArea: {fileID: 0}
-      - Key: cian
-        Value:
-          _parentZoneId: red
-          _areaRatio: 0.2
-          _presetArea: {fileID: 0}
-      - Key: mag
-        Value:
-          _parentZoneId: red
+          _parentZoneId: A
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
-      - Key: yel
+      - Key: C
         Value:
-          _parentZoneId: green
+          _parentZoneId: A
+          _areaRatio: 0.2
+          _presetArea: {fileID: 0}
+      - Key: D
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.2
+          _presetArea: {fileID: 0}
+      - Key: E
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+      - Key: F
+        Value:
+          _parentZoneId: B
           _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-      - Key: oran
+          _presetArea: {fileID: 2800000, guid: 0a3fa9861879cc7469ef16c79d25dcb6, type: 3}
+      - Key: G
         Value:
-          _parentZoneId: green
+          _parentZoneId: B
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
     Adjacencies:
       _serializedList:
-      - Key: green
+      - Key: F
         Value:
-        - blue
-        - cian
-        - mag
-        - yel
-      - Key: blue
+        - G
+    ZonesAreasPresets:
+      _serializedList: []
+  - FloorPlanId: Plan 0
+    GridDimensions: {x: 10, y: 10}
+    ZonesConfigs:
+      _serializedList:
+      - Key: A
         Value:
-        - cian
+          _parentZoneId: 
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+      - Key: B
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+      - Key: C
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+      - Key: D
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+      - Key: E
+        Value:
+          _parentZoneId: B
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+      - Key: F
+        Value:
+          _parentZoneId: B
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+      - Key: G
+        Value:
+          _parentZoneId: C
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+      - Key: H
+        Value:
+          _parentZoneId: C
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+      - Key: I
+        Value:
+          _parentZoneId: G
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+      - Key: J
+        Value:
+          _parentZoneId: G
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+    Adjacencies:
+      _serializedList:
+      - Key: E
+        Value:
+        - F
+        - H
     ZonesAreasPresets:
       _serializedList: []
   - FloorPlanId: Plan 2 - uncle w test
@@ -176,68 +232,5 @@ MonoBehaviour:
       - Key: green
         Value:
         - blue
-    ZonesAreasPresets:
-      _serializedList: []
-  - FloorPlanId: Plan 0
-    GridDimensions: {x: 15, y: 15}
-    ZonesConfigs:
-      _serializedList:
-      - Key: red
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: green
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: blue
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: cian
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: mag
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: yel
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: vomito
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: oran
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: purple
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: pink
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-    Adjacencies:
-      _serializedList:
-      - Key: green
-        Value:
-        - blue
-        - cian
-        - mag
     ZonesAreasPresets:
       _serializedList: []
