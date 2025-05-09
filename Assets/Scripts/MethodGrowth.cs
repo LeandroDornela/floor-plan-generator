@@ -698,22 +698,10 @@ public partial class MethodGrowth : FPGenerationMethod
 #endregion
 
 
-// TODO: Ha redundancia na comparação.
+
 bool IsConnectivityConstraintMeet(FloorPlanManager floorPlanManager)
 {
-    foreach(Zone zone in floorPlanManager.ZonesInstances.Values)
-    {
-        // I the zone don't have adjacent zones, skip it.
-        if(zone.AdjacentZones.Count == 0) continue;
-
-        if(!zone.AreAllAdjacenciesMeet(floorPlanManager.CellsGrid))
-        {
-            UnityEngine.Debug.LogError($"Adjacency constraint not meet for zone {zone.ZoneId}.");
-            return false;
-        }
-    }
-
-    return true;
+    return floorPlanManager.AreAllAdjacenciesMeet();
 }
     
 #region ========== AUXILIARY METHODS ==========

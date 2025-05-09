@@ -255,7 +255,96 @@ public class Zone // similar a uma estrutura de nos em arvore
     }
 
 
-    public bool AreAllAdjacenciesMeet(CellsGrid cellsGrid)
+    public bool IsAdjacentTo(CellsGrid cellsGrid, Zone adjZone)
+    {
+        Debug.Log($"======> Checking adjacency between {ZoneId} and {adjZone.ZoneId}");
+
+        for(int i = 0; i < _borderCells.Length; i++)
+        {
+            Debug.LogWarning($"Border cell: {i}");
+
+            Cell currentBorderCell = _borderCells[i];
+            Vector2Int curBorderCellGridPos = currentBorderCell.GridPosition;
+            Cell cellToCheck;
+
+            // Up
+            if(cellsGrid.GetCell(curBorderCellGridPos.x, curBorderCellGridPos.y - 1, out cellToCheck))
+            {
+                Debug.Log($"check up. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x},{curBorderCellGridPos.y - 1}]");
+
+                Zone adjParentZone = cellToCheck.Zone;
+                while(adjParentZone != null)
+                {
+                    if(adjParentZone.ZoneId == adjZone.ZoneId)
+                    {
+                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
+                        return true;
+                    }
+
+                    adjParentZone = adjParentZone.ParentZone;
+                }                
+            }
+
+            // Down
+            if(cellsGrid.GetCell(curBorderCellGridPos.x, curBorderCellGridPos.y + 1, out cellToCheck))
+            {
+                Debug.Log($"check down. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x},{curBorderCellGridPos.y + 1}]");
+
+                Zone adjParentZone = cellToCheck.Zone;
+                while(adjParentZone != null)
+                {
+                    if(adjParentZone.ZoneId == adjZone.ZoneId)
+                    {
+                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
+                        return true;
+                    }
+
+                    adjParentZone = adjParentZone.ParentZone;
+                }
+            }
+
+            // Left
+            if(cellsGrid.GetCell(curBorderCellGridPos.x - 1, curBorderCellGridPos.y, out cellToCheck))
+            {
+                Debug.Log($"check left. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x - 1},{curBorderCellGridPos.y}]");
+
+                Zone adjParentZone = cellToCheck.Zone;
+                while(adjParentZone != null)
+                {
+                    if(adjParentZone.ZoneId == adjZone.ZoneId)
+                    {
+                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
+                        return true;
+                    }
+
+                    adjParentZone = adjParentZone.ParentZone;
+                }
+            }
+
+            // Right
+            if(cellsGrid.GetCell(curBorderCellGridPos.x + 1, curBorderCellGridPos.y, out cellToCheck))
+            {
+                Debug.Log($"check right. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x + 1},{curBorderCellGridPos.y}]");
+
+                Zone adjParentZone = cellToCheck.Zone;
+                while(adjParentZone != null)
+                {
+                    if(adjParentZone.ZoneId == adjZone.ZoneId)
+                    {
+                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
+                        return true;
+                    }
+
+                    adjParentZone = adjParentZone.ParentZone;
+                }
+            }
+        }
+        
+        return false;
+    }
+
+/*
+    private bool AreAllAdjacenciesMeet(CellsGrid cellsGrid)
     {
         if(_borderCells.Length == 0)
         {
@@ -358,7 +447,7 @@ public class Zone // similar a uma estrutura de nos em arvore
 
         return false;
     }
-
+*/
 #endregion
 
 
@@ -453,6 +542,8 @@ public class Zone // similar a uma estrutura de nos em arvore
         {
             Cell neighborCell;
 
+            bool cellAdded = false;
+
             for(int x = -1; x <= 1; x++)
             {
                 for(int y = -1; y <= 1; y++)
@@ -463,8 +554,12 @@ public class Zone // similar a uma estrutura de nos em arvore
                       (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
                     {
                         borderCells.Add(cell);
+                        cellAdded = true;
+                        break;
                     }
                 }
+
+                if(cellAdded) break; // Break the iteration to void adding the same cell multiple times.
             }
         }
 

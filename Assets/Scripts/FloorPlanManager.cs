@@ -29,6 +29,9 @@ public class FloorPlanManager
     private Dictionary<string, Zone> _zonesInstances;
     private bool _initialized = false;
 
+    //Storing adjacencies to facilitate the adj. checking without redundance.
+    private Dictionary<string, string[]> _adjacencies;
+
 
     public string FloorPlanId => _floorPlanId;
     public CellsGrid CellsGrid => _cellsGrid;
@@ -65,6 +68,8 @@ public class FloorPlanManager
         _zonesInstances = new Dictionary<string, Zone>(); // a list/dictionary of all the zones instances, identified by the zone id.
 
         _cellsGrid = new CellsGrid(floorPlanConfig.GridDimensions);
+
+        _adjacencies = floorPlanConfig.Adjacencies;
 
         CreateZonesHierarchy(floorPlanConfig.ZonesConfigs, floorPlanConfig.Adjacencies, _cellsGrid);
 
@@ -306,6 +311,28 @@ public class FloorPlanManager
         {
             return false;
         }
+    }
+
+
+    public bool AreAllAdjacenciesMeet()
+    {
+        foreach(var adjArray in _adjacencies)
+        {
+            string currentZoneId = adjArray.Key;
+
+            foreach(string adjZoneId in adjArray.Value)
+            {
+                if(!_zonesInstances[currentZoneId].IsAdjacentTo(_cellsGrid, _zonesInstances[adjZoneId]))
+                {
+                    Debug.LogWarning($"Adjacency constraint not meetfor zone {currentZoneId} and {adjZoneId}");
+                    return false;
+                }
+            }
+
+            Debug.LogWarning($"All adjacency constraints meet for zone {currentZoneId}");
+        }
+        
+        return true;
     }
 
 
