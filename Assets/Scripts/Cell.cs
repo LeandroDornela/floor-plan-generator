@@ -7,11 +7,13 @@ public class Cell // dando preferencia para classes para passar por ref
 {
     private Zone _zone;
     private Vector2Int _gridPosition;
+    private bool _hasDoor = false;
 
-    public Dictionary<string, string> atributos;
+    //public Dictionary<string, string> atributos;
 
     public Zone Zone => _zone;
     public Vector2Int GridPosition => _gridPosition;
+    public bool HasDoor => _hasDoor;
 
 
     public Cell(int gridPositionX, int gridPositionY, Zone zone = null)
@@ -19,7 +21,7 @@ public class Cell // dando preferencia para classes para passar por ref
         _gridPosition = new Vector2Int(gridPositionX, gridPositionY);
         _zone = zone;
 
-        atributos = new Dictionary<string, string>();
+        //atributos = new Dictionary<string, string>();
     }
 
     public void SetZone(Zone newZone)
@@ -30,6 +32,12 @@ public class Cell // dando preferencia para classes para passar por ref
     public bool IsInZone(Zone zoneToCheck)
     {
         return zoneToCheck == _zone;
+    }
+
+
+    public void SetDoor()
+    {
+        _hasDoor = true;
     }
 
     public List<Zone> GetParentZonesHierarchy()

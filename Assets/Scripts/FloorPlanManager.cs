@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,6 +41,7 @@ public class FloorPlanManager
     /// </summary>
     public Zone RootZone => _rootZone;
     public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
+    public Dictionary<string, string[]> AdjacencyRules => _adjacencies;
 
 
     public FloorPlanManager(FloorPlanData floorPlanConfig)
@@ -314,6 +316,7 @@ public class FloorPlanManager
     }
 
 
+    [Obsolete]
     public bool AreAllAdjacenciesMeet()
     {
         foreach(var adjArray in _adjacencies)

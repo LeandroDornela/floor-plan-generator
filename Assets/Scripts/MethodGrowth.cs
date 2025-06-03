@@ -698,10 +698,28 @@ public partial class MethodGrowth : FPGenerationMethod
 #endregion
 
 
-
+[Obsolete]
 bool IsConnectivityConstraintMeet(FloorPlanManager floorPlanManager)
 {
     return floorPlanManager.AreAllAdjacenciesMeet();
+}
+
+// Will also check for adjacencies.
+bool PlaceDoors(FloorPlanManager floorPlanManager)
+{
+    foreach(var adjRule in floorPlanManager.AdjacencyRules)
+    {
+        // The zone that is represented by the key and have the "value" adjacentzones is
+        // the zone that will hold the doors!
+        string currentZoneId = adjRule.Key;
+
+        if(!floorPlanManager.ZonesInstances[currentZoneId].TryPlaceDoorForAdjacent(floorPlanManager.CellsGrid, adjRule.Value))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
     
 #region ========== AUXILIARY METHODS ==========
