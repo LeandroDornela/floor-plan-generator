@@ -224,16 +224,23 @@ public class Zone // similar a uma estrutura de nos em arvore
         return Area >= _areaRatio * _floorPlanManager.CellsGrid.Area;
     }
 
+
+    public float DistanceFromDesiredArea()
+    {
+        float desiredArea = _areaRatio * _floorPlanManager.CellsGrid.Area;
+        return desiredArea - Area;
+    }
+
     
     /// <summary>
     /// 
     /// </summary>
     /// <param name="zoneToTest"></param>
     /// <returns></returns>
-    public bool IsAdjacent(Zone zoneToTest)
-    {
-        return _adjacentZones.ContainsKey(zoneToTest.ZoneId);
-    }
+        public bool IsAdjacent(Zone zoneToTest)
+        {
+            return _adjacentZones.ContainsKey(zoneToTest.ZoneId);
+        }
 
 
     /// <summary>
