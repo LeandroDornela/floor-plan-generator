@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,16 +31,19 @@ namespace BuildingGenerator
 
         //Storing adjacencies to facilitate the adj. checking without redundance.
         private Dictionary<string, string[]> _adjacencies;
+        private List<CellsTuple> _wallCellsTuples;
 
+        
+        public string FloorPlanId => _floorPlanId;
+        public CellsGrid CellsGrid => _cellsGrid;
+        public List<CellsTuple> WallCellsTuples => _wallCellsTuples;
 
-    public string FloorPlanId => _floorPlanId;
-    public CellsGrid CellsGrid => _cellsGrid;
-    /// <summary>
-    /// The util floor plan zone, grid's cells outside this zone will not be used by the algorith.
-    /// </summary>
-    public Zone RootZone => _rootZone;
-    public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
-    public Dictionary<string, string[]> AdjacencyRules => _adjacencies;
+        
+        /// <summary>
+        /// The util floor plan zone, grid's cells outside this zone will not be used by the algorith.
+        /// </summary>
+        public Zone RootZone => _rootZone;
+        public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
 
 
         public FloorPlanManager(FloorPlanData floorPlanConfig)
@@ -72,6 +74,8 @@ namespace BuildingGenerator
             _cellsGrid = new CellsGrid(floorPlanConfig.GridDimensions);
 
             _adjacencies = floorPlanConfig.Adjacencies;
+
+            _wallCellsTuples = new List<CellsTuple>();
 
             CreateZonesHierarchy(floorPlanConfig.ZonesConfigs, floorPlanConfig.Adjacencies, _cellsGrid);
 
@@ -316,9 +320,8 @@ namespace BuildingGenerator
         }
 
 
-    [Obsolete]
-    public bool AreAllAdjacenciesMeet()
-    {
+        public bool AreAllAdjacenciesMeet()
+        {
         foreach(var adjArray in _adjacencies)
         {
             string currentZoneId = adjArray.Key;

@@ -66,11 +66,6 @@ public class VisualCell : MonoBehaviour
             }
 
             Handles.Label(transform.position, $"[{transform.position.x}, {Mathf.Abs(transform.position.z)}]\n{zoneId}");
-            if(_cell.HasDoor)
-            {
-                Gizmos.color = Color.black;
-                Gizmos.DrawWireSphere(transform.position, 0.3f);
-            }
         }
     }
 }

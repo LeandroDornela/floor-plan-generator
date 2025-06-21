@@ -203,12 +203,6 @@ public class Zone // similar a uma estrutura de nos em arvore
         }
     }
 
-
-    public void SetDoorAt(Cell cell)
-    {
-        cell.SetDoor();
-    }
-
 #endregion
 
 
@@ -290,9 +284,6 @@ public class Zone // similar a uma estrutura de nos em arvore
                 {
                     if(adjParentZone.ZoneId == adjZone.ZoneId)
                     {
-                        // >>>>>>>>>>>>>> TEMP <<<<<<<<<<<<<<<
-                        currentBorderCell.SetDoor();
-
                         // Is adjacent to at least one cell of the adjacent zone, so its valid.
                         return true;
                     }
@@ -311,9 +302,6 @@ public class Zone // similar a uma estrutura de nos em arvore
                 {
                     if(adjParentZone.ZoneId == adjZone.ZoneId)
                     {
-                        // >>>>>>>>>>>>>> TEMP <<<<<<<<<<<<<<<
-                        currentBorderCell.SetDoor();
-
                         // Is adjacent to at least one cell of the adjacent zone, so its valid.
                         return true;
                     }
@@ -332,10 +320,6 @@ public class Zone // similar a uma estrutura de nos em arvore
                 {
                     if(adjParentZone.ZoneId == adjZone.ZoneId)
                     {
-                        // >>>>>>>>>>>>>> TEMP <<<<<<<<<<<<<<<
-                        currentBorderCell.SetDoor();
-
-
                         // Is adjacent to at least one cell of the adjacent zone, so its valid.
                         return true;
                     }
@@ -354,9 +338,6 @@ public class Zone // similar a uma estrutura de nos em arvore
                 {
                     if(adjParentZone.ZoneId == adjZone.ZoneId)
                     {
-                        // >>>>>>>>>>>>>> TEMP <<<<<<<<<<<<<<<
-                        currentBorderCell.SetDoor();
-
                         // Is adjacent to at least one cell of the adjacent zone, so its valid.
                         return true;
                     }
@@ -500,114 +481,6 @@ public class Zone // similar a uma estrutura de nos em arvore
 
         _lBorderCells = lBorder;
         _isLShaped = true;
-
-        return true;
-    }
-
-
-    public bool TryPlaceDoorForZones(CellsGrid cellsGrid, string[] adjZonesIds)
-    {
-        // para cada celula da borda verifica se tem um vizinho correspondnete a zona adjacente atual sendo checada
-        // se não ha zona atual sendo checada define a primeira zona adjacente encontrada como sendo a zona atual sendo checada
-        // adiciona a celula ao array com celulas vizinhas
-        // avança para a prixma celula
-        // se na proxima celula não a current cell como vizinha, escollhe uma celula do array para criar uma porta
-        // cria a porta, limpa o array e define a proxima zona,  se a ceula não tem zona adjacente mantem zona adj atual
-        // a ser checada como indefinida até que se encontre uma celula que tenha uma viziniha adjacente
-        
-        for(int i = 0; i < _borderCells.Length; i++)
-        {
-            Debug.LogWarning($"Border cell: {i}");
-
-            Cell currentBorderCell = _borderCells[i];
-            Vector2Int curBorderCellGridPos = currentBorderCell.GridPosition;
-            Cell cellToCheck;
-
-            // Up
-            if(cellsGrid.GetCell(curBorderCellGridPos.x, curBorderCellGridPos.y - 1, out cellToCheck))
-            {
-                Debug.Log($"check up. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x},{curBorderCellGridPos.y - 1}]");
-
-                Zone adjParentZone = cellToCheck.Zone;
-                while(adjParentZone != null)
-                {
-                    //if(adjParentZone.ZoneId == adjZone.ZoneId)
-                    {
-                        // >>>>>>>>>>>>>> TEMP <<<<<<<<<<<<<<<
-                        currentBorderCell.SetDoor();
-
-                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
-                        return true;
-                    }
-
-                    adjParentZone = adjParentZone.ParentZone;
-                }                
-            }
-
-            // Down
-            if(cellsGrid.GetCell(curBorderCellGridPos.x, curBorderCellGridPos.y + 1, out cellToCheck))
-            {
-                Debug.Log($"check down. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x},{curBorderCellGridPos.y + 1}]");
-
-                Zone adjParentZone = cellToCheck.Zone;
-                while(adjParentZone != null)
-                {
-                    //if(adjParentZone.ZoneId == adjZone.ZoneId)
-                    {
-                        // >>>>>>>>>>>>>> TEMP <<<<<<<<<<<<<<<
-                        currentBorderCell.SetDoor();
-
-                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
-                        return true;
-                    }
-
-                    adjParentZone = adjParentZone.ParentZone;
-                }
-            }
-
-            // Left
-            if(cellsGrid.GetCell(curBorderCellGridPos.x - 1, curBorderCellGridPos.y, out cellToCheck))
-            {
-                Debug.Log($"check left. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x - 1},{curBorderCellGridPos.y}]");
-
-                Zone adjParentZone = cellToCheck.Zone;
-                while(adjParentZone != null)
-                {
-                    //if(adjParentZone.ZoneId == adjZone.ZoneId)
-                    {
-                        // >>>>>>>>>>>>>> TEMP <<<<<<<<<<<<<<<
-                        currentBorderCell.SetDoor();
-
-
-                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
-                        return true;
-                    }
-
-                    adjParentZone = adjParentZone.ParentZone;
-                }
-            }
-
-            // Right
-            if(cellsGrid.GetCell(curBorderCellGridPos.x + 1, curBorderCellGridPos.y, out cellToCheck))
-            {
-                Debug.Log($"check right. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x + 1},{curBorderCellGridPos.y}]");
-
-                Zone adjParentZone = cellToCheck.Zone;
-                while(adjParentZone != null)
-                {
-                    //if(adjParentZone.ZoneId == adjZone.ZoneId)
-                    {
-                        // >>>>>>>>>>>>>> TEMP <<<<<<<<<<<<<<<
-                        currentBorderCell.SetDoor();
-
-                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
-                        return true;
-                    }
-
-                    adjParentZone = adjParentZone.ParentZone;
-                }
-            }
-        }
 
         return true;
     }

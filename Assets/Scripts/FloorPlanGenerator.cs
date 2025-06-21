@@ -123,7 +123,7 @@ public class FloorPlanGenerator
         var elapsedMs = watch.ElapsedMilliseconds;
         UnityEngine.Debug.Log(elapsedMs);
 
-        //FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(_selectedFloorPlans[0]);
+        FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(_selectedFloorPlans[0]);
         
         return _selectedFloorPlans;
     }

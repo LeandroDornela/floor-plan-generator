@@ -69,7 +69,7 @@ public class CellsGrid // using class to facilitate passing values by reference
 
 
     /// <summary>
-    /// 
+    /// Return true if is a valid grid position but, the out cell still can be null.
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>

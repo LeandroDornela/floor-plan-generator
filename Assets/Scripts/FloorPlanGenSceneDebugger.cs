@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace BuildingGenerator
@@ -13,52 +14,76 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     private SerializedDictionary<string, Color> _zoneColors;
     private List<VisualCell> _cellsGraphicsInstances;
 
+        private FloorPlanManager _currentFloorPlan;
+
     //private string _gridPreview;
 
-    private static FloorPlanGenSceneDebugger _instance;
+        private static FloorPlanGenSceneDebugger _instance;
     public static FloorPlanGenSceneDebugger Instance => _instance;
+
+        public GameObject wallPrefab;
 
 
 
     private void Awake()
-    {
-        if(_instance != null && _instance != this)
         {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="floorPlan"></param>
-    public void OnFloorPlanUpdated(FloorPlanManager floorPlan)
-    {
-        if(_currentFloorPlanId != floorPlan.FloorPlanId)
-        {
-            SetNewFloorPlan(floorPlan);
-            return;
-        }
-
-        //_gridPreview = _floorPlanGenerator._currentFloorPlan.CellsGrid.GridToString();
-        
-        for(int i = 0; i < floorPlan.CellsGrid.Cells.Length; i++)
-        {
-            Zone cellZone = floorPlan.CellsGrid.Cells[i].Zone;
-            if(cellZone != null)
+            if (_instance != null && _instance != this)
             {
-                _cellsGraphicsInstances[i].SetColor(_zoneColors[cellZone.ZoneId], floorPlan.CellsGrid.Cells[i]);
+                Destroy(this.gameObject);
             }
             else
             {
-                _cellsGraphicsInstances[i].SetColor(Color.black, null);
+                _instance = this;
             }
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="floorPlan"></param>
+        public void OnFloorPlanUpdated(FloorPlanManager floorPlan)
+        {
+            if (_currentFloorPlanId != floorPlan.FloorPlanId)
+            {
+                SetNewFloorPlan(floorPlan);
+                return;
+            }
+
+            //_gridPreview = _floorPlanGenerator._currentFloorPlan.CellsGrid.GridToString();
+
+            for (int i = 0; i < floorPlan.CellsGrid.Cells.Length; i++)
+            {
+                Zone cellZone = floorPlan.CellsGrid.Cells[i].Zone;
+                if (cellZone != null)
+                {
+                    _cellsGraphicsInstances[i].SetColor(_zoneColors[cellZone.ZoneId], floorPlan.CellsGrid.Cells[i]);
+                }
+                else
+                {
+                    _cellsGraphicsInstances[i].SetColor(Color.black, null);
+                }
+            }
+
+            if (_currentFloorPlan != null)
+            {
+                foreach (CellsTuple cellsTuple in _currentFloorPlan.WallCellsTuples)
+                {
+                    Vector3 cellAPos = new Vector3(cellsTuple.CellA.GridPosition.x,
+                                                   0,
+                                                   -cellsTuple.CellA.GridPosition.y);
+                    Vector3 cellBPos = new Vector3(cellsTuple.CellB.GridPosition.x,
+                                                   0,
+                                                   -cellsTuple.CellB.GridPosition.y);
+
+                    Vector3 dif = cellAPos - cellBPos;
+                    dif.Scale(new Vector3(0.5f, 0.5f, 0.5f));
+                    Vector3 pos = cellBPos + dif;
+                    Quaternion rot = Quaternion.LookRotation(dif, Vector3.up);
+
+                    Instantiate(wallPrefab, new Vector3(pos.x, 0, pos.z), rot);
+                }
+            }
     }
 
 
@@ -69,6 +94,7 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     void SetNewFloorPlan(FloorPlanManager floorPlan)
     {
         _currentFloorPlanId = floorPlan.FloorPlanId;
+        _currentFloorPlan = floorPlan;
 
         ResetDebugger();
 
@@ -136,10 +162,47 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
     }
 
 
-    void OnDrawGizmos()
-    {
-        //if(!_initialized) { return; }
-        //Handles.Label(Vector3.zero, _gridPreview);
+        void OnDrawGizmos()
+        {
+            //if(!_initialized) { return; }
+            //Handles.Label(Vector3.zero, _gridPreview);
+
+            if (_currentFloorPlan != null)
+            {
+                foreach (CellsTuple cellsTuple in _currentFloorPlan.WallCellsTuples)
+                {
+                    // Converte posição da grid para o ambiente 3D.
+                    Vector3 cellAPos = new Vector3(cellsTuple.CellA.GridPosition.x,
+                                                   0,
+                                                   -cellsTuple.CellA.GridPosition.y);
+                    Vector3 cellBPos = new Vector3(cellsTuple.CellB.GridPosition.x,
+                                                   0,
+                                                   -cellsTuple.CellB.GridPosition.y);
+
+                    Vector3 dif = cellAPos - cellBPos;
+                    dif.Scale(new Vector3(0.5f, 0.5f, 0.5f));
+                    Vector3 pos = cellBPos + dif;
+                    Quaternion rot = Quaternion.LookRotation(dif, Vector3.up);
+
+                    //Instantiate(wallPrefab, new Vector3(pos.x, 0, pos.z), rot);
+                    
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawLine(cellAPos, cellBPos);
+                    //Gizmos.DrawWireSphere(new Vector3(pos.x, 1, -pos.y), 0.1f);
+                }
+
+                /*
+                // Debug borders
+                foreach (Zone zone in _currentFloorPlan.ZonesInstances.Values)
+                {
+                    foreach (Cell cell in zone.BorderCells)
+                    {
+                        Gizmos.color = Color.black;
+                        Gizmos.DrawWireSphere(new Vector3(cell.GridPosition.x, 1, -cell.GridPosition.y), 0.1f);
+                    }
+                }
+                */
+        }
     }
 }
 }
