@@ -6,26 +6,26 @@ using UnityEngine;
 
 namespace BuildingGenerator
 {
-public class FloorPlanGenSceneDebugger : MonoBehaviour
-{
-    [SerializeField] private GameObject _cellGraphicsPrefab;
+    public class FloorPlanGenSceneDebugger : MonoBehaviour
+    {
+        [SerializeField] private GameObject _cellGraphicsPrefab;
 
-    private string _currentFloorPlanId;
-    private SerializedDictionary<string, Color> _zoneColors;
-    private List<VisualCell> _cellsGraphicsInstances;
+        private string _currentFloorPlanId;
+        private SerializedDictionary<string, Color> _zoneColors;
+        private List<VisualCell> _cellsGraphicsInstances;
 
         private FloorPlanManager _currentFloorPlan;
 
-    //private string _gridPreview;
+        //private string _gridPreview;
 
         private static FloorPlanGenSceneDebugger _instance;
-    public static FloorPlanGenSceneDebugger Instance => _instance;
+        public static FloorPlanGenSceneDebugger Instance => _instance;
 
         public GameObject wallPrefab;
 
+        private List<GameObject> _wallInstances;
 
-
-    private void Awake()
+        private void Awake()
         {
             if (_instance != null && _instance != this)
             {
@@ -44,9 +44,10 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
         /// <param name="floorPlan"></param>
         public void OnFloorPlanUpdated(FloorPlanManager floorPlan)
         {
-            if (_currentFloorPlanId != floorPlan.FloorPlanId)
+            if(_currentFloorPlan != floorPlan)
             {
                 SetNewFloorPlan(floorPlan);
+                UpdateWalls();
                 return;
             }
 
@@ -65,101 +66,130 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
                 }
             }
 
+            UpdateWalls();
+        }
+
+        void UpdateWalls()
+        {
+            if (_wallInstances != null)
+            {
+                foreach (GameObject obj in _wallInstances)
+                {
+                    Destroy(obj);
+                }
+                _wallInstances.Clear();
+            }
+            else
+            {
+                _wallInstances = new List<GameObject>();
+            }
+
             if (_currentFloorPlan != null)
             {
                 foreach (CellsTuple cellsTuple in _currentFloorPlan.WallCellsTuples)
                 {
+                    if (cellsTuple.CellA == null || cellsTuple.CellB == null)
+                    {
+                        continue;
+                    }
+
                     Vector3 cellAPos = new Vector3(cellsTuple.CellA.GridPosition.x,
                                                    0,
                                                    -cellsTuple.CellA.GridPosition.y);
                     Vector3 cellBPos = new Vector3(cellsTuple.CellB.GridPosition.x,
                                                    0,
                                                    -cellsTuple.CellB.GridPosition.y);
-
                     Vector3 dif = cellAPos - cellBPos;
                     dif.Scale(new Vector3(0.5f, 0.5f, 0.5f));
                     Vector3 pos = cellBPos + dif;
                     Quaternion rot = Quaternion.LookRotation(dif, Vector3.up);
 
-                    Instantiate(wallPrefab, new Vector3(pos.x, 0, pos.z), rot);
+                    if (cellsTuple.HasDoor)
+                    {
+                        // prefab com porta
+                    }
+                    else
+                    {
+                        _wallInstances.Add(Instantiate(wallPrefab, new Vector3(pos.x, 0, pos.z), rot));
+                    }
                 }
             }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="floorPlan"></param>
-    void SetNewFloorPlan(FloorPlanManager floorPlan)
-    {
-        _currentFloorPlanId = floorPlan.FloorPlanId;
-        _currentFloorPlan = floorPlan;
-
-        ResetDebugger();
-
-        // Set the zone colors.
-        int numZones = floorPlan.ZonesInstances.Count;
-        float colorInterval = 1f/numZones;
-        _zoneColors = new SerializedDictionary<string, Color>();
-        float hueValue = 0;
-        foreach(var zone in floorPlan.ZonesInstances)
-        {
-            _zoneColors.Add(zone.Value.ZoneId, Color.HSVToRGB(hueValue, 0.8f, 0.8f));
-            hueValue += colorInterval;
         }
 
-        InstantiateCellsGraphics(floorPlan);
-    }
 
-
-    /// <summary>
-    /// 
-    /// </summary>
-    void ResetDebugger()
-    {
-        // Checa se existen celulas instanciadas, as destroi e limpa a lista.
-        if(_cellsGraphicsInstances != null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="floorPlan"></param>
+        void SetNewFloorPlan(FloorPlanManager floorPlan)
         {
-            foreach (var cell in _cellsGraphicsInstances)
+            _currentFloorPlanId = floorPlan.FloorPlanId;
+            _currentFloorPlan = floorPlan;
+
+            ResetDebugger();
+
+            // Set the zone colors.
+            int numZones = floorPlan.ZonesInstances.Count;
+            float colorInterval = 1f / numZones;
+            _zoneColors = new SerializedDictionary<string, Color>();
+            float hueValue = 0;
+            foreach (var zone in floorPlan.ZonesInstances)
             {
-                Destroy(cell.gameObject);
+                _zoneColors.Add(zone.Value.ZoneId, Color.HSVToRGB(hueValue, 0.8f, 0.8f));
+                hueValue += colorInterval;
             }
 
-            _cellsGraphicsInstances.Clear();
+            InstantiateCellsGraphics(floorPlan);
         }
-    }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="floorPlan"></param>
-    void InstantiateCellsGraphics(FloorPlanManager floorPlan)
-    {
-        _cellsGraphicsInstances = new List<VisualCell>();
-
-        // Instancia as celulas.
-        foreach (var cell in floorPlan.CellsGrid.Cells)
+        /// <summary>
+        /// 
+        /// </summary>
+        void ResetDebugger()
         {
-            VisualCell visualCell = Instantiate(_cellGraphicsPrefab,
-                                                new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y),
-                                                Quaternion.identity,
-                                                transform).GetComponent<VisualCell>();
-            
-            visualCell.Init(cell);
-            
-            if(cell.Zone != null)
+            // Checa se existen celulas instanciadas, as destroi e limpa a lista.
+            if (_cellsGraphicsInstances != null)
             {
-                visualCell.SetColor(_zoneColors[cell.Zone.ZoneId], cell);
+                foreach (var cell in _cellsGraphicsInstances)
+                {
+                    Destroy(cell.gameObject);
+                }
+
+                _cellsGraphicsInstances.Clear();
             }
-            else
-            {
-                visualCell.SetColor(Color.black, null);
-            }
-            _cellsGraphicsInstances.Add(visualCell);
         }
-    }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="floorPlan"></param>
+        void InstantiateCellsGraphics(FloorPlanManager floorPlan)
+        {
+            _cellsGraphicsInstances = new List<VisualCell>();
+
+            // Instancia as celulas.
+            foreach (var cell in floorPlan.CellsGrid.Cells)
+            {
+                VisualCell visualCell = Instantiate(_cellGraphicsPrefab,
+                                                    new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y),
+                                                    Quaternion.identity,
+                                                    transform).GetComponent<VisualCell>();
+
+                visualCell.Init(cell);
+
+                if (cell.Zone != null)
+                {
+                    visualCell.SetColor(_zoneColors[cell.Zone.ZoneId], cell);
+                }
+                else
+                {
+                    visualCell.SetColor(Color.black, null);
+                }
+                _cellsGraphicsInstances.Add(visualCell);
+            }
+        }
 
 
         void OnDrawGizmos()
@@ -184,14 +214,12 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
                     Vector3 pos = cellBPos + dif;
                     Quaternion rot = Quaternion.LookRotation(dif, Vector3.up);
 
-                    //Instantiate(wallPrefab, new Vector3(pos.x, 0, pos.z), rot);
-                    
                     Gizmos.color = Color.black;
                     Gizmos.DrawLine(cellAPos, cellBPos);
                     //Gizmos.DrawWireSphere(new Vector3(pos.x, 1, -pos.y), 0.1f);
                 }
 
-                /*
+                
                 // Debug borders
                 foreach (Zone zone in _currentFloorPlan.ZonesInstances.Values)
                 {
@@ -201,8 +229,8 @@ public class FloorPlanGenSceneDebugger : MonoBehaviour
                         Gizmos.DrawWireSphere(new Vector3(cell.GridPosition.x, 1, -cell.GridPosition.y), 0.1f);
                     }
                 }
-                */
+                
+            }
         }
     }
-}
 }

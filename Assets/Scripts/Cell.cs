@@ -16,11 +16,13 @@ namespace BuildingGenerator
     {
         private Zone _zone;
         private Vector2Int _gridPosition;
+        private bool _isBorderCell;
 
         public Dictionary<string, string> atributos;
 
         public Zone Zone => _zone;
         public Vector2Int GridPosition => _gridPosition;
+        public bool IsBorderCell => _isBorderCell;
 
 
         public Cell(int gridPositionX, int gridPositionY, Zone zone = null)
@@ -62,6 +64,11 @@ namespace BuildingGenerator
         public void SetZone(Zone newZone)
         {
             _zone = newZone;
+        }
+
+        public void SetIsBorderCell(bool value)
+        {
+            _isBorderCell = value;
         }
 
         public bool IsInZone(Zone zoneToCheck)

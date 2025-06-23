@@ -231,7 +231,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     /// </summary>
     /// <param name="zoneToTest"></param>
     /// <returns></returns>
-        public bool IsAdjacent(Zone zoneToTest)
+        public bool MustBeAdjacentTo(Zone zoneToTest)
         {
             return _adjacentZones.ContainsKey(zoneToTest.ZoneId);
         }
@@ -262,7 +262,7 @@ public class Zone // similar a uma estrutura de nos em arvore
     }
 
 
-    public bool IsAdjacentTo(CellsGrid cellsGrid, Zone adjZone)
+    public bool VerifyAdjacencyTo(CellsGrid cellsGrid, Zone adjZone)
     {
         Debug.Log($"======> Checking adjacency between {ZoneId} and {adjZone.ZoneId}");
 
@@ -551,6 +551,7 @@ public class Zone // similar a uma estrutura de nos em arvore
 
             bool cellAdded = false;
 
+            // Check the neighbors
             for(int x = -1; x <= 1; x++)
             {
                 for(int y = -1; y <= 1; y++)
@@ -560,6 +561,7 @@ public class Zone // similar a uma estrutura de nos em arvore
                     if(!cellsGrid.GetCell(cell.GridPosition.x + x, cell.GridPosition.y + y, out neighborCell) ||
                       (neighborCell?.Zone != this && neighborCell?.Zone?._parentZone != this))
                     {
+                        cell.SetIsBorderCell(true);
                         borderCells.Add(cell);
                         cellAdded = true;
                         break;

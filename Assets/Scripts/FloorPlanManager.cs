@@ -328,7 +328,7 @@ namespace BuildingGenerator
 
                 foreach(string adjZoneId in adjArray.Value)
                 {
-                    if(!_zonesInstances[currentZoneId].IsAdjacentTo(_cellsGrid, _zonesInstances[adjZoneId]))
+                    if(!_zonesInstances[currentZoneId].VerifyAdjacencyTo(_cellsGrid, _zonesInstances[adjZoneId]))
                     {
                         Debug.LogWarning($"Adjacency constraint not meetfor zone {currentZoneId} and {adjZoneId}");
                         return false;
