@@ -2,12 +2,10 @@
 
 using UnityEngine;
 using System.Threading;
-using UnityEditor;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-//using System.Diagnostics;
 
 
 namespace BuildingGenerator
@@ -32,6 +30,11 @@ namespace BuildingGenerator
         public bool _randomInitialArea = false;
         public bool _ignoreBorderWeights = false;
         public bool _ignoreAdjacentWeights = false;
+
+        [Header("Other")]
+        [Min(1)] public int _minLCorridorWidth = 2;
+
+        
 
         // RUN TIME 
         private CancellationTokenSource _cts;
@@ -160,14 +163,11 @@ namespace BuildingGenerator
             }
 
 
-            SetWalls(floorPlanManager);
-
-
-            // After generating all zones, check the connectivity.
-            if (!IsConnectivityConstraintMeet(floorPlanManager))
+            if (!SetWalls(floorPlanManager))
             {
                 return false;
             }
+
 
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
@@ -278,7 +278,7 @@ namespace BuildingGenerator
                 return zone.TryExpandShapeL(true);
             }
 
-            var largestFreeSpace = zone.GetLargestExpansionSpaceRect(true);
+            var largestFreeSpace = zone.GetLargestExpansionSpaceRect(false);
 
             // No side to expand
             if (largestFreeSpace.distance == 0)
@@ -287,7 +287,7 @@ namespace BuildingGenerator
             }
 
             // Check side is only part of a border, if is set to expand L, else expand rect.
-            if (!largestFreeSpace.isFullLine)
+            if (!largestFreeSpace.isFullLine && largestFreeSpace.freeLineDescription.NumberOfCells >= _minLCorridorWidth)
             {
                 zone.SetAsLShaped(largestFreeSpace.freeLineDescription);
                 return zone.TryExpandShapeL(true);
@@ -318,7 +318,7 @@ namespace BuildingGenerator
             var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>();
             foreach (var side in sides)
             {
-                if (zone.GetExpansionSpaceRect(side, true).isFullLine)
+                if (zone.GetExpansionSpaceRect(side, false).isFullLine)
                 {
                     if (zone.TryExpandShapeRect(side))
                     {
@@ -328,7 +328,7 @@ namespace BuildingGenerator
             }
 
             // If wasn't able to expand any side, try to start L
-            var largestFreeSide = zone.GetLargestExpansionSpaceRect(true);
+            var largestFreeSide = zone.GetLargestExpansionSpaceRect(false);
             if (largestFreeSide.distance == 0) // No free side
             {
                 return false;
@@ -337,9 +337,14 @@ namespace BuildingGenerator
             {
                 UnityEngine.Debug.LogWarning("At this point it should not have a full border available.");
             }
-            zone.SetAsLShaped(largestFreeSide.freeLineDescription);
-            return zone.TryExpandShapeL(true);
 
+            if (largestFreeSide.freeLineDescription.NumberOfCells >= _minLCorridorWidth)
+            {
+                zone.SetAsLShaped(largestFreeSide.freeLineDescription);
+                return zone.TryExpandShapeL(true);
+            }
+
+            return false;
         }
 
 
@@ -699,104 +704,6 @@ namespace BuildingGenerator
 
         #endregion
 
-
-        #region ========== POST PROCESSING ==========
-
-        bool IsConnectivityConstraintMeet(FloorPlanManager floorPlanManager)
-        {
-            return floorPlanManager.AreAllAdjacenciesMeet();
-        }
-
-
-        void SetWalls(FloorPlanManager floorPlanManager)
-        {
-            // Passar por todas as celulas
-            // se id x e y > checar as da direita e baixo apenas
-            // se id x || y == 0 checa tbm em cima e esquerda
-
-            CellsGrid grid = floorPlanManager.CellsGrid;
-
-            for (int y = 0; y < grid.Dimensions.y; y++)
-            {
-                for (int x = 0; x < grid.Dimensions.x; x++)
-                {
-                    // ==================== Cell check ====================
-                    Cell currentCell;
-                    if (!grid.GetCell(x, y, out currentCell))
-                    {
-                        Debug.LogError("Invalid dimensions.");
-                        return;
-                    }
-                    // By default should not happen since the grid is initialized with new cells instances.
-                    if (currentCell == null)
-                        currentCell = new Cell(x, y, null);
-                    if (currentCell.Zone != null && !currentCell.IsBorderCell)
-                        continue;
-                    if (currentCell.Zone != null && currentCell.Zone.HasChildrenZones)
-                        continue;
-
-                    // ==================== End cell check
-
-                    // ==================== Check the neighbors ====================
-                    // Will take a neighbor cell and if the zone of the neighbor is different from current zone, is a wall.
-                    Cell neighborCell;
-                    // Check on TOP only when on TOP matrix threshold.
-                    if (y == 0 && currentCell.Zone != null) // Cell is border at matrix left threshold.
-                    {
-                        floorPlanManager.WallCellsTuples.Add(new CellsTuple(currentCell, new Cell(currentCell.GridPosition.x, currentCell.GridPosition.y - 1, null), false));
-                    }
-
-                    // Check BOTTOM
-                    grid.GetCell(currentCell.GridPosition.x, currentCell.GridPosition.y + 1, out neighborCell);
-                    if (neighborCell == null)
-                    {
-                        neighborCell = new Cell(currentCell.GridPosition.x, currentCell.GridPosition.y + 1, null);
-                    }
-                    if (neighborCell?.Zone != currentCell?.Zone)
-                    {
-                        floorPlanManager.WallCellsTuples.Add(new CellsTuple(currentCell, neighborCell, false));
-                    }
-
-                    // Check on LEFT only when on LEFT matrix threshold.
-                    if (x == 0 && currentCell.Zone != null) // Cell is border at matrix left threshold.
-                    {
-                        floorPlanManager.WallCellsTuples.Add(new CellsTuple(currentCell, new Cell(currentCell.GridPosition.x - 1, currentCell.GridPosition.y, null), false));
-                    }
-                    // Check RIGHT
-                    grid.GetCell(currentCell.GridPosition.x + 1, currentCell.GridPosition.y, out neighborCell);
-                    if (neighborCell == null)
-                    {
-                        neighborCell = new Cell(currentCell.GridPosition.x + 1, currentCell.GridPosition.y, null);
-                    }
-                    if (neighborCell?.Zone != currentCell?.Zone)
-                    {
-                        floorPlanManager.WallCellsTuples.Add(new CellsTuple(currentCell, neighborCell, false));
-                    }
-                    // ==================== End check neighbors
-
-                    //currentCell.Zone.MustBeAdjacentTo(neighborCell.Zone);
-                }
-            }
-        }
-
-
-        [Obsolete]
-        bool PlaceDoors(FloorPlanManager floorPlanManager)
-        {
-            SetWalls(floorPlanManager);
-            // para cada config na lista de adjacencia
-            //      passa pelas celulas da borda salvando em arrays as celulas candidatas para porta que são vizinhas das zonas adjacentes
-
-
-            //floorPlanManager.WallCellsTuples.Add(new CellsTuple(floorPlanManager.CellsGrid.Cells[10], floorPlanManager.CellsGrid.Cells[11], true));
-            //floorPlanManager.WallCellsTuples.Add(new CellsTuple(floorPlanManager.CellsGrid.Cells[10], floorPlanManager.CellsGrid.Cells[22], true));
-
-
-
-            return true;
-        }
-
-        #endregion
 
         #region ========== AUXILIARY METHODS ==========
         /*

@@ -69,23 +69,27 @@ public class FloorPlanGenerator
             {
                 // >>>>> 1 FLOOR PLAN GENERATION - START
                 bool isValid = false;
-                // Try to generate a valid floor plan.
-                // Loop to try generate a valid floor plan to enter the candidates floor plans list.
-                for (int i = 0; i < _maxGenerationTries; i++)
-                {
-                    _currentFloorPlan = new FloorPlanManager(floorPlanConfig);
-                    isValid = await _generationMethod.Run(_currentFloorPlan, _sceneDebugger);
-                    if (isValid)
+                    // Try to generate a valid floor plan.
+                    // Loop to try generate a valid floor plan to enter the candidates floor plans list.
+                    int genTry;
+                    for (genTry = 0; genTry < _maxGenerationTries; genTry++)
                     {
-                        break;
+                        _currentFloorPlan = new FloorPlanManager(floorPlanConfig);
+                        Debug.Log("<color=yellow>Plan Gen start...</color>");
+                        isValid = await _generationMethod.Run(_currentFloorPlan, _sceneDebugger);
+                        if (isValid)
+                        {
+                            Debug.Log($"Total generation tries until a valid result: {genTry+1}/{_maxGenerationTries}");
+                            break;
+                        }
                     }
-                }
                 if (!isValid)
-                {
-                    // TODO: _generationMethod.Run cold return a struct as result with a string containing the reason of the failure.
-                    Debug.LogError($"Unable to generate the floor plan: {floorPlanConfig}. Try changing the settings.");
-                    return default;
-                }
+                    {
+                        // TODO: _generationMethod.Run cold return a struct as result with a string containing the reason of the failure.
+                        Debug.LogError($"Unable to generate the floor plan: {floorPlanConfig}. Try changing the settings.");
+                        _running = false;
+                        return default;
+                    }
                 _generatedRawFloorPlans.Add(_currentFloorPlan);
                 FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(_currentFloorPlan);
                 await UniTask.NextFrame();
@@ -95,6 +99,7 @@ public class FloorPlanGenerator
             if (_generatedRawFloorPlans.Count == 0)
             {
                 Debug.LogError("No valid floor plans generated.");
+                _running = false;
                 return default;
             }
 
@@ -106,7 +111,7 @@ public class FloorPlanGenerator
                 float fpScore = 0;
                 float regularZonesCount = floorPlan.RegularZonesCount();
                 float totalDesiredAreasDistance = Mathf.Clamp(floorPlan.TotalDistanceFromDesiredAreas(), 1, float.MaxValue); // Considering very small distances as irrelevant.
-                fpScore = regularZonesCount / totalDesiredAreasDistance;
+                    fpScore = regularZonesCount / totalDesiredAreasDistance;
                 if (fpScore > biggestScore)
                 {
                     biggestScore = fpScore;

@@ -13,116 +13,8 @@ MonoBehaviour:
   m_Name: TestingFloorPlansConfig
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
-  - FloorPlanId: Plan 1
-    GridDimensions: {x: 30, y: 30}
-    ZonesConfigs:
-      _serializedList:
-      - Key: A
-        Value:
-          _parentZoneId: 
-          _areaRatio: 1
-          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
-      - Key: B
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-      - Key: C
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.2
-          _presetArea: {fileID: 0}
-      - Key: D
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.2
-          _presetArea: {fileID: 0}
-      - Key: E
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-      - Key: F
-        Value:
-          _parentZoneId: B
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-      - Key: G
-        Value:
-          _parentZoneId: B
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-    Adjacencies:
-      _serializedList:
-      - Key: F
-        Value:
-        - G
-    ZonesAreasPresets:
-      _serializedList: []
-  - FloorPlanId: Plan 0
-    GridDimensions: {x: 10, y: 10}
-    ZonesConfigs:
-      _serializedList:
-      - Key: A
-        Value:
-          _parentZoneId: 
-          _areaRatio: 1
-          _presetArea: {fileID: 0}
-      - Key: B
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-      - Key: C
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-      - Key: D
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-      - Key: E
-        Value:
-          _parentZoneId: B
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-      - Key: F
-        Value:
-          _parentZoneId: B
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-      - Key: G
-        Value:
-          _parentZoneId: C
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-      - Key: H
-        Value:
-          _parentZoneId: C
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-      - Key: I
-        Value:
-          _parentZoneId: G
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-      - Key: J
-        Value:
-          _parentZoneId: G
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-    Adjacencies:
-      _serializedList:
-      - Key: E
-        Value:
-        - F
-        - H
-    ZonesAreasPresets:
-      _serializedList: []
   - FloorPlanId: Artigo-1
-    GridDimensions: {x: 12, y: 12}
+    GridDimensions: {x: 12, y: 8}
     ZonesConfigs:
       _serializedList:
       - Key: casa
@@ -130,41 +22,57 @@ MonoBehaviour:
           _parentZoneId: 
           _areaRatio: 1
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
       - Key: privado
         Value:
           _parentZoneId: casa
           _areaRatio: 0.5
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
       - Key: publico
         Value:
           _parentZoneId: casa
           _areaRatio: 0.5
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
       - Key: sala
         Value:
           _parentZoneId: publico
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 1
+          _hasWindows: 0
       - Key: cozinha
         Value:
           _parentZoneId: publico
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 1
+          _hasWindows: 0
       - Key: corredor
         Value:
           _parentZoneId: privado
-          _areaRatio: 0.1
+          _areaRatio: 0.01
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
       - Key: banheiro
         Value:
           _parentZoneId: privado
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
       - Key: quarto
         Value:
           _parentZoneId: privado
           _areaRatio: 0.25
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
     Adjacencies:
       _serializedList:
       - Key: sala
@@ -177,116 +85,326 @@ MonoBehaviour:
         - quarto
     ZonesAreasPresets:
       _serializedList: []
-  - FloorPlanId: Plan 2 - uncle w test
-    GridDimensions: {x: 15, y: 10}
+  - FloorPlanId: Plan 1
+    GridDimensions: {x: 30, y: 30}
     ZonesConfigs:
       _serializedList:
-      - Key: red
+      - Key: A
         Value:
           _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: blue
+          _areaRatio: 1
+          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: B
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: A
+          _areaRatio: 0.3
           _presetArea: {fileID: 0}
-      - Key: green
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: C
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: A
+          _areaRatio: 0.2
           _presetArea: {fileID: 0}
-      - Key: cian
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: D
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: A
+          _areaRatio: 0.2
           _presetArea: {fileID: 0}
-      - Key: mag
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: E
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: A
+          _areaRatio: 0.3
           _presetArea: {fileID: 0}
-      - Key: yel
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: F
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: B
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
-      - Key: vomito
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: G
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: B
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
-      - Key: oran
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: purple
-        Value:
-          _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: green
+      - Key: F
         Value:
-        - blue
-      - Key: cian
-        Value:
-        - yel
-        - oran
-        - purple
-        - mag
+        - G
     ZonesAreasPresets:
       _serializedList: []
-  - FloorPlanId: Real
-    GridDimensions: {x: 10, y: 5}
+  - FloorPlanId: Plan 0.1
+    GridDimensions: {x: 30, y: 30}
     ZonesConfigs:
       _serializedList:
-      - Key: red
+      - Key: A
         Value:
           _parentZoneId: 
-          _areaRatio: 0
-          _presetArea: {fileID: 0}
-      - Key: green
+          _areaRatio: 1
+          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: B
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: A
+          _areaRatio: 0.3
           _presetArea: {fileID: 0}
-      - Key: blue
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: C
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: A
+          _areaRatio: 0.3
           _presetArea: {fileID: 0}
-      - Key: cian
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: D
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: A
+          _areaRatio: 0.3
           _presetArea: {fileID: 0}
-      - Key: mag
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: E
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: B
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
-      - Key: yel
+          _hasOutsideDoor: 1
+          _hasWindows: 0
+      - Key: F
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: B
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
-      - Key: vomito
+          _hasOutsideDoor: 1
+          _hasWindows: 0
+      - Key: G
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: C
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
-      - Key: oran
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: H
         Value:
-          _parentZoneId: 
-          _areaRatio: 0
+          _parentZoneId: C
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: I
+        Value:
+          _parentZoneId: G
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: J
+        Value:
+          _parentZoneId: G
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: green
+      - Key: E
         Value:
-        - blue
+        - F
+        - H
+    ZonesAreasPresets:
+      _serializedList: []
+  - FloorPlanId: Plan 0
+    GridDimensions: {x: 10, y: 10}
+    ZonesConfigs:
+      _serializedList:
+      - Key: A
+        Value:
+          _parentZoneId: 
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: B
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: C
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: D
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: E
+        Value:
+          _parentZoneId: B
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: F
+        Value:
+          _parentZoneId: B
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: G
+        Value:
+          _parentZoneId: C
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: H
+        Value:
+          _parentZoneId: C
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: I
+        Value:
+          _parentZoneId: G
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: J
+        Value:
+          _parentZoneId: G
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+    Adjacencies:
+      _serializedList:
+      - Key: E
+        Value:
+        - F
+        - H
+    ZonesAreasPresets:
+      _serializedList: []
+  - FloorPlanId: Artigo-2
+    GridDimensions: {x: 15, y: 15}
+    ZonesConfigs:
+      _serializedList:
+      - Key: casa
+        Value:
+          _parentZoneId: 
+          _areaRatio: 1
+          _presetArea: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: publico
+        Value:
+          _parentZoneId: casa
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: privado1
+        Value:
+          _parentZoneId: casa
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: privado2
+        Value:
+          _parentZoneId: casa
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: sala
+        Value:
+          _parentZoneId: publico
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 1
+          _hasWindows: 0
+      - Key: cozinha
+        Value:
+          _parentZoneId: publico
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: quarto1
+        Value:
+          _parentZoneId: privado1
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: quarto2
+        Value:
+          _parentZoneId: privado1
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: banheiro1
+        Value:
+          _parentZoneId: privado1
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: quarto3
+        Value:
+          _parentZoneId: privado2
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: banheiro2
+        Value:
+          _parentZoneId: privado2
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: closed
+        Value:
+          _parentZoneId: privado2
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: corredor
+        Value:
+          _parentZoneId: privado1
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+    Adjacencies:
+      _serializedList: []
     ZonesAreasPresets:
       _serializedList: []

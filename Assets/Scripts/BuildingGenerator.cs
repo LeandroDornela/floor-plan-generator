@@ -25,11 +25,11 @@ public class BuildingGenerator : MonoBehaviour
 
 
     [ProButton]
-    public async void GenerateBuilding(int amount = 1)
+    public async void GenerateBuilding()
     {
         if(!Application.isPlaying) return;
 
-        var result = await _floorPlanGenerator.GenerateFloorPlans(_buildingDataManager.GetFloorPlanData(), amount);
+        var result = await _floorPlanGenerator.GenerateFloorPlans(_buildingDataManager.GetFloorPlanData(), 1);
         
         foreach(var plan in result)
          plan.PrintFloorPlan();

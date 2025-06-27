@@ -8,8 +8,10 @@ public class VisualCell : MonoBehaviour
     public Renderer _renderer;
     private Cell _cell;
 
+        public bool _drawDebug;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+        void Start()
     {
         if (_renderer == null) { _renderer = GetComponent<Renderer>(); }
     }
@@ -54,6 +56,8 @@ public class VisualCell : MonoBehaviour
 
         void OnDrawGizmos()
         {
+            if (!_drawDebug) return;
+
             string zoneId;
 
             if(_cell != null && _cell.Zone != null)

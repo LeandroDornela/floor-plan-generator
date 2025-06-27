@@ -44,6 +44,7 @@ namespace BuildingGenerator
         /// </summary>
         public Zone RootZone => _rootZone;
         public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
+        public Dictionary<string, string[]> Adjacencies => _adjacencies;
 
 
         public FloorPlanManager(FloorPlanData floorPlanConfig)
@@ -98,7 +99,7 @@ namespace BuildingGenerator
             // Create all zones.
             foreach(var zone in zonesConfigs)
             {
-                _zonesInstances.Add(zone.Key, new Zone(this, zone.Key, zone.Value.AreaRatio));
+                _zonesInstances.Add(zone.Key, new Zone(this, zone.Key, zone.Value.AreaRatio, zone.Value.HasOutsideDoor, zone.Value.HasWindows));
             }
 
             // Set the parents and children of the zones.
@@ -317,28 +318,6 @@ namespace BuildingGenerator
             {
                 return false;
             }
-        }
-
-
-        public bool AreAllAdjacenciesMeet()
-        {
-        foreach(var adjArray in _adjacencies)
-        {
-            string currentZoneId = adjArray.Key;
-
-                foreach(string adjZoneId in adjArray.Value)
-                {
-                    if(!_zonesInstances[currentZoneId].VerifyAdjacencyTo(_cellsGrid, _zonesInstances[adjZoneId]))
-                    {
-                        Debug.LogWarning($"Adjacency constraint not meetfor zone {currentZoneId} and {adjZoneId}");
-                        return false;
-                    }
-                }
-
-                Debug.LogWarning($"All adjacency constraints meet for zone {currentZoneId}");
-            }
-            
-            return true;
         }
 
 

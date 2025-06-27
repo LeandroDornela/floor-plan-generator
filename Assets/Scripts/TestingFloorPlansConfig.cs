@@ -11,17 +11,20 @@ public struct TestZoneConfig
     [SerializeField] private string _parentZoneId;
     [SerializeField] private float _areaRatio;
     [SerializeField] private Texture2D _presetArea;
+    [SerializeField] private bool _hasOutsideDoor;
+    [SerializeField] private bool _hasWindows;
+
 
     public ZoneData ToZoneConfig(Vector2Int gridDimensions)
-    {
-        int[] presetArea = null;
-        if(_presetArea != null)
         {
-            presetArea = TextureToIntArray(_presetArea, gridDimensions);
-        }
+            int[] presetArea = null;
+            if (_presetArea != null)
+            {
+                presetArea = TextureToIntArray(_presetArea, gridDimensions);
+            }
 
-        return new ZoneData(_parentZoneId, _areaRatio, presetArea);
-    }
+            return new ZoneData(_parentZoneId, _areaRatio, presetArea, _hasOutsideDoor, _hasWindows);
+        }
 
     public int[] TextureToIntArray(Texture2D texture, Vector2Int gridDimensions)
     {

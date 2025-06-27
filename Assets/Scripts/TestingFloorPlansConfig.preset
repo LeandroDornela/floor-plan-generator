@@ -1,0 +1,936 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TestingFloorPlansConfig
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 73704530b3912fd448623ce82d05b82e, type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.size
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].FloorPlanId
+    value: Artigo-1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].GridDimensions.x
+    value: 12
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].GridDimensions.y
+    value: 12
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.size
+    value: 8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[0].Key
+    value: casa
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[0].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[0].Value._areaRatio
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[0].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[1].Key
+    value: privado
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[1].Value._parentZoneId
+    value: casa
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[1].Value._areaRatio
+    value: 0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[1].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[2].Key
+    value: publico
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[2].Value._parentZoneId
+    value: casa
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[2].Value._areaRatio
+    value: 0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[2].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[3].Key
+    value: sala
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[3].Value._parentZoneId
+    value: publico
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[3].Value._areaRatio
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[3].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[4].Key
+    value: cozinha
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[4].Value._parentZoneId
+    value: publico
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[4].Value._areaRatio
+    value: 0.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[4].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[5].Key
+    value: corredor
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[5].Value._parentZoneId
+    value: privado
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[5].Value._areaRatio
+    value: 0.01
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[5].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[6].Key
+    value: banheiro
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[6].Value._parentZoneId
+    value: privado
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[6].Value._areaRatio
+    value: 0.15
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[6].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[7].Key
+    value: quarto
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[7].Value._parentZoneId
+    value: privado
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[7].Value._areaRatio
+    value: 0.25
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesConfigs._serializedList.Array.data[7].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.data[0].Key
+    value: sala
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.data[0].Value.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.data[0].Value.Array.data[0]'
+    value: cozinha
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.data[0].Value.Array.data[1]'
+    value: corredor
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.data[1].Key
+    value: corredor
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.data[1].Value.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.data[1].Value.Array.data[0]'
+    value: banheiro
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[0].Adjacencies._serializedList.Array.data[1].Value.Array.data[1]'
+    value: quarto
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[0].ZonesAreasPresets._serializedList.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].FloorPlanId
+    value: Plan 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].GridDimensions.x
+    value: 30
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].GridDimensions.y
+    value: 30
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.size
+    value: 7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[0].Key
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[0].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[0].Value._areaRatio
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[0].Value._presetArea
+    value: 
+    objectReference: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[1].Key
+    value: B
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[1].Value._parentZoneId
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[1].Value._areaRatio
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[1].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[2].Key
+    value: C
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[2].Value._parentZoneId
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[2].Value._areaRatio
+    value: 0.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[2].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[3].Key
+    value: D
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[3].Value._parentZoneId
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[3].Value._areaRatio
+    value: 0.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[3].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[4].Key
+    value: E
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[4].Value._parentZoneId
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[4].Value._areaRatio
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[4].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[5].Key
+    value: F
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[5].Value._parentZoneId
+    value: B
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[5].Value._areaRatio
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[5].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[6].Key
+    value: G
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[6].Value._parentZoneId
+    value: B
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[6].Value._areaRatio
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesConfigs._serializedList.Array.data[6].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].Adjacencies._serializedList.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].Adjacencies._serializedList.Array.data[0].Key
+    value: F
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].Adjacencies._serializedList.Array.data[0].Value.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[1].Adjacencies._serializedList.Array.data[0].Value.Array.data[0]'
+    value: G
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[1].ZonesAreasPresets._serializedList.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].FloorPlanId
+    value: Plan 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].GridDimensions.x
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].GridDimensions.y
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.size
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[0].Key
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[0].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[0].Value._areaRatio
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[0].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[1].Key
+    value: B
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[1].Value._parentZoneId
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[1].Value._areaRatio
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[1].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[2].Key
+    value: C
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[2].Value._parentZoneId
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[2].Value._areaRatio
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[2].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[3].Key
+    value: D
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[3].Value._parentZoneId
+    value: A
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[3].Value._areaRatio
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[3].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[4].Key
+    value: E
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[4].Value._parentZoneId
+    value: B
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[4].Value._areaRatio
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[4].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[5].Key
+    value: F
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[5].Value._parentZoneId
+    value: B
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[5].Value._areaRatio
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[5].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[6].Key
+    value: G
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[6].Value._parentZoneId
+    value: C
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[6].Value._areaRatio
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[6].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[7].Key
+    value: H
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[7].Value._parentZoneId
+    value: C
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[7].Value._areaRatio
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[7].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[8].Key
+    value: I
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[8].Value._parentZoneId
+    value: G
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[8].Value._areaRatio
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[8].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[9].Key
+    value: J
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[9].Value._parentZoneId
+    value: G
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[9].Value._areaRatio
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesConfigs._serializedList.Array.data[9].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].Adjacencies._serializedList.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].Adjacencies._serializedList.Array.data[0].Key
+    value: E
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].Adjacencies._serializedList.Array.data[0].Value.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[2].Adjacencies._serializedList.Array.data[0].Value.Array.data[0]'
+    value: F
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[2].Adjacencies._serializedList.Array.data[0].Value.Array.data[1]'
+    value: H
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[2].ZonesAreasPresets._serializedList.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].FloorPlanId
+    value: Plan 2 - uncle w test
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].GridDimensions.x
+    value: 15
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].GridDimensions.y
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.size
+    value: 9
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[0].Key
+    value: red
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[0].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[0].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[0].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[1].Key
+    value: blue
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[1].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[1].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[1].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[2].Key
+    value: green
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[2].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[2].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[2].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[3].Key
+    value: cian
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[3].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[3].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[3].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[4].Key
+    value: mag
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[4].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[4].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[4].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[5].Key
+    value: yel
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[5].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[5].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[5].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[6].Key
+    value: vomito
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[6].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[6].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[6].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[7].Key
+    value: oran
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[7].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[7].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[7].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[8].Key
+    value: purple
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[8].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[8].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesConfigs._serializedList.Array.data[8].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[0].Key
+    value: green
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[0].Value.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[0].Value.Array.data[0]'
+    value: blue
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[1].Key
+    value: cian
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[1].Value.Array.size
+    value: 4
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[1].Value.Array.data[0]'
+    value: yel
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[1].Value.Array.data[1]'
+    value: oran
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[1].Value.Array.data[2]'
+    value: purple
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[3].Adjacencies._serializedList.Array.data[1].Value.Array.data[3]'
+    value: mag
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[3].ZonesAreasPresets._serializedList.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].FloorPlanId
+    value: Real
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].GridDimensions.x
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].GridDimensions.y
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.size
+    value: 8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[0].Key
+    value: red
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[0].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[0].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[0].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[1].Key
+    value: green
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[1].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[1].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[1].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[2].Key
+    value: blue
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[2].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[2].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[2].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[3].Key
+    value: cian
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[3].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[3].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[3].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[4].Key
+    value: mag
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[4].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[4].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[4].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[5].Key
+    value: yel
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[5].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[5].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[5].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[6].Key
+    value: vomito
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[6].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[6].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[6].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[7].Key
+    value: oran
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[7].Value._parentZoneId
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[7].Value._areaRatio
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesConfigs._serializedList.Array.data[7].Value._presetArea
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].Adjacencies._serializedList.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].Adjacencies._serializedList.Array.data[0].Key
+    value: green
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].Adjacencies._serializedList.Array.data[0].Value.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: 'FloorPlanConfigs.Array.data[4].Adjacencies._serializedList.Array.data[0].Value.Array.data[0]'
+    value: blue
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: FloorPlanConfigs.Array.data[4].ZonesAreasPresets._serializedList.Array.size
+    value: 0
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []
+  m_CoupledType:
+    m_NativeTypeID: 0
+    m_ManagedTypePPtr: {fileID: 0}
+    m_ManagedTypeFallback: 
+  m_CoupledProperties: []

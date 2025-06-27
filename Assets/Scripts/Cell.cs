@@ -18,6 +18,8 @@ namespace BuildingGenerator
         private Vector2Int _gridPosition;
         private bool _isBorderCell;
 
+        // TODO: cache neighbors
+
         public Dictionary<string, string> atributos;
 
         public Zone Zone => _zone;
@@ -58,6 +60,20 @@ namespace BuildingGenerator
         {
             cellsGrid.GetCell(_gridPosition.x + xMod, _gridPosition.y + yMod, out Cell neighbor);
             return neighbor;
+        }
+
+
+        // TODO: after having direct ref to neigbors, change the way to calculate.
+        public int NumNeighborsInSameZone(CellsGrid cellsGrid)
+        {
+            int counter = 0;
+
+            if (GetTopNeighbor(cellsGrid)?.Zone == _zone) counter++;
+            if (GetBottomNeighbor(cellsGrid)?.Zone == _zone) counter++;
+            if (GetLeftNeighbor(cellsGrid)?.Zone == _zone) counter++;
+            if (GetRightNeighbor(cellsGrid)?.Zone == _zone) counter++;
+
+            return counter;
         }
 
 

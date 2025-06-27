@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 
 namespace BuildingGenerator
@@ -22,8 +23,14 @@ namespace BuildingGenerator
         public static FloorPlanGenSceneDebugger Instance => _instance;
 
         public GameObject wallPrefab;
+        public GameObject doorPrefab;
 
         private List<GameObject> _wallInstances;
+
+        public bool _debugBorders;
+        public bool _debugWallSharers;
+        public bool _debugWallLines;
+       
 
         private void Awake()
         {
@@ -106,7 +113,7 @@ namespace BuildingGenerator
 
                     if (cellsTuple.HasDoor)
                     {
-                        // prefab com porta
+                        _wallInstances.Add(Instantiate(doorPrefab, new Vector3(pos.x, 0, pos.z), rot));
                     }
                     else
                     {
@@ -214,19 +221,32 @@ namespace BuildingGenerator
                     Vector3 pos = cellBPos + dif;
                     Quaternion rot = Quaternion.LookRotation(dif, Vector3.up);
 
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawLine(cellAPos, cellBPos);
-                    //Gizmos.DrawWireSphere(new Vector3(pos.x, 1, -pos.y), 0.1f);
+                    if(_debugWallLines)
+                    {
+                        if(cellsTuple.IsOutsideBorder)
+                            Gizmos.color = Color.red;
+                        else
+                            Gizmos.color = Color.black;
+                        Gizmos.DrawLine(cellAPos, cellBPos);
+                    }
+
+                    if (_debugWallSharers)
+                    {
+                        Handles.color = Color.yellow;
+                        Handles.Label(new Vector3(pos.x, 3, pos.z), $"{cellsTuple.CellA.Zone?.ZoneId} \n {cellsTuple.CellB.Zone?.ZoneId}");
+                    }
+                    
                 }
 
-                
+
                 // Debug borders
+                if(_debugBorders)
                 foreach (Zone zone in _currentFloorPlan.ZonesInstances.Values)
                 {
                     foreach (Cell cell in zone.BorderCells)
                     {
                         Gizmos.color = Color.black;
-                        Gizmos.DrawWireSphere(new Vector3(cell.GridPosition.x, 1, -cell.GridPosition.y), 0.1f);
+                        Gizmos.DrawWireSphere(new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y), 0.1f);
                     }
                 }
                 

@@ -87,3 +87,6 @@ MonoBehaviour:
   _randomInitialArea: 0
   _ignoreBorderWeights: 0
   _ignoreAdjacentWeights: 0
+  _minLCorridorWidth: 3
+  _maxNeighborsToHaveDoor: 2
+  _outsideZoneId: outside

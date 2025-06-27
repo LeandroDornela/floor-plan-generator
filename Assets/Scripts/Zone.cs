@@ -35,6 +35,8 @@ public class Zone // similar a uma estrutura de nos em arvore
     private Zone _parentZone;
     private Dictionary<string, Zone> _childZones;
     private Dictionary<string, Zone> _adjacentZones;
+    private bool _hasOutsideDoor;
+    private bool _hasWindows;
     
 
     private List<Cell> _cellsList; // Celulas atualmente associadas a zona.
@@ -63,6 +65,8 @@ public class Zone // similar a uma estrutura de nos em arvore
     public Zone ParentZone => _parentZone;
     public Dictionary<string, Zone> ChildZones => _childZones;
     public Dictionary<string, Zone> AdjacentZones => _adjacentZones;
+    public bool HasOutsideDoor => _hasOutsideDoor;
+    public bool HasWindows => _hasWindows;
     public Cell[] Cells => _cellsArray;
     public Cell[] BorderCells
     {
@@ -75,17 +79,19 @@ public class Zone // similar a uma estrutura de nos em arvore
     public bool IsLShaped => _isLShaped;
     public bool IsBaked => _isBaked;
     public bool HasChildrenZones => _childZones?.Count > 0;
-    
 
-    public Zone(FloorPlanManager floorPlanManager, string zoneId, float areaRatio)
-    {
-        _floorPlanManager = floorPlanManager;
-        _zoneId = zoneId;
-        _areaRatio = areaRatio;
-        _parentZone = null;
-        _cellsList = new List<Cell>();
-        _childZones = new Dictionary<string, Zone>();
-        _adjacentZones = new Dictionary<string, Zone>();
+
+        public Zone(FloorPlanManager floorPlanManager, string zoneId, float areaRatio, bool hasOutsideDoor, bool hasWindows)
+        {
+            _floorPlanManager = floorPlanManager;
+            _zoneId = zoneId;
+            _areaRatio = areaRatio;
+            _parentZone = null;
+            _cellsList = new List<Cell>();
+            _childZones = new Dictionary<string, Zone>();
+            _adjacentZones = new Dictionary<string, Zone>();
+            _hasOutsideDoor = hasOutsideDoor;
+            _hasWindows = hasWindows;
     }
 
 #region =========== CELLS AND FAMILY ZONES SETTING ===========
@@ -261,200 +267,6 @@ public class Zone // similar a uma estrutura de nos em arvore
         return (float)_zoneBorders[Side.Top].NumberOfCells / _zoneBorders[Side.Left].NumberOfCells;
     }
 
-
-    public bool VerifyAdjacencyTo(CellsGrid cellsGrid, Zone adjZone)
-    {
-        Debug.Log($"======> Checking adjacency between {ZoneId} and {adjZone.ZoneId}");
-
-        for(int i = 0; i < _borderCells.Length; i++)
-        {
-            Debug.LogWarning($"Border cell: {i}");
-
-            Cell currentBorderCell = _borderCells[i];
-            Vector2Int curBorderCellGridPos = currentBorderCell.GridPosition;
-            Cell cellToCheck;
-
-            // Up
-            if(cellsGrid.GetCell(curBorderCellGridPos.x, curBorderCellGridPos.y - 1, out cellToCheck))
-            {
-                Debug.Log($"check up. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x},{curBorderCellGridPos.y - 1}]");
-
-                Zone adjParentZone = cellToCheck.Zone;
-                while(adjParentZone != null)
-                {
-                    if(adjParentZone.ZoneId == adjZone.ZoneId)
-                    {
-                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
-                        return true;
-                    }
-
-                    adjParentZone = adjParentZone.ParentZone;
-                }                
-            }
-
-            // Down
-            if(cellsGrid.GetCell(curBorderCellGridPos.x, curBorderCellGridPos.y + 1, out cellToCheck))
-            {
-                Debug.Log($"check down. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x},{curBorderCellGridPos.y + 1}]");
-
-                Zone adjParentZone = cellToCheck.Zone;
-                while(adjParentZone != null)
-                {
-                    if(adjParentZone.ZoneId == adjZone.ZoneId)
-                    {
-                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
-                        return true;
-                    }
-
-                    adjParentZone = adjParentZone.ParentZone;
-                }
-            }
-
-            // Left
-            if(cellsGrid.GetCell(curBorderCellGridPos.x - 1, curBorderCellGridPos.y, out cellToCheck))
-            {
-                Debug.Log($"check left. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x - 1},{curBorderCellGridPos.y}]");
-
-                Zone adjParentZone = cellToCheck.Zone;
-                while(adjParentZone != null)
-                {
-                    if(adjParentZone.ZoneId == adjZone.ZoneId)
-                    {
-                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
-                        return true;
-                    }
-
-                    adjParentZone = adjParentZone.ParentZone;
-                }
-            }
-
-            // Right
-            if(cellsGrid.GetCell(curBorderCellGridPos.x + 1, curBorderCellGridPos.y, out cellToCheck))
-            {
-                Debug.Log($"check right. cell of the zone:[{curBorderCellGridPos.x},{curBorderCellGridPos.y}], cell of adj: [{curBorderCellGridPos.x + 1},{curBorderCellGridPos.y}]");
-
-                Zone adjParentZone = cellToCheck.Zone;
-                while(adjParentZone != null)
-                {
-                    if(adjParentZone.ZoneId == adjZone.ZoneId)
-                    {
-                        // Is adjacent to at least one cell of the adjacent zone, so its valid.
-                        return true;
-                    }
-
-                    adjParentZone = adjParentZone.ParentZone;
-                }
-            }
-        }
-        
-        return false;
-    }
-
-/*
-    private bool AreAllAdjacenciesMeet(CellsGrid cellsGrid)
-    {
-        if(_borderCells.Length == 0)
-        {
-            Debug.Log($"No border cells for zone {ZoneId}.");
-            return false;
-        }
-
-        List<Zone> adjacenciesToFind = new List<Zone>(_adjacentZones.Values);
-
-        Debug.Log($"Looking for adj to zone {ZoneId}, total adj: {_adjacentZones.Count}");
-
-        for(int i = 0; i < _borderCells.Length; i++)
-        {
-            if(adjacenciesToFind.Count == 0)
-            {
-                // All adjacencies found.
-                Debug.Log($"Meet for zone {ZoneId}");
-                return true;
-            }
-
-            Cell cellToCheck;
-
-            // Up
-            if(cellsGrid.GetCell(_borderCells[i].GridPosition.x, _borderCells[i].GridPosition.y - 1, out cellToCheck))
-            {
-                Debug.Log($"check up. cell of the zone:[{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y}], cell of adj: [{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y - 1}]");
-
-                // Skip if cell is in this zone.
-                if(cellToCheck.Zone != this)
-                foreach(Zone zone in adjacenciesToFind)
-                {
-                    Debug.Log($"Zone: {ZoneId}, current adj: {zone.ZoneId}, cell of the zone:[{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y}], cell of adj: [{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y - 1}]");
-
-                    if(cellToCheck.Zone == zone)
-                    {
-                        Debug.Log("ok");
-                        adjacenciesToFind.Remove(zone);
-                        break;
-                    }
-                }
-            }
-            // Down
-            if(cellsGrid.GetCell(_borderCells[i].GridPosition.x, _borderCells[i].GridPosition.y + 1, out cellToCheck))
-            {
-                Debug.Log($"check down. cell of the zone:[{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y}], cell of adj: [{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y + 1}]");
-
-                // Skip if cell is in this zone.
-                if(cellToCheck.Zone != this)
-                foreach(Zone zone in adjacenciesToFind)
-                {
-                    Debug.Log($"Zone: {ZoneId}, current adj: {zone.ZoneId}, cell of the zone:[{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y}], cell of adj: [{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y + 1}]");
-
-                    if(cellToCheck.Zone == zone)
-                    {
-                        Debug.Log("ok");
-                        adjacenciesToFind.Remove(zone);
-                        break;
-                    }
-                }
-            }
-            // Left
-            if(cellsGrid.GetCell(_borderCells[i].GridPosition.x - 1, _borderCells[i].GridPosition.y, out cellToCheck))
-            {
-                Debug.Log($"check left. cell of the zone:[{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y}], cell of adj: [{_borderCells[i].GridPosition.x - 1},{_borderCells[i].GridPosition.y}]");
-
-                // Skip if cell is in this zone.
-                if(cellToCheck.Zone != this)
-                foreach(Zone zone in adjacenciesToFind)
-                {
-                    Debug.Log($"Zone: {ZoneId}, current adj: {zone.ZoneId}, cell of the zone:[{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y}], cell of adj: [{_borderCells[i].GridPosition.x - 1},{_borderCells[i].GridPosition.y}]");
-
-                    if(cellToCheck.Zone == zone)
-                    {
-                        Debug.Log("ok");
-                        adjacenciesToFind.Remove(zone);
-                        break;
-                    }
-                }
-            }
-            // Right
-            if(cellsGrid.GetCell(_borderCells[i].GridPosition.x + 1, _borderCells[i].GridPosition.y, out cellToCheck))
-            {
-                Debug.Log($"check right. cell of the zone:[{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y}], cell of adj: [{_borderCells[i].GridPosition.x + 1},{_borderCells[i].GridPosition.y}]");
-
-                // Skip if cell is in this zone.
-                if(cellToCheck.Zone != this)
-                foreach(Zone zone in adjacenciesToFind)
-                {
-                    Debug.Log($"Zone: {ZoneId}, current adj: {zone.ZoneId}, cell of the zone:[{_borderCells[i].GridPosition.x},{_borderCells[i].GridPosition.y}], cell of adj: [{_borderCells[i].GridPosition.x + 1},{_borderCells[i].GridPosition.y}]");
-
-                    if(cellToCheck.Zone == zone)
-                    {
-                        Debug.Log("ok");
-                        adjacenciesToFind.Remove(zone);
-                        break;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-*/
 #endregion
 
 
