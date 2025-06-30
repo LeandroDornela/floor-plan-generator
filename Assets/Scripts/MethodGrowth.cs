@@ -27,12 +27,11 @@ namespace BuildingGenerator
         public bool _ignoreDesiredAreaInRect = false;
         public bool _stopAtInitialPlot = false;
         public bool _skipToFinalResult = false;
-        public bool _randomInitialArea = false;
         public bool _ignoreBorderWeights = false;
         public bool _ignoreAdjacentWeights = false;
 
         [Header("Other")]
-        [Min(1)] public int _minLCorridorWidth = 2;
+        [Min(1)] public int _minLCorridorWidth = 2; // TODO: change to zone side percentage.
 
         
 

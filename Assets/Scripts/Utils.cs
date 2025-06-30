@@ -145,5 +145,31 @@ namespace BuildingGenerator
 
             Debug.Log(result);
         }
-}
+
+        public static Texture2D ResizeWithNearest(Texture2D source, int newWidth, int newHeight)
+        {
+            // Set up a temporary RenderTexture
+            RenderTexture rt = RenderTexture.GetTemporary(newWidth, newHeight);
+            rt.filterMode = FilterMode.Point; // Nearest-neighbor filtering
+
+            // Set source texture's filter mode
+            source.filterMode = FilterMode.Point;
+
+            // Copy source to RenderTexture
+            RenderTexture.active = rt;
+            Graphics.Blit(source, rt);
+
+            // Create new Texture2D and read pixels from RenderTexture
+            Texture2D result = new Texture2D(newWidth, newHeight, source.format, false);
+            result.filterMode = FilterMode.Point;
+            result.ReadPixels(new Rect(0, 0, newWidth, newHeight), 0, 0);
+            result.Apply();
+
+            // Clean up
+            RenderTexture.active = null;
+            RenderTexture.ReleaseTemporary(rt);
+
+            return result;
+        }
+    }
 }
