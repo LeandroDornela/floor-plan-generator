@@ -677,7 +677,7 @@ namespace BuildingGenerator
 
             if (!hasAnAvailableCell)
             {
-                UnityEngine.Debug.LogWarning($"{zoneToPlot.ZoneId} can't be plotted, setting all valid positions to weight 1 to continue the execution. Please try changing the area ratios.");
+                //UnityEngine.Debug.LogWarning($"{zoneToPlot.ZoneId} can't be plotted, setting all valid positions to weight 1 to continue the execution. Please try changing the area ratios.");
 
                 for (int i = 0; i < cellsToCalc.Length; i++)
                 {

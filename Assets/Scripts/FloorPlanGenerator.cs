@@ -75,7 +75,7 @@ public class FloorPlanGenerator
                     for (genTry = 0; genTry < _maxGenerationTries; genTry++)
                     {
                         _currentFloorPlan = new FloorPlanManager(floorPlanConfig);
-                        Debug.Log("<color=yellow>Plan Gen start...</color>");
+                        //Debug.Log("<color=yellow>Plan Gen start...</color>");
                         isValid = await _generationMethod.Run(_currentFloorPlan, _sceneDebugger);
                         if (isValid)
                         {

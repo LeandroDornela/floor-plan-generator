@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 81fcefef2acceaf479198f277388b2eb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 189718
+  packageName: Medieval house modular lite
+  packageVersion: 1.0
+  assetPath: Assets/Medieval_house_lite/Fire/LightFlickerEffect.cs
+  uploadId: 419335

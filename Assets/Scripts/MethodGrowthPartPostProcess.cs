@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Animations;
 
 namespace BuildingGenerator
 {
@@ -8,6 +9,8 @@ namespace BuildingGenerator
     {
         [Header("Post process")]
         [Range(0, 4)] public int _maxNeighborsToHaveDoor = 2;
+
+        private string _outsideZoneId = "outside";
 
         bool SetWalls(FloorPlanManager floorPlanManager)
         {
@@ -28,7 +31,7 @@ namespace BuildingGenerator
             {
                 for (int x = 0; x < grid.Dimensions.x; x++)
                 {
-                    // ==================== Cell check ====================
+                    // Validate Current Cell
                     Cell currentCell;
                     if (!grid.GetCell(x, y, out currentCell))
                     {
@@ -43,25 +46,15 @@ namespace BuildingGenerator
                     if (currentCell.Zone != null && currentCell.Zone.HasChildrenZones)
                         continue;
 
-                    // ==================== End cell check
 
                     // ==================== Check the neighbors ====================
                     // Will take a neighbor cell and if the zone of the neighbor is different from current zone, is a wall.
+                    // TODO: this section can be more simplifeild, create method for "check bottom and right" and the put
+                    // and 3 methods call in one new method.
                     Cell neighborCell;
 
-                    // Check on TOP only when on TOP matrix threshold.
-                    if (y == 0 && currentCell.Zone != null) // Cell is border at matrix left threshold.
-                    {
-                        // Neighbor cell is on top out.
-                        var newTuple = new CellsTuple(currentCell, new Cell(currentCell.GridPosition.x, currentCell.GridPosition.y - 1, null), false);
-                        newTuple.SetOutsideBorder(true);
-                        floorPlanManager.WallCellsTuples.Add(newTuple);
-
-                        if (currentCell.Zone.HasOutsideDoor && currentCell.NumNeighborsInSameZone(grid) <= _maxNeighborsToHaveDoor)
-                        {
-                            doorsCandidates.AddValue(currentCell.Zone.ZoneId, "outside", newTuple);
-                        }
-                    }
+                    // Evaluate TOP matrix threshold.
+                    EvaluateMatrixTopLeftThresholds(Axis.Y, y, currentCell, grid, floorPlanManager, doorsCandidates);
 
                     // Check BOTTOM
                     grid.GetCell(currentCell.GridPosition.x, currentCell.GridPosition.y + 1, out neighborCell);
@@ -75,19 +68,8 @@ namespace BuildingGenerator
 
                     //========================================================================= Horizontal check
 
-                    // Check on LEFT only when on LEFT matrix threshold.
-                    if (x == 0 && currentCell.Zone != null) // Cell is border at matrix left threshold.
-                    {
-                        // Neighbor cell is on left out.
-                        var newTuple = new CellsTuple(currentCell, new Cell(currentCell.GridPosition.x - 1, currentCell.GridPosition.y, null), false);
-                        newTuple.SetOutsideBorder(true);
-                        floorPlanManager.WallCellsTuples.Add(newTuple);
-                        if (currentCell.Zone.HasOutsideDoor &&
-                            currentCell.NumNeighborsInSameZone(grid) <= _maxNeighborsToHaveDoor)
-                        {
-                            doorsCandidates.AddValue(currentCell.Zone.ZoneId, "outside", newTuple);
-                        }
-                    }
+                    // Evaluate LEFT matrix threshold.
+                    EvaluateMatrixTopLeftThresholds(Axis.X, x, currentCell, grid, floorPlanManager, doorsCandidates);
 
                     // Check RIGHT
                     grid.GetCell(currentCell.GridPosition.x + 1, currentCell.GridPosition.y, out neighborCell);
@@ -98,7 +80,6 @@ namespace BuildingGenerator
                     }
 
                     CreateWallTupleForInternalMatrixCells(currentCell, neighborCell, grid, doorsCandidates, floorPlanManager);
-                    
                     // ==================== End check neighbors
                 }
             }
@@ -112,6 +93,48 @@ namespace BuildingGenerator
             }
 
             return true;
+        }
+
+
+        /// <summary>
+        /// For checking the neighbor cells on top and left of current cells, since the algorithm only checks the
+        /// right and bottom ones to avoid redundance. Will execute only if coordinate is 0 and the current cell is in a zone.
+        /// </summary>
+        /// <param name="axis">Axis.X or Axis.Y</param>
+        /// <param name="axisCoord">Must be 0.</param>
+        /// <param name="currentCell"></param>
+        /// <param name="grid"></param>
+        /// <param name="floorPlanManager"></param>
+        /// <param name="doorsCandidates"></param>
+        void EvaluateMatrixTopLeftThresholds(Axis axis, int axisCoord,  Cell currentCell, CellsGrid grid, FloorPlanManager floorPlanManager, DictionaryLists<string, CellsTuple> doorsCandidates)
+        {
+            Vector2Int axisModifier = new Vector2Int();
+
+            if (axis == Axis.X)
+            {
+                axisModifier = Vector2Int.right;
+            }
+            else if (axis == Axis.Y)
+            {
+                axisModifier = Vector2Int.up;
+            }
+            else
+            {
+                Debug.LogError("Invalid axis.");
+            }
+
+            if (axisCoord == 0 && currentCell.Zone != null) // Cell is border at matrix left threshold.
+            {
+                // Neighbor cell is on top out.
+                var newTuple = new CellsTuple(currentCell, new Cell(currentCell.GridPosition.x - 1 * axisModifier.x, currentCell.GridPosition.y - 1 * axisModifier.y, null), false);
+                newTuple.SetOutsideBorder(true);
+                floorPlanManager.WallCellsTuples.Add(newTuple);
+
+                if (currentCell.Zone.HasOutsideDoor && currentCell.NumNeighborsInSameZone(grid) <= _maxNeighborsToHaveDoor)
+                {
+                    doorsCandidates.AddValue(currentCell.Zone.ZoneId, _outsideZoneId, newTuple);
+                }
+            }
         }
 
 
@@ -132,12 +155,12 @@ namespace BuildingGenerator
                     if (currentCell.Zone != null && neighborCell.Zone == null && currentCell.Zone.HasOutsideDoor)
                     {
                         newTuple.SetOutsideBorder(true);
-                        doorsCandidates.AddValue(currentCell.Zone.ZoneId, "outside", newTuple);
+                        doorsCandidates.AddValue(currentCell.Zone.ZoneId, _outsideZoneId, newTuple);
                     }
                     else if (currentCell.Zone == null && neighborCell.Zone != null && neighborCell.Zone.HasOutsideDoor)
                     {
                         newTuple.SetOutsideBorder(true);
-                        doorsCandidates.AddValue("outside", neighborCell.Zone.ZoneId, newTuple);
+                        doorsCandidates.AddValue(_outsideZoneId, neighborCell.Zone.ZoneId, newTuple);
                     }
                 }
 
@@ -182,7 +205,7 @@ namespace BuildingGenerator
 
                 foreach (var adjacentZone in adjRule.Value)
                 {
-                    Debug.Log($"Checking adjacency for <b>{zone}</b> and <b>{adjacentZone}</b>...");
+                    //Debug.Log($"Checking adjacency for <b>{zone}</b> and <b>{adjacentZone}</b>...");
 
                     // This section documents how adjacency between zones relates to door placement candidates.
                     //
@@ -193,9 +216,14 @@ namespace BuildingGenerator
                     // Door candidate mapping:
                     // [zone1]
                     //   ├─ [zone2] -> [candTuple1], [candTuple2]
-                    //   └─ [zone3] -> [candTuple3], [candTuple4], [candTuple5]
                     // [zone2]
                     //   └─ [zone4] -> [candTuple6], [candTuple7]
+                    // [Zone3]
+                    //   └─ [Zone1] -> [candTuple3], [candTuple4], [candTuple5]
+                    //
+                    // Notice that, due to the way the elements are inserted in the dictionary they are not
+                    // identical(the 'outside' zone is the main reason), and for verification we will have
+                    // a PERMUTATION doing for ex. Zone1,Zone3 and Zone3,Zone1.
                     //
                     // Example:
                     // Checks whether [zone3], adjacent to [zone1], has at least one valid <candTuple>.
@@ -205,16 +233,16 @@ namespace BuildingGenerator
                         if (listOfDoorCandidates.Count == 0)
                         {
                             // At least one adjacency constraint not meet.
-                            Debug.LogError($"Post process: Adjacency not meet for <b>{zone}</b> and <b>{adjacentZone}</b>");
+                            //Debug.LogError($"Post process: Adjacency not meet for <b>{zone}</b> and <b>{adjacentZone}</b>");
                             return false;
                         }
                     }
                     else
                     {
-                        Debug.LogError($"<color=red>Adjacency not meet</color> for <b>{zone}</b> and <b>{adjacentZone}</b>");
+                        //Debug.LogError($"<color=red>Adjacency not meet</color> for <b>{zone}</b> and <b>{adjacentZone}</b>");
                         return false;
                     }
-                    Debug.Log($"<color=green>Adjacencies ok for the pair.</color>");
+                    //Debug.Log($"<color=green>Adjacencies ok for the pair.</color>");
                 }
             }
 

@@ -80,7 +80,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _adjacencyWeightMultiplier: 1
   _borderWeightMultiplier: 1
-  delay: 0.01
+  delay: 0.1
   _ignoreDesiredAreaInRect: 0
   _stopAtInitialPlot: 0
   _skipToFinalResult: 1
@@ -89,4 +89,3 @@ MonoBehaviour:
   _ignoreAdjacentWeights: 0
   _minLCorridorWidth: 3
   _maxNeighborsToHaveDoor: 2
-  _outsideZoneId: outside
