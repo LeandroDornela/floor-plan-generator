@@ -276,19 +276,23 @@ namespace BuildingGenerator
         /// <returns></returns>
         public bool AssignCellToZone(Cell cell, Zone zone)
         {
-            if(cell == null || zone == null)
+            if(cell == null)
             {
-                Debug.LogError("Invalid cell or zone.");
+                Debug.LogError("Invalid cell.");
                 return false;
             }
 
             // Remove previous set cell zone.
-            if(cell.Zone != null)
+            if (cell.Zone != null)
             {
                 cell.Zone.RemoveCell(cell);
             }
 
-            zone.AddCell(cell);
+            if (zone != null)
+            {
+                zone.AddCell(cell);
+            }
+            
             cell.SetZone(zone);
 
             return true;

@@ -13,15 +13,75 @@ MonoBehaviour:
   m_Name: TestingFloorPlansConfig
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
+  - FloorPlanId: Plan 1
+    GridDimensions: {x: 30, y: 30}
+    ZonesConfigs:
+      _serializedList:
+      - Key: A
+        Value:
+          _parentZoneId: 
+          _areaRatio: 1
+          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: B
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: C
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.2
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: D
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.2
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: E
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: F
+        Value:
+          _parentZoneId: B
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: G
+        Value:
+          _parentZoneId: B
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+    Adjacencies:
+      _serializedList:
+      - Key: F
+        Value:
+        - G
+    ZonesAreasPresets:
+      _serializedList: []
   - FloorPlanId: Artigo-1
-    GridDimensions: {x: 12, y: 10}
+    GridDimensions: {x: 15, y: 15}
     ZonesConfigs:
       _serializedList:
       - Key: casa
         Value:
           _parentZoneId: 
           _areaRatio: 1
-          _presetArea: {fileID: 2800000, guid: f89427c38e8592a4b99985d1a187d218, type: 3}
+          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
       - Key: privado
@@ -85,15 +145,15 @@ MonoBehaviour:
         - quarto
     ZonesAreasPresets:
       _serializedList: []
-  - FloorPlanId: Plan 1
-    GridDimensions: {x: 30, y: 30}
+  - FloorPlanId: Plan 0
+    GridDimensions: {x: 10, y: 10}
     ZonesConfigs:
       _serializedList:
       - Key: A
         Value:
           _parentZoneId: 
           _areaRatio: 1
-          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
+          _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
       - Key: B
@@ -106,21 +166,21 @@ MonoBehaviour:
       - Key: C
         Value:
           _parentZoneId: A
-          _areaRatio: 0.2
+          _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
       - Key: D
         Value:
           _parentZoneId: A
-          _areaRatio: 0.2
+          _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
       - Key: E
         Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
+          _parentZoneId: B
+          _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
@@ -133,16 +193,38 @@ MonoBehaviour:
           _hasWindows: 0
       - Key: G
         Value:
-          _parentZoneId: B
+          _parentZoneId: C
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: H
+        Value:
+          _parentZoneId: C
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: I
+        Value:
+          _parentZoneId: G
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: J
+        Value:
+          _parentZoneId: G
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: F
+      - Key: E
         Value:
-        - G
+        - F
+        - H
     ZonesAreasPresets:
       _serializedList: []
   - FloorPlanId: Artigo-2-opt
@@ -303,88 +385,6 @@ MonoBehaviour:
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
-          _hasWindows: 0
-      - Key: G
-        Value:
-          _parentZoneId: C
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: H
-        Value:
-          _parentZoneId: C
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: I
-        Value:
-          _parentZoneId: G
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: J
-        Value:
-          _parentZoneId: G
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-    Adjacencies:
-      _serializedList:
-      - Key: E
-        Value:
-        - F
-        - H
-    ZonesAreasPresets:
-      _serializedList: []
-  - FloorPlanId: Plan 0
-    GridDimensions: {x: 10, y: 10}
-    ZonesConfigs:
-      _serializedList:
-      - Key: A
-        Value:
-          _parentZoneId: 
-          _areaRatio: 1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: B
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: C
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: D
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: E
-        Value:
-          _parentZoneId: B
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: F
-        Value:
-          _parentZoneId: B
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
           _hasWindows: 0
       - Key: G
         Value:

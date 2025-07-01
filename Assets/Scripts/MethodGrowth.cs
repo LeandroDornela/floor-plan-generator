@@ -33,7 +33,6 @@ namespace BuildingGenerator
         [Header("Other")]
         [Min(1)] public int _minLCorridorWidth = 2; // TODO: change to zone side percentage.
 
-        
 
         // RUN TIME 
         private CancellationTokenSource _cts;
@@ -139,9 +138,6 @@ namespace BuildingGenerator
                 }
 
 
-                // ======================================================== CRESCIMENTO LIVRE(espaços restantes)
-                // while free spaces.
-
                 // <<<<<<<<<< end main grow logic
 
                 // Prepare the next set of zones to grow.
@@ -158,12 +154,32 @@ namespace BuildingGenerator
                     }
                 }
 
+                // When finish a zone subdivision re bake the dirty zones.
+                // TODO: don't need to check if all are dirty, at this point only the parent of _grownZones should be dirty.
+                ReBakeDirtyZones(floorPlanManager);
+
                 _grownZones.Clear();
             }
 
-
-            if (!SetWalls(floorPlanManager))
+            // For debug.
+            foreach (var zone in floorPlanManager.ZonesInstances)
             {
+                zone.Value.CheckZoneCellsConsistency();
+            }
+
+            // Can be done at the of the process os at the end of a hierarchy level. The fact of making at the end and the cells
+            // don't having a prior zone assigned is not a problem since the cell have only one parent zone when we add to the cell
+            // a leaf zone it will automatically have the parents of the leaf assigned to it.
+            if (!AssignMissingCells(floorPlanManager))
+            {
+                Debug.LogWarning("Failed to assign missing cells.");
+                return false;
+            }
+
+            // TODO: separate wall/door placement from connectivity check.
+            if (!PlaceWallsAndCheckConnectivity(floorPlanManager))
+            {
+                Debug.LogWarning("Failed to place walls.");
                 return false;
             }
 
@@ -704,7 +720,20 @@ namespace BuildingGenerator
         #endregion
 
 
+
         #region ========== AUXILIARY METHODS ==========
+        void ReBakeDirtyZones(FloorPlanManager floorPlanManager)
+        {
+            foreach (Zone zone in floorPlanManager.ZonesInstances.Values)
+            {
+                if (zone.IsDirty)
+                {
+                    Utils.ConsoleDebug.DevLog($"{zone.ZoneId} is dirty. Re-baking...");
+                    zone.Unbake();
+                    zone.Bake();
+                }
+            }
+        }
         /*
         /// <summary>
         /// 

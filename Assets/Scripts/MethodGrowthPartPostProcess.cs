@@ -12,7 +12,7 @@ namespace BuildingGenerator
 
         private string _outsideZoneId = "outside";
 
-        bool SetWalls(FloorPlanManager floorPlanManager)
+        bool PlaceWallsAndCheckConnectivity(FloorPlanManager floorPlanManager)
         {
             // Passar por todas as celulas
             // se id x e y > checar as da direita e baixo apenas
@@ -24,7 +24,7 @@ namespace BuildingGenerator
             // and to check if all zones have doors candidates for all required adjacencies.
             // - Initialize the dictionary using the adjacency lists so both can have similar structures, making easier tho
             // check adjacency meet at the end.
-            DictionaryLists<string, CellsTuple> doorsCandidates = new DictionaryLists<string, CellsTuple>(floorPlanManager.Adjacencies.Keys.ToArray());
+            DictionaryDictionaryList<string, CellsTuple> doorsCandidates = new DictionaryDictionaryList<string, CellsTuple>(floorPlanManager.Adjacencies.Keys.ToArray());
             //DictionaryLists<string, CellsTuple> doorsCandidates = new DictionaryLists<string, CellsTuple>();
 
             for (int y = 0; y < grid.Dimensions.y; y++)
@@ -106,7 +106,7 @@ namespace BuildingGenerator
         /// <param name="grid"></param>
         /// <param name="floorPlanManager"></param>
         /// <param name="doorsCandidates"></param>
-        void EvaluateMatrixTopLeftThresholds(Axis axis, int axisCoord,  Cell currentCell, CellsGrid grid, FloorPlanManager floorPlanManager, DictionaryLists<string, CellsTuple> doorsCandidates)
+        void EvaluateMatrixTopLeftThresholds(Axis axis, int axisCoord,  Cell currentCell, CellsGrid grid, FloorPlanManager floorPlanManager, DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
         {
             Vector2Int axisModifier = new Vector2Int();
 
@@ -138,7 +138,7 @@ namespace BuildingGenerator
         }
 
 
-        void CreateWallTupleForInternalMatrixCells(Cell currentCell, Cell neighborCell, CellsGrid grid, DictionaryLists<string, CellsTuple> doorsCandidates, FloorPlanManager floorPlanManager)
+        void CreateWallTupleForInternalMatrixCells(Cell currentCell, Cell neighborCell, CellsGrid grid, DictionaryDictionaryList<string, CellsTuple> doorsCandidates, FloorPlanManager floorPlanManager)
         {
             if (neighborCell?.Zone != currentCell?.Zone)
             {
@@ -182,7 +182,7 @@ namespace BuildingGenerator
         /// Randonly select doors from door candidates pairs to mark it as having a door.
         /// </summary>
         /// <param name="doorsCandidates"></param>
-        void RandomDoorSelection(DictionaryLists<string, CellsTuple> doorsCandidates)
+        void RandomDoorSelection(DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
         {
             foreach (var dictionary in doorsCandidates.Dictionary.Values)
             {
@@ -195,7 +195,7 @@ namespace BuildingGenerator
         }
 
 
-        bool AreAdjacencyConstsMeet(Dictionary<string, string[]> adjacencyRules, DictionaryLists<string, CellsTuple> doorsCandidates)
+        bool AreAdjacencyConstsMeet(Dictionary<string, string[]> adjacencyRules, DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
         {
             // Compare the adjacency rules with the door candidates, if all adjacency rules have at least one valid candidate door
             // it means all zones that shold be connected(have a door) actually have a door.
@@ -250,7 +250,7 @@ namespace BuildingGenerator
         }
         
 
-        void Debug_SetAllDoorCandidatesAsDoors(DictionaryLists<string, CellsTuple> doorsCandidates)
+        void Debug_SetAllDoorCandidatesAsDoors(DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
         {
             foreach (var dictionary in doorsCandidates.Dictionary.Values)
             {

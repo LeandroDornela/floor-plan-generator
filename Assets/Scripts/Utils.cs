@@ -5,7 +5,7 @@ namespace BuildingGenerator
 {
     public class Utils
     {
-        public class Random
+        public class Random : MonoBehaviour
         {
             // NOTE: Unity Random doesn't work outside the main thread.
 
@@ -55,6 +55,50 @@ namespace BuildingGenerator
                 return (float)random.NextDouble() * (max - min) + min;
 
                 //return UnityEngine.Random.Range(min, max);
+            }
+        }
+
+
+        [System.Serializable]
+        public class ConsoleDebug
+        {
+            [NaughtyAttributes.ShowNonSerializedField]
+            public static bool _enable = true;
+            public static bool _enableDevLogs = true; // Dev logs should be disabled in production
+            public static bool _enableLog = true;
+            public static bool _enableWarning = true;
+            public static bool _enableError = true;
+
+            // General and production logs
+            public static void Log(string val)
+            {
+                if (_enable && _enableLog && _enableDevLogs) Debug.Log(val);
+            }
+
+            public static void Warning(string val)
+            {
+                if (_enable && _enableWarning && _enableDevLogs) Debug.LogWarning(val);
+            }
+
+            public static void Error(string val)
+            {
+                if (_enable && _enableError && _enableDevLogs) Debug.LogError(val);
+            }
+            
+            // Development only logs
+            public static void DevLog(string val)
+            {
+                if (_enable && _enableLog && _enableDevLogs) Debug.Log(val);
+            }
+
+            public static void DevWarning(string val)
+            {
+                if (_enable && _enableWarning && _enableDevLogs) Debug.LogWarning(val);
+            }
+
+            public static void DevError(string val)
+            {
+                if (_enable && _enableError && _enableDevLogs) Debug.LogError(val);
             }
         }
 

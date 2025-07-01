@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DictionaryLists<TKey, TList>
+public class DictionaryDictionaryList<TKey, TList>
 {
     private Dictionary<TKey, DictionaryList<TKey, TList>> _dictionary;
 
     public Dictionary<TKey, DictionaryList<TKey, TList>> Dictionary => _dictionary;
 
-    public DictionaryLists()
+    public DictionaryDictionaryList()
     {
         _dictionary = new Dictionary<TKey, DictionaryList<TKey, TList>>();
     }
 
-    public DictionaryLists(TKey[] firstLayer)
+    public DictionaryDictionaryList(TKey[] firstLayer)
     {
         _dictionary = new Dictionary<TKey, DictionaryList<TKey, TList>>();
 

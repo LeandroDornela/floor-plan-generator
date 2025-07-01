@@ -87,4 +87,5 @@ MonoBehaviour:
   _ignoreBorderWeights: 0
   _ignoreAdjacentWeights: 0
   _minLCorridorWidth: 3
+  _unassignedCellsAction: 2
   _maxNeighborsToHaveDoor: 2

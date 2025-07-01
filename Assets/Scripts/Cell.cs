@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,10 @@ namespace BuildingGenerator
         public Zone Zone => _zone;
         public Vector2Int GridPosition => _gridPosition;
         public bool IsBorderCell => _isBorderCell;
+
+        public bool IsAssignedToLeafZone => (_zone != null)? _zone.IsLeaf : false; // Is assigned to a leaf zone if this zone don't have children.
+
+        public string _TESTVAR = "-";
 
 
         public Cell(int gridPositionX, int gridPositionY, Zone zone = null)

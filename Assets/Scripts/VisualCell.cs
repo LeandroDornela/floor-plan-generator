@@ -69,7 +69,7 @@ public class VisualCell : MonoBehaviour
                 zoneId = "";
             }
 
-            Handles.Label(transform.position, $"[{transform.position.x}, {Mathf.Abs(transform.position.z)}]\n{zoneId}");
+            Handles.Label(transform.position, $"[{transform.position.x}, {Mathf.Abs(transform.position.z)}]\n{zoneId},\n{_cell?._TESTVAR}");
         }
     }
 }
