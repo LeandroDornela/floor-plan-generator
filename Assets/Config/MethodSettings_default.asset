@@ -14,27 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _delay: 0.01
   _stopAtInitialPlot: 0
-  _skipToFinalResult: 0
+  _skipToFinalResult: 1
   _borderDistanceCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.19212434
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
+      time: 0.5
+      value: 0.5
+      inSlope: -2.9793541
+      outSlope: -2.9793541
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.052776147
+    - serializedVersion: 3
+      time: 1
+      value: -0.0017700195
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.15025358
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -44,7 +53,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -52,13 +61,22 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
+      time: 0.15
       value: 1
       inSlope: 0
-      outSlope: 0
+      outSlope: -4.4311924
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.36116326
+      outWeight: 0.026604403
+    - serializedVersion: 3
+      time: 1.0013428
+      value: 0
+      inSlope: -0.34737808
+      outSlope: -0.34737808
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.08201167
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -67,6 +85,7 @@ MonoBehaviour:
   _borderWeightMultiplier: 1
   _ignoreBorderWeights: 0
   _ignoreAdjacentWeights: 0
-  _minLCorridorWidth: 2
+  _minLCorridorWidth: 3
   _ignoreDesiredAreaInRect: 0
+  _unassignedCellsAction: 0
   _maxNeighborsToHaveDoor: 2

@@ -21,7 +21,7 @@ MonoBehaviour:
         Value:
           _parentZoneId: 
           _areaRatio: 1
-          _presetArea: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
+          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
       - Key: privado

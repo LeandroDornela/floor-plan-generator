@@ -332,7 +332,7 @@ namespace BuildingGenerator
             foreach (Zone zone in _zonesInstances.Values)
             {
                 // Ignore the zone if its not a leaf,or a "room".
-                if (zone.HasChildrenZones)
+                if (!zone.IsLeaf)
                 {
                     continue;
                 }
@@ -356,7 +356,7 @@ namespace BuildingGenerator
             foreach (Zone zone in _zonesInstances.Values)
             {
                 // Ignore the zone if its not a leaf,or a "room".
-                if (zone.HasChildrenZones)
+                if (!zone.IsLeaf)
                 {
                     continue;
                 }

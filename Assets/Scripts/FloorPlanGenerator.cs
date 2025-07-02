@@ -26,56 +26,58 @@ public class FloorPlanGenerator
 
     public FloorPlanManager _currentFloorPlan;
 
-    public MethodGrowthSettings _generationMethodSettings;
-
-    private MethodGrowth _generationMethod;
+    [NaughtyAttributes.Expandable] public MethodGrowthSettings _generationMethodSettings;
+    
 
     [Header("Debug")]
     [SerializeField] private FloorPlanGenSceneDebugger _sceneDebugger;
     [SerializeField] private bool _enableDebug = false;
 
     private bool _running = false;
+    
+
+    private MethodGrowth _generationMethod;
 
 
     public async UniTask<List<FloorPlanManager>> GenerateFloorPlans(FloorPlanData floorPlanConfig, int amount = 1)
-    {
-        if(_running)
         {
-            Debug.LogWarning("Generation in process, please wait.");
-            return default;
-        }
+            if (_running)
+            {
+                Debug.LogWarning("Generation in process, please wait.");
+                return default;
+            }
 
-        if(amount <= 0)
-        {
-            Debug.LogWarning("The amount of floor plans to generate must be at least 1.");
-            return default;
-        }
+            if (amount <= 0)
+            {
+                Debug.LogWarning("The amount of floor plans to generate must be at least 1.");
+                return default;
+            }
 
-        List<FloorPlanManager> _selectedFloorPlans = new List<FloorPlanManager>();
+            List<FloorPlanManager> _selectedFloorPlans = new List<FloorPlanManager>();
 
-        // TODO: temp
+            // TODO: temp
             //_currentFloorPlan = new FloorPlanManager(floorPlanConfig);
             //if(_sceneDebugger != null && _enableDebug == true) _sceneDebugger.Init(this, floorPlanConfig);
-        // =====
-        
-        _running = true;
-        var watch = System.Diagnostics.Stopwatch.StartNew();
-        // Random setup.
-        if(!_useSeed) _seed = (int)DateTime.Now.Ticks; // Keep like this to store current seed.
-        Utils.Random.SetSeed(_seed);
+            // =====
 
-        //await UniTask.SwitchToThreadPool();
+            _running = true;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            // Random setup.
+            if (!_useSeed) _seed = (int)DateTime.Now.Ticks; // Keep like this to store current seed.
+            Utils.Random.SetSeed(_seed);
 
-        // Loop for generating the final desired number of floor plans
-        for (int amountCount = 0; amountCount < amount; amountCount++)
-        {
-            List<FloorPlanManager> _generatedRawFloorPlans = new List<FloorPlanManager>();
-            // >>>>> N(_samples) FLOOR PLANS GENERATION - START
-            // Loop to generate the defined number of samples to select the best to enter the select array
-            for (int samplesCount = 0; samplesCount < _samples; samplesCount++)
+            //await UniTask.SwitchToThreadPool();
+
+            // Loop for generating the final desired number of floor plans
+            for (int amountCount = 0; amountCount < amount; amountCount++)
             {
-                // >>>>> 1 FLOOR PLAN GENERATION - START
-                bool isValid = false;
+                List<FloorPlanManager> _generatedRawFloorPlans = new List<FloorPlanManager>();
+                // >>>>> N(_samples) FLOOR PLANS GENERATION - START
+                // Loop to generate the defined number of samples to select the best to enter the select array
+                for (int samplesCount = 0; samplesCount < _samples; samplesCount++)
+                {
+                    // >>>>> 1 FLOOR PLAN GENERATION - START
+                    bool isValid = false;
                     // Try to generate a valid floor plan.
                     // Loop to try generate a valid floor plan to enter the candidates floor plans list.
                     int genTry;
@@ -87,58 +89,58 @@ public class FloorPlanGenerator
                         isValid = await _generationMethod.Run(_generationMethodSettings, _currentFloorPlan, _sceneDebugger);
                         if (isValid)
                         {
-                            Debug.Log($"Total generation tries until a valid result: {genTry+1}/{_maxGenerationTries}");
+                            Debug.Log($"Total generation tries until a valid result: {genTry + 1}/{_maxGenerationTries}");
                             break;
                         }
                     }
-                if (!isValid)
+                    if (!isValid)
                     {
                         // TODO: _generationMethod.Run cold return a struct as result with a string containing the reason of the failure.
                         Debug.LogError($"Unable to generate the floor plan: {floorPlanConfig}. Try changing the settings.");
                         _running = false;
                         return default;
                     }
-                _generatedRawFloorPlans.Add(_currentFloorPlan);
-                FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(_currentFloorPlan);
-                await UniTask.NextFrame();
-                // <<<<< 1 FLOOR PLAN GENERATION - END
-            }
-            // <<<<< N(_samples) FLOOR PLANS GENERATION - END
-            if (_generatedRawFloorPlans.Count == 0)
-            {
-                Debug.LogError("No valid floor plans generated.");
-                _running = false;
-                return default;
-            }
-
-            // Find the best results.
-            float biggestScore = 0;
-            FloorPlanManager selectedFloorPlan = _generatedRawFloorPlans[0];
-            foreach (FloorPlanManager floorPlan in _generatedRawFloorPlans)
-            {
-                float fpScore = 0;
-                float regularZonesCount = floorPlan.RegularZonesCount();
-                float totalDesiredAreasDistance = Mathf.Clamp(floorPlan.TotalDistanceFromDesiredAreas(), 1, float.MaxValue); // Considering very small distances as irrelevant.
-                    fpScore = regularZonesCount / totalDesiredAreasDistance;
-                if (fpScore > biggestScore)
-                {
-                    biggestScore = fpScore;
-                    selectedFloorPlan = floorPlan;
+                    _generatedRawFloorPlans.Add(_currentFloorPlan);
+                    FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(_currentFloorPlan);
+                    await UniTask.NextFrame();
+                    // <<<<< 1 FLOOR PLAN GENERATION - END
                 }
+                // <<<<< N(_samples) FLOOR PLANS GENERATION - END
+                if (_generatedRawFloorPlans.Count == 0)
+                {
+                    Debug.LogError("No valid floor plans generated.");
+                    _running = false;
+                    return default;
+                }
+
+                // Find the best results.
+                float biggestScore = 0;
+                FloorPlanManager selectedFloorPlan = _generatedRawFloorPlans[0];
+                foreach (FloorPlanManager floorPlan in _generatedRawFloorPlans)
+                {
+                    float fpScore = 0;
+                    float regularZonesCount = floorPlan.RegularZonesCount();
+                    float totalDesiredAreasDistance = Mathf.Clamp(floorPlan.TotalDistanceFromDesiredAreas(), 1, float.MaxValue); // Considering very small distances as irrelevant.
+                    fpScore = regularZonesCount / totalDesiredAreasDistance;
+                    if (fpScore > biggestScore)
+                    {
+                        biggestScore = fpScore;
+                        selectedFloorPlan = floorPlan;
+                    }
+                }
+                _selectedFloorPlans.Add(selectedFloorPlan);
             }
-            _selectedFloorPlans.Add(selectedFloorPlan);
+
+            //await UniTask.SwitchToMainThread();
+            // Random reset, optional.
+            Utils.Random.ClearSeed();
+            _running = false;
+            var elapsedMs = watch.ElapsedMilliseconds;
+            UnityEngine.Debug.Log(elapsedMs);
+
+            FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(_selectedFloorPlans[0]);
+
+            return _selectedFloorPlans;
         }
-
-        //await UniTask.SwitchToMainThread();
-        // Random reset, optional.
-        Utils.Random.ClearSeed();
-        _running = false;
-        var elapsedMs = watch.ElapsedMilliseconds;
-        UnityEngine.Debug.Log(elapsedMs);
-
-        FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(_selectedFloorPlans[0]);
-        
-        return _selectedFloorPlans;
-    }
 }
 }

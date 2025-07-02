@@ -43,7 +43,7 @@ namespace BuildingGenerator
                         currentCell = new Cell(x, y, null);
                     if (currentCell.Zone != null && !currentCell.IsBorderCell)
                         continue;
-                    if (currentCell.Zone != null && currentCell.Zone.HasChildrenZones)
+                    if (currentCell.Zone != null && !currentCell.Zone.IsLeaf)
                         continue;
 
 
