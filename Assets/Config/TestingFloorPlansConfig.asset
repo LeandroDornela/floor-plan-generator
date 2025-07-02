@@ -13,75 +13,15 @@ MonoBehaviour:
   m_Name: TestingFloorPlansConfig
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
-  - FloorPlanId: Plan 1
-    GridDimensions: {x: 30, y: 30}
-    ZonesConfigs:
-      _serializedList:
-      - Key: A
-        Value:
-          _parentZoneId: 
-          _areaRatio: 1
-          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: B
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: C
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.2
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: D
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.2
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: E
-        Value:
-          _parentZoneId: A
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: F
-        Value:
-          _parentZoneId: B
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: G
-        Value:
-          _parentZoneId: B
-          _areaRatio: 0.1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-    Adjacencies:
-      _serializedList:
-      - Key: F
-        Value:
-        - G
-    ZonesAreasPresets:
-      _serializedList: []
   - FloorPlanId: Artigo-1
-    GridDimensions: {x: 15, y: 15}
+    GridDimensions: {x: 12, y: 12}
     ZonesConfigs:
       _serializedList:
       - Key: casa
         Value:
           _parentZoneId: 
           _areaRatio: 1
-          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
+          _presetArea: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
       - Key: privado
@@ -143,6 +83,66 @@ MonoBehaviour:
         Value:
         - banheiro
         - quarto
+    ZonesAreasPresets:
+      _serializedList: []
+  - FloorPlanId: Plan 1
+    GridDimensions: {x: 30, y: 30}
+    ZonesConfigs:
+      _serializedList:
+      - Key: A
+        Value:
+          _parentZoneId: 
+          _areaRatio: 1
+          _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: B
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: C
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.2
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: D
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.2
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: E
+        Value:
+          _parentZoneId: A
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: F
+        Value:
+          _parentZoneId: B
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: G
+        Value:
+          _parentZoneId: B
+          _areaRatio: 0.1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+    Adjacencies:
+      _serializedList:
+      - Key: F
+        Value:
+        - G
     ZonesAreasPresets:
       _serializedList: []
   - FloorPlanId: Plan 0

@@ -688,6 +688,10 @@ PrefabInstance:
       propertyPath: _floorPlanGenerator._generationMethodType
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6802430932163227676, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
+      propertyPath: _floorPlanGenerator._generationMethodSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f775db6d507f9f46836a17068b515a9, type: 2}
     - target: {fileID: 7173197788445162609, guid: c7a1413f41c477343a7d8174bd51750f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

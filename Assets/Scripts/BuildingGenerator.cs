@@ -38,8 +38,6 @@ public class BuildingGenerator : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        _floorPlanGenerator?.OnDrawGizmos();
-
         Handles.Label(transform.position, counter.ToString());
     }
 }

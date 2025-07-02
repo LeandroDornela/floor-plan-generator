@@ -7,11 +7,11 @@ namespace BuildingGenerator
 {
     public partial class MethodGrowth
     {
-        [Header("Post process")]
-        [Range(0, 4)] public int _maxNeighborsToHaveDoor = 2;
-
-        private string _outsideZoneId = "outside";
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="floorPlanManager"></param>
+        /// <returns></returns>
         bool PlaceWallsAndCheckConnectivity(FloorPlanManager floorPlanManager)
         {
             // Passar por todas as celulas
@@ -106,7 +106,7 @@ namespace BuildingGenerator
         /// <param name="grid"></param>
         /// <param name="floorPlanManager"></param>
         /// <param name="doorsCandidates"></param>
-        void EvaluateMatrixTopLeftThresholds(Axis axis, int axisCoord,  Cell currentCell, CellsGrid grid, FloorPlanManager floorPlanManager, DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
+        void EvaluateMatrixTopLeftThresholds(Axis axis, int axisCoord, Cell currentCell, CellsGrid grid, FloorPlanManager floorPlanManager, DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
         {
             Vector2Int axisModifier = new Vector2Int();
 
@@ -130,7 +130,7 @@ namespace BuildingGenerator
                 newTuple.SetOutsideBorder(true);
                 floorPlanManager.WallCellsTuples.Add(newTuple);
 
-                if (currentCell.Zone.HasOutsideDoor && currentCell.NumNeighborsInSameZone(grid) <= _maxNeighborsToHaveDoor)
+                if (currentCell.Zone.HasOutsideDoor && currentCell.NumNeighborsInSameZone(grid) <= _settings.MaxNeighborsToHaveDoor)
                 {
                     doorsCandidates.AddValue(currentCell.Zone.ZoneId, _outsideZoneId, newTuple);
                 }
@@ -138,6 +138,14 @@ namespace BuildingGenerator
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentCell"></param>
+        /// <param name="neighborCell"></param>
+        /// <param name="grid"></param>
+        /// <param name="doorsCandidates"></param>
+        /// <param name="floorPlanManager"></param>
         void CreateWallTupleForInternalMatrixCells(Cell currentCell, Cell neighborCell, CellsGrid grid, DictionaryDictionaryList<string, CellsTuple> doorsCandidates, FloorPlanManager floorPlanManager)
         {
             if (neighborCell?.Zone != currentCell?.Zone)
@@ -169,12 +177,19 @@ namespace BuildingGenerator
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cellA"></param>
+        /// <param name="cellB"></param>
+        /// <param name="grid"></param>
+        /// <returns></returns>
         bool CanTupleHaveADoor(Cell cellA, Cell cellB, CellsGrid grid)
         {
             // One cell have a number of neighbors between a min and max value
             // Or the cell have a number of neighbors between a min and max value
-            return cellA.NumNeighborsInSameZone(grid) <= _maxNeighborsToHaveDoor ||
-                   cellB.NumNeighborsInSameZone(grid) <= _maxNeighborsToHaveDoor;
+            return cellA.NumNeighborsInSameZone(grid) <= _settings.MaxNeighborsToHaveDoor ||
+                   cellB.NumNeighborsInSameZone(grid) <= _settings.MaxNeighborsToHaveDoor;
         }
 
 
@@ -195,6 +210,12 @@ namespace BuildingGenerator
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="adjacencyRules"></param>
+        /// <param name="doorsCandidates"></param>
+        /// <returns></returns>
         bool AreAdjacencyConstsMeet(Dictionary<string, string[]> adjacencyRules, DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
         {
             // Compare the adjacency rules with the door candidates, if all adjacency rules have at least one valid candidate door
@@ -248,8 +269,12 @@ namespace BuildingGenerator
 
             return true;
         }
-        
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="doorsCandidates"></param>
         void Debug_SetAllDoorCandidatesAsDoors(DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
         {
             foreach (var dictionary in doorsCandidates.Dictionary.Values)

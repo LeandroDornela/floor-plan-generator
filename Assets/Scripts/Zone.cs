@@ -341,7 +341,7 @@ namespace BuildingGenerator
             _isBaked = true;
             _isDirty = false;
 
-            Utils.ConsoleDebug.DevLog("Baked.");
+            Utils.ConsoleDebug.DevLog($"{_zoneId} baked.");
         }
 
         /// <summary>

@@ -1,14 +1,9 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace BuildingGenerator
 {
     public partial class MethodGrowth
     {
-        public enum UnassignedCellsAction { Nullify, ToDesAreaDifference, ToNeighborCellCount, none }
-        public UnassignedCellsAction _unassignedCellsAction = UnassignedCellsAction.ToNeighborCellCount;
-
-
         /// <summary>
         /// Only for leaf zones. To support divisible zones check need to change the condition to unassigned cell.
         /// </summary>
@@ -86,21 +81,21 @@ namespace BuildingGenerator
                     }
                 }
 
-                switch (_unassignedCellsAction)
+                switch (_settings.UnassignedCellsAction)
                 {
-                    case UnassignedCellsAction.Nullify:
+                    case MethodGrowthSettings.UnassignedCellsActionEnum.Nullify:
                         selectedZone = null;
                         break;
-                    case UnassignedCellsAction.ToDesAreaDifference:
+                    case MethodGrowthSettings.UnassignedCellsActionEnum.ToDesAreaDifference:
                         selectedZone = zoneWithBiggestDesiredAreaDif;
                         break;
-                    case UnassignedCellsAction.ToNeighborCellCount:
+                    case MethodGrowthSettings.UnassignedCellsActionEnum.ToNeighborCellCount:
                         selectedZone = zoneWithMoreNeighbors;
                         break;
                 }
 
 
-                if (_unassignedCellsAction != UnassignedCellsAction.none)
+                if (_settings.UnassignedCellsAction != MethodGrowthSettings.UnassignedCellsActionEnum.none)
                 {
                     foreach (Cell cell in chunk)
                     {

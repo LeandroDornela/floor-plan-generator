@@ -13,15 +13,22 @@ public class FloorPlanGenerator
 
     public int _seed = 0;
 
-    // Maximum number that it will request the generation method to generate a valid floor plan.
+    /// <summary>
+    /// Maximum number that it will request the generation method to generate a valid floor plan.
+    /// </summary>
     public int _maxGenerationTries = 10;
-    // Number of valid floor plans to generate. At the end choose the best option from the samples.
-    // Worst case generation = (_maxGenerationTries * _samples)
+    
+    /// <summary>
+    /// Number of valid floor plans to generate. At the end choose the best option from the samples.
+    /// Worst case generation = (_maxGenerationTries * _samples)
+    /// </summary>
     public int _samples = 10;
 
     public FloorPlanManager _currentFloorPlan;
 
-    [SerializeField, NaughtyAttributes.Expandable] private FPGenerationMethod _generationMethod;
+    public MethodGrowthSettings _generationMethodSettings;
+
+    private MethodGrowth _generationMethod;
 
     [Header("Debug")]
     [SerializeField] private FloorPlanGenSceneDebugger _sceneDebugger;
@@ -76,7 +83,8 @@ public class FloorPlanGenerator
                     {
                         _currentFloorPlan = new FloorPlanManager(floorPlanConfig);
                         //Debug.Log("<color=yellow>Plan Gen start...</color>");
-                        isValid = await _generationMethod.Run(_currentFloorPlan, _sceneDebugger);
+                        _generationMethod = new MethodGrowth(); // Create a new instance of the generation method to reset the runtime values from previous run.
+                        isValid = await _generationMethod.Run(_generationMethodSettings, _currentFloorPlan, _sceneDebugger);
                         if (isValid)
                         {
                             Debug.Log($"Total generation tries until a valid result: {genTry+1}/{_maxGenerationTries}");
@@ -131,12 +139,6 @@ public class FloorPlanGenerator
         FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(_selectedFloorPlans[0]);
         
         return _selectedFloorPlans;
-    }
-
-
-    public void OnDrawGizmos()
-    {
-        _generationMethod?.OnDrawGizmos();
     }
 }
 }
