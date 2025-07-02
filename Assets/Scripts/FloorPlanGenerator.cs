@@ -6,40 +6,40 @@ using System.Collections.Generic;
 
 namespace BuildingGenerator
 {
-[System.Serializable]
-public class FloorPlanGenerator
-{
-    public bool _useSeed = false;
+    [System.Serializable]
+    public class FloorPlanGenerator
+    {
+        public bool _useSeed = false;
 
-    public int _seed = 0;
+        public int _seed = 0;
 
-    /// <summary>
-    /// Maximum number that it will request the generation method to generate a valid floor plan.
-    /// </summary>
-    public int _maxGenerationTries = 10;
-    
-    /// <summary>
-    /// Number of valid floor plans to generate. At the end choose the best option from the samples.
-    /// Worst case generation = (_maxGenerationTries * _samples)
-    /// </summary>
-    public int _samples = 10;
+        /// <summary>
+        /// Maximum number that it will request the generation method to generate a valid floor plan.
+        /// </summary>
+        public int _maxGenerationTries = 10;
 
-    public FloorPlanManager _currentFloorPlan;
+        /// <summary>
+        /// Number of valid floor plans to generate. At the end choose the best option from the samples.
+        /// Worst case generation = (_maxGenerationTries * _samples)
+        /// </summary>
+        public int _samples = 10;
 
-    [NaughtyAttributes.Expandable] public MethodGrowthSettings _generationMethodSettings;
-    
+        public FloorPlanManager _currentFloorPlan;
 
-    [Header("Debug")]
-    [SerializeField] private FloorPlanGenSceneDebugger _sceneDebugger;
-    [SerializeField] private bool _enableDebug = false;
-
-    private bool _running = false;
-    
-
-    private MethodGrowth _generationMethod;
+        [NaughtyAttributes.Expandable] public MethodGrowthSettings _generationMethodSettings;
 
 
-    public async UniTask<List<FloorPlanManager>> GenerateFloorPlans(FloorPlanData floorPlanConfig, int amount = 1)
+        [Header("Debug")]
+        [SerializeField] private FloorPlanGenSceneDebugger _sceneDebugger;
+        [SerializeField] private bool _enableDebug = false;
+
+        private bool _running = false;
+
+
+        private MethodGrowth _generationMethod;
+
+
+        public async UniTask<List<FloorPlanManager>> GenerateFloorPlans(FloorPlanData floorPlanConfig, int amount = 1)
         {
             if (_running)
             {
@@ -142,5 +142,5 @@ public class FloorPlanGenerator
 
             return _selectedFloorPlans;
         }
-}
+    }
 }
