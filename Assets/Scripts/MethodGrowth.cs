@@ -1,4 +1,4 @@
-//#define TEST
+#define TEST
 
 using UnityEngine;
 using System.Threading;
@@ -24,6 +24,7 @@ namespace BuildingGenerator
         private MethodGrowthSettings _settings;
 
         private const string _outsideZoneId = "outside";
+        private bool _checkFullSpace = false;
 
 
         /// <summary>
@@ -33,9 +34,9 @@ namespace BuildingGenerator
         public async UniTask<bool> Run(MethodGrowthSettings methodGrowthSettings, FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger)
         {
 #if TEST
-        UnityEngine.Debug.LogWarning("Running in TEST mode.");
+        Utils.Debug.DevWarning("Running in TEST mode.");
 #endif
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             /*
             if(!EditorApplication.isPlaying)
             {
@@ -43,6 +44,9 @@ namespace BuildingGenerator
                 return false;
             }
             */
+            
+            // Start the timer.
+            Utils.Stopwatch timer = new Utils.Stopwatch();
 
             _cts = new CancellationTokenSource();
             //EditorApplication.playModeStateChanged += PlayModeStateChanged;
@@ -65,12 +69,9 @@ namespace BuildingGenerator
                 _zonesToGrow = GetNextZonesToGrowList(floorPlanManager);
                 UpdateZonesWeights(_zonesToGrow);
 
-
                 if (_settings.StopAtInitialPlot) break;
 
-
-                // >>>>>>>>>>> begin main grow logic
-                // =========================================================== LOOP CRESCIMENTO RECT
+                // LOOP CRESCIMENTO RECT
                 while (_zonesToGrow.Count > 0)
                 {
                     _currentZone = GetNextZone(_zonesToGrow);
@@ -84,20 +85,16 @@ namespace BuildingGenerator
 
                     if (!_settings.SkipToFinalResult)
                     {
-                        FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(floorPlanManager);
+                        sceneDebugger.OnFloorPlanUpdated(floorPlanManager);
                         await UniTask.WaitForSeconds(_settings.Delay + 0.1f, cancellationToken: _cts.Token);
                     }
                 }
 
-
                 // Prepare for next step.
-
                 _zonesToGrow = new List<Zone>(_grownZones);
                 UpdateZonesWeights(_zonesToGrow);
                 _grownZones.Clear();
 
-
-                // ======================================================== LOOP L
                 // LOOP CRESCIMENTO L
                 while (_zonesToGrow.Count > 0)
                 {
@@ -112,13 +109,10 @@ namespace BuildingGenerator
 
                     if (!_settings.SkipToFinalResult)
                     {
-                        FloorPlanGenSceneDebugger.Instance.OnFloorPlanUpdated(floorPlanManager);
+                        sceneDebugger.OnFloorPlanUpdated(floorPlanManager);
                         await UniTask.WaitForSeconds(_settings.Delay, cancellationToken: _cts.Token);
                     }
                 }
-
-
-                // <<<<<<<<<< end main grow logic
 
                 // Prepare the next set of zones to grow.
                 // "Bake" the zones that finished to grow and add the ones with children(the ones tha will be subdivided)
@@ -141,32 +135,32 @@ namespace BuildingGenerator
                 _grownZones.Clear();
             }
 
+
             // For debug.
             foreach (var zone in floorPlanManager.ZonesInstances)
             {
                 zone.Value.CheckZoneCellsConsistency();
             }
 
+
             // Can be done at the of the process os at the end of a hierarchy level. The fact of making at the end and the cells
             // don't having a prior zone assigned is not a problem since the cell have only one parent zone when we add to the cell
             // a leaf zone it will automatically have the parents of the leaf assigned to it.
             if (!AssignMissingCells(floorPlanManager))
             {
-                Debug.LogWarning("Failed to assign missing cells.");
+                Utils.Debug.DevError("Failed to assign missing cells.");
                 return false;
             }
+
 
             // TODO: separate wall/door placement from connectivity check.
             if (!PlaceWallsAndCheckConnectivity(floorPlanManager))
             {
-                Debug.LogWarning("Failed to place walls.");
+                Utils.Debug.DevError("Failed to place walls.");
                 return false;
             }
 
-
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
-            //UnityEngine.Debug.Log(elapsedMs);
+            GenerationStats.Instance.AddTimeEnter("fullMethod", timer.Stop());
 
             //EditorApplication.playModeStateChanged -= PlayModeStateChanged;
             _cts.Dispose();
@@ -182,7 +176,7 @@ namespace BuildingGenerator
             {
                 if (zone.IsDirty)
                 {
-                    Utils.ConsoleDebug.DevLog($"{zone.ZoneId} is dirty. Re-baking...");
+                    Utils.Debug.DevLog($"{zone.ZoneId} is dirty. Re-baking...");
                     zone.Unbake();
                     zone.Bake();
                 }

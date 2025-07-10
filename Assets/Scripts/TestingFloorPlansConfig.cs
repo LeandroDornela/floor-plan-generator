@@ -62,9 +62,6 @@ namespace BuildingGenerator
 
         [SerializedDictionary("Zone ID", "Adj. IDs")]
         public SerializedDictionary<string, string[]> Adjacencies;
-
-        [SerializedDictionary("Zone ID", "Cells")]
-        public SerializedDictionary<string, string> ZonesAreasPresets;
     }
 
 

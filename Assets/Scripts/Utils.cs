@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace BuildingGenerator
 {
     public class Utils
     {
-        public class Random : MonoBehaviour
+        public class Random// : MonoBehaviour
         {
             // NOTE: Unity Random doesn't work outside the main thread.
 
@@ -60,7 +62,7 @@ namespace BuildingGenerator
 
 
         [System.Serializable]
-        public class ConsoleDebug
+        public class Debug
         {
             [NaughtyAttributes.ShowNonSerializedField]
             public static bool _enable = true;
@@ -72,53 +74,90 @@ namespace BuildingGenerator
             // General and production logs
             public static void Log(string val)
             {
-                if (_enable && _enableLog && _enableDevLogs) Debug.Log(val);
+                if (_enable && _enableLog && _enableDevLogs) UnityEngine.Debug.Log(val);
             }
 
             public static void Warning(string val)
             {
-                if (_enable && _enableWarning && _enableDevLogs) Debug.LogWarning(val);
+                if (_enable && _enableWarning && _enableDevLogs) UnityEngine.Debug.LogWarning(val);
             }
 
             public static void Error(string val)
             {
-                if (_enable && _enableError && _enableDevLogs) Debug.LogError(val);
+                if (_enable && _enableError && _enableDevLogs) UnityEngine.Debug.LogError(val);
             }
-            
+
             // Development only logs
             public static void DevLog(string val)
             {
-                if (_enable && _enableLog && _enableDevLogs) Debug.Log(val);
+                if (_enable && _enableLog && _enableDevLogs) UnityEngine.Debug.Log(val);
             }
 
             public static void DevWarning(string val)
             {
-                if (_enable && _enableWarning && _enableDevLogs) Debug.LogWarning(val);
+                if (_enable && _enableWarning && _enableDevLogs) UnityEngine.Debug.LogWarning(val);
             }
 
             public static void DevError(string val)
             {
-                if (_enable && _enableError && _enableDevLogs) Debug.LogError(val);
+                if (_enable && _enableError && _enableDevLogs) UnityEngine.Debug.LogError(val);
             }
         }
 
 
+        public class Stopwatch
+        {
+            System.Diagnostics.Stopwatch _watch;
+
+            public Stopwatch()
+            {
+                _watch = System.Diagnostics.Stopwatch.StartNew();
+            }
+
+            public System.Diagnostics.Stopwatch Stop()
+            {
+                _watch.Stop();
+                return _watch;
+            }
+        }
+
+        #region =============== STATIC METHODS ===============
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="width"></param>
+        /// <returns></returns>
         public static Vector2Int ArrayIndexToMatrix(int index, int width)
         {
             return new Vector2Int(index / width, index % width);
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <returns></returns>
         public static int MatrixToArrayIndex(int x, int y, int width)
         {
             return width * y + x;
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="data"></param>
         public static void PrintArrayAsGrid(int width, int height, float[] data)
         {
             if (width * height != data.Length)
             {
-                Debug.LogWarning("Size mismatch.");
+                UnityEngine.Debug.LogWarning("Size mismatch.");
                 //return;
             }
 
@@ -187,9 +226,17 @@ namespace BuildingGenerator
             }
             result += "]";
 
-            Debug.Log(result);
+            UnityEngine.Debug.Log(result);
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="newWidth"></param>
+        /// <param name="newHeight"></param>
+        /// <returns></returns>
         public static Texture2D ResizeWithNearest(Texture2D source, int newWidth, int newHeight)
         {
             // Set up a temporary RenderTexture
@@ -215,5 +262,62 @@ namespace BuildingGenerator
 
             return result;
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static double CalculateMean(List<double> values)
+        {
+            double sum = 0;
+
+            foreach (double value in values)
+            {
+                sum += value;
+            }
+
+            return sum / values.Count;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static double CalculateMedian(List<double> values)
+        {
+            List<double> sorted = new List<double>(values);
+            sorted.Sort();
+
+            int count = sorted.Count;
+
+            if (count % 2 == 0)
+            {
+                int index = count / 2;
+                return (sorted[index] + sorted[index - 1]) / 2.0;
+            }
+            else
+            {
+                int index = (count - 1) / 2;
+                return sorted[index];
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sufix"></param>
+        public static void Screenshot(string sufix)
+        {
+            string fileName = $"{DateTime.Now:yyyyMMdd_HHmmssfffffff}_{sufix}.png";
+            string path = Directory.GetParent(Application.dataPath).FullName;
+            path = Path.Combine(path, "Screenshots", fileName);
+            ScreenCapture.CaptureScreenshot(path);
+        }
     }
+    #endregion
 }

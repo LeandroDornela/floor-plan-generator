@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 2157114733137866506}
+  _drawDebug: 1
 --- !u!1 &2913663536996157315
 GameObject:
   m_ObjectHideFlags: 0

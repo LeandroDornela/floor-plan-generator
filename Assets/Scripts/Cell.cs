@@ -19,28 +19,38 @@ namespace BuildingGenerator
         private Vector2Int _gridPosition;
         private bool _isBorderCell;
 
-        // TODO: cache neighbors
-
-        public Dictionary<string, string> atributos;
+        private Cell _topNeighbor = null;
+        private Cell _topRightNeighbor = null;
+        private Cell _rightNeighbor = null;
+        private Cell _rightBottomNeighbor = null;
+        private Cell _bottomNeighbor = null;
+        private Cell _bottomLeftNeighbor = null;
+        private Cell _leftNeighbor = null;
+        private Cell _leftTopNeighbor = null;
 
         public Zone Zone => _zone;
         public Vector2Int GridPosition => _gridPosition;
         public bool IsBorderCell => _isBorderCell;
-
         public bool IsAssignedToLeafZone => (_zone != null)? _zone.IsLeaf : false; // Is assigned to a leaf zone if this zone don't have children.
+        
+        public Cell TopNeighbor { set { _topNeighbor = value; } get { return _topNeighbor; } }
+        public Cell TopRightNeighbor { set { _topRightNeighbor = value; } get { return _topRightNeighbor; } }
+        public Cell RightNeighbor { set { _rightNeighbor = value; } get { return _rightNeighbor; } }
+        public Cell RightBottomNeighbor { set { _rightBottomNeighbor = value; } get { return _rightBottomNeighbor; } }
+        public Cell BottomNeighbor { set { _bottomNeighbor = value; } get { return _bottomNeighbor; } }
+        public Cell BottomLeftNeighbor { set { _bottomLeftNeighbor = value; } get { return _bottomLeftNeighbor; } }
+        public Cell LeftNeighbor { set { _leftNeighbor = value; } get { return _leftNeighbor; } }
+        public Cell LeftTopNeighbor { set { _leftTopNeighbor = value; } get { return _leftTopNeighbor; } }
 
-        public string _TESTVAR = "-";
 
 
         public Cell(int gridPositionX, int gridPositionY, Zone zone = null)
         {
             _gridPosition = new Vector2Int(gridPositionX, gridPositionY);
             _zone = zone;
-
-            atributos = new Dictionary<string, string>();
         }
 
-
+/*
         public Cell GetTopNeighbor(CellsGrid cellsGrid)
         {
             return GetNeighbor(cellsGrid, 0, -1);
@@ -66,17 +76,17 @@ namespace BuildingGenerator
             cellsGrid.GetCell(_gridPosition.x + xMod, _gridPosition.y + yMod, out Cell neighbor);
             return neighbor;
         }
-
+*/
 
         // TODO: after having direct ref to neigbors, change the way to calculate.
-        public int NumNeighborsInSameZone(CellsGrid cellsGrid)
+        public int NumNeighborsInSameZone()
         {
             int counter = 0;
 
-            if (GetTopNeighbor(cellsGrid)?.Zone == _zone) counter++;
-            if (GetBottomNeighbor(cellsGrid)?.Zone == _zone) counter++;
-            if (GetLeftNeighbor(cellsGrid)?.Zone == _zone) counter++;
-            if (GetRightNeighbor(cellsGrid)?.Zone == _zone) counter++;
+            if (TopNeighbor?.Zone == _zone) counter++;
+            if (BottomNeighbor?.Zone == _zone) counter++;
+            if (LeftNeighbor?.Zone == _zone) counter++;
+            if (RightNeighbor?.Zone == _zone) counter++;
 
             return counter;
         }

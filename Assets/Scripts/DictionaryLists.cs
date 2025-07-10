@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class DictionaryDictionaryList<TKey, TList>
 {
     private Dictionary<TKey, DictionaryList<TKey, TList>> _dictionary;
-
     public Dictionary<TKey, DictionaryList<TKey, TList>> Dictionary => _dictionary;
 
     public DictionaryDictionaryList()
@@ -81,10 +81,10 @@ public class DictionaryDictionaryList<TKey, TList>
     }
 }
 
+[System.Serializable]
 public class DictionaryList<TKey, TList>
 {
     private Dictionary<TKey, List<TList>> _dictionary;
-
     public Dictionary<TKey, List<TList>> Dictionary => _dictionary;
 
     public DictionaryList()

@@ -9,7 +9,10 @@ namespace BuildingGenerator
 {
     public class FloorPlanGenSceneDebugger : MonoBehaviour
     {
-        [SerializeField] private GameObject _cellGraphicsPrefab;
+        //[SerializeField] private GameObject _cellGraphicsPrefab;
+
+        public Transform wallsHolder;
+        public Transform cellsHolder;
 
         private string _currentFloorPlanId;
         private SerializedDictionary<string, Color> _zoneColors;
@@ -19,19 +22,21 @@ namespace BuildingGenerator
 
         //private string _gridPreview;
 
-        private static FloorPlanGenSceneDebugger _instance;
-        public static FloorPlanGenSceneDebugger Instance => _instance;
+        //private static FloorPlanGenSceneDebugger _instance;
+        //public static FloorPlanGenSceneDebugger Instance => _instance;
 
-        public GameObject wallPrefab;
-        public GameObject doorPrefab;
+        //public GameObject wallPrefab;
+        //public GameObject doorPrefab;
 
         private List<GameObject> _wallInstances;
+
+        private BuildingAssetsPack buildingAssetsPack;
 
         public bool _debugBorders;
         public bool _debugWallSharers;
         public bool _debugWallLines;
-       
 
+/*
         private void Awake()
         {
             if (_instance != null && _instance != this)
@@ -43,6 +48,23 @@ namespace BuildingGenerator
                 _instance = this;
             }
         }
+*/
+
+        public void Init(BuildingAssetsPack _buildingAssetsPack)
+        {
+/*
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                _instance = this;
+            }
+*/
+
+            buildingAssetsPack = _buildingAssetsPack;
+        }
 
 
         /// <summary>
@@ -51,10 +73,10 @@ namespace BuildingGenerator
         /// <param name="floorPlan"></param>
         public void OnFloorPlanUpdated(FloorPlanManager floorPlan)
         {
-            if(_currentFloorPlan != floorPlan)
+            if (_currentFloorPlan != floorPlan)
             {
-                SetNewFloorPlan(floorPlan);
-                UpdateWalls();
+                SetNewFloorPlan(floorPlan, buildingAssetsPack);
+                UpdateWalls(buildingAssetsPack);
                 return;
             }
 
@@ -73,16 +95,16 @@ namespace BuildingGenerator
                 }
             }
 
-            UpdateWalls();
+            UpdateWalls(buildingAssetsPack);
         }
 
-        void UpdateWalls()
+        void UpdateWalls(BuildingAssetsPack buildingAssetsPack)
         {
             if (_wallInstances != null)
             {
                 foreach (GameObject obj in _wallInstances)
                 {
-                    Destroy(obj);
+                    if(obj != null) DestroyImmediate(obj);
                 }
                 _wallInstances.Clear();
             }
@@ -113,11 +135,11 @@ namespace BuildingGenerator
 
                     if (cellsTuple.HasDoor)
                     {
-                        _wallInstances.Add(Instantiate(doorPrefab, new Vector3(pos.x, 0, pos.z), rot));
+                        if(buildingAssetsPack.doorPrefab != null) _wallInstances.Add(Instantiate(buildingAssetsPack.doorPrefab, new Vector3(pos.x, 0, pos.z), rot, wallsHolder));
                     }
                     else
                     {
-                        _wallInstances.Add(Instantiate(wallPrefab, new Vector3(pos.x, 0, pos.z), rot));
+                        if(buildingAssetsPack.wallPrefab != null) _wallInstances.Add(Instantiate(buildingAssetsPack.wallPrefab, new Vector3(pos.x, 0, pos.z), rot, wallsHolder));
                     }
                 }
             }
@@ -128,7 +150,7 @@ namespace BuildingGenerator
         /// 
         /// </summary>
         /// <param name="floorPlan"></param>
-        void SetNewFloorPlan(FloorPlanManager floorPlan)
+        void SetNewFloorPlan(FloorPlanManager floorPlan, BuildingAssetsPack buildingAssetsPack)
         {
             _currentFloorPlanId = floorPlan.FloorPlanId;
             _currentFloorPlan = floorPlan;
@@ -146,7 +168,7 @@ namespace BuildingGenerator
                 hueValue += colorInterval;
             }
 
-            InstantiateCellsGraphics(floorPlan);
+            InstantiateCellsGraphics(floorPlan, buildingAssetsPack);
         }
 
 
@@ -160,7 +182,7 @@ namespace BuildingGenerator
             {
                 foreach (var cell in _cellsGraphicsInstances)
                 {
-                    Destroy(cell.gameObject);
+                    if(cell != null) DestroyImmediate(cell.gameObject);
                 }
 
                 _cellsGraphicsInstances.Clear();
@@ -172,17 +194,17 @@ namespace BuildingGenerator
         /// 
         /// </summary>
         /// <param name="floorPlan"></param>
-        void InstantiateCellsGraphics(FloorPlanManager floorPlan)
+        void InstantiateCellsGraphics(FloorPlanManager floorPlan, BuildingAssetsPack buildingAssetsPack)
         {
             _cellsGraphicsInstances = new List<VisualCell>();
 
             // Instancia as celulas.
             foreach (var cell in floorPlan.CellsGrid.Cells)
             {
-                VisualCell visualCell = Instantiate(_cellGraphicsPrefab,
+                VisualCell visualCell = Instantiate(buildingAssetsPack.floorPrefab,
                                                     new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y),
                                                     Quaternion.identity,
-                                                    transform).GetComponent<VisualCell>();
+                                                    cellsHolder).GetComponent<VisualCell>();
 
                 visualCell.Init(cell);
 
@@ -221,9 +243,9 @@ namespace BuildingGenerator
                     Vector3 pos = cellBPos + dif;
                     Quaternion rot = Quaternion.LookRotation(dif, Vector3.up);
 
-                    if(_debugWallLines)
+                    if (_debugWallLines)
                     {
-                        if(cellsTuple.IsOutsideBorder)
+                        if (cellsTuple.IsOutsideBorder)
                             Gizmos.color = Color.red;
                         else
                             Gizmos.color = Color.black;
@@ -235,21 +257,22 @@ namespace BuildingGenerator
                         Handles.color = Color.yellow;
                         Handles.Label(new Vector3(pos.x, 3, pos.z), $"{cellsTuple.CellA.Zone?.ZoneId} \n {cellsTuple.CellB.Zone?.ZoneId}");
                     }
-                    
+
                 }
 
 
                 // Debug borders
-                if(_debugBorders)
-                foreach (Zone zone in _currentFloorPlan.ZonesInstances.Values)
-                {
-                    foreach (Cell cell in zone.BorderCells)
+                if (_debugBorders)
+                    foreach (Zone zone in _currentFloorPlan.ZonesInstances.Values)
                     {
-                        Gizmos.color = Color.black;
-                        Gizmos.DrawWireSphere(new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y), 0.1f);
+                        if (zone.BorderCells != null)
+                            foreach (Cell cell in zone.BorderCells)
+                            {
+                                Gizmos.color = Color.black;
+                                Gizmos.DrawWireSphere(new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y), 0.1f);
+                            }
                     }
-                }
-                
+
             }
         }
     }

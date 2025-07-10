@@ -32,7 +32,7 @@ namespace BuildingGenerator
 
         private string _zoneId;
         private float _areaRatio;
-        private float _desiredAspect = 1; // 1 is square
+        [Range(0.001f, 1)] private float _desiredAspect = 1; // 1 is square. Max 1
         private Zone _parentZone;
         private Dictionary<string, Zone> _childZones;
         private Dictionary<string, Zone> _adjacentZones;
@@ -40,11 +40,13 @@ namespace BuildingGenerator
         private bool _hasWindows;
 
 
-        public List<Cell> _cellsList; // Celulas atualmente associadas a zona.
+        private List<Cell> _cellsList; // Celulas atualmente associadas a zona.
         private Dictionary<Side, CellsLineDescription> _zoneBorders;
         private CellsLineDescription _lBorderCells;
         private Cell[] _cellsArray; // Baked
         private Cell[] _borderCells; // Baked
+
+        float _desiredArea; // TODO: maybe round to int.
 
         private bool _isLShaped = false;
         private bool _isBaked = false;
@@ -52,10 +54,10 @@ namespace BuildingGenerator
 
         // Coord transformation matrix, used to compact the methods that have different behavior base on the border of the shape.
         private readonly Dictionary<Side, Vector4> _coordTransMatrices = new Dictionary<Side, Vector4>{
-    {Side.Top, new Vector4(1,0,0,-1)},
-    {Side.Bottom, new Vector4(1,0,0,1)},
-    {Side.Left, new Vector4(0,1,-1,0)},
-    {Side.Right, new Vector4(0,1,1,0)}};
+        {Side.Top, new Vector4(1,0,UniGridPosModifiers.TOP_MOD.x,UniGridPosModifiers.TOP_MOD.y)},
+        {Side.Bottom, new Vector4(1,0,UniGridPosModifiers.BOTTOM_MOD.x,UniGridPosModifiers.BOTTOM_MOD.y)},
+        {Side.Left, new Vector4(0,1,UniGridPosModifiers.LEFT_MOD.x,UniGridPosModifiers.LEFT_MOD.y)},
+        {Side.Right, new Vector4(0,1,UniGridPosModifiers.RIGHT_MOD.x,UniGridPosModifiers.RIGHT_MOD.y)}};
 
 
         // PUBLIC PROP
@@ -78,7 +80,7 @@ namespace BuildingGenerator
         {
             get
             {
-                if (_borderCells == null || _borderCells.Length == 0) Utils.ConsoleDebug.DevError("Border Cells is not set.");
+                //if (_borderCells == null || _borderCells.Length == 0) Utils.ConsoleDebug.DevError("Border Cells is not set.");
                 return _borderCells;
             }
         }
@@ -87,6 +89,7 @@ namespace BuildingGenerator
         public bool HasChildrenZones => _childZones?.Count > 0;
         public bool IsLeaf => _childZones?.Count == 0;
         public bool IsDirty => _isDirty;
+        public float DesiredArea => _desiredArea;
 
 
         public Zone(FloorPlanManager floorPlanManager, string zoneId, float areaRatio, bool hasOutsideDoor, bool hasWindows)
@@ -100,6 +103,7 @@ namespace BuildingGenerator
             _adjacentZones = new Dictionary<string, Zone>();
             _hasOutsideDoor = hasOutsideDoor;
             _hasWindows = hasWindows;
+            _desiredArea = _areaRatio * _floorPlanManager.CellsGrid.Area;
         }
 
         #region =========== CELLS AND FAMILY ZONES SETTING ===========
@@ -112,19 +116,19 @@ namespace BuildingGenerator
         {
             if (cell == null)
             {
-                Utils.ConsoleDebug.DevError("Trying to add a null cell.");
+                Utils.Debug.DevError("Trying to add a null cell.");
                 return false;
             }
 
             if (_isBaked && !_isDirty)
             {
-                Utils.ConsoleDebug.DevWarning("Adding cell to baked Zone.");
+                Utils.Debug.DevWarning("Adding cell to baked Zone.");
                 _isDirty = true;
             }
 
             if (_cellsList.Contains(cell))
             {
-                Utils.ConsoleDebug.DevError("Trying to add an exiting cell.");
+                Utils.Debug.DevError("Trying to add an exiting cell.");
                 return false;
             }
 
@@ -154,13 +158,13 @@ namespace BuildingGenerator
         {
             if (cell == null)
             {
-                Utils.ConsoleDebug.DevError("Trying to remove a null cell.");
+                Utils.Debug.DevError("Trying to remove a null cell.");
                 return false;
             }
 
             if (_isBaked && !_isDirty)
             {
-                Utils.ConsoleDebug.DevWarning($"Removing cell from baked Zone. Zone: {_zoneId}");
+                Utils.Debug.DevWarning($"Removing cell from baked Zone. Zone: {_zoneId}");
                 _isDirty = true;
             }
 
@@ -170,7 +174,7 @@ namespace BuildingGenerator
             }
             else
             {
-                Utils.ConsoleDebug.DevError("The cell isn't in the zone.");
+                Utils.Debug.DevError("The cell isn't in the zone.");
                 return false;
             }
         }
@@ -185,7 +189,7 @@ namespace BuildingGenerator
         {
             if (childZone == null)
             {
-                Utils.ConsoleDebug.DevError("Trying to add a null child.");
+                Utils.Debug.DevError("Trying to add a null child.");
                 return false;
             }
 
@@ -202,7 +206,7 @@ namespace BuildingGenerator
         {
             if (adjacentZone == null)
             {
-                Utils.ConsoleDebug.DevError("Trying to add a null adjacent zone.");
+                Utils.Debug.DevError("Trying to add a null adjacent zone.");
                 return false;
             }
 
@@ -224,7 +228,7 @@ namespace BuildingGenerator
             }
             else
             {
-                Utils.ConsoleDebug.DevError("Parent zone can't be overridden.");
+                Utils.Debug.DevError("Parent zone can't be overridden.");
                 return false;
             }
         }
@@ -247,8 +251,7 @@ namespace BuildingGenerator
 
         public float DistanceFromDesiredArea()
         {
-            float desiredArea = _areaRatio * _floorPlanManager.CellsGrid.Area;
-            return desiredArea - Area;
+            return _desiredArea - Area;
         }
 
 
@@ -284,7 +287,31 @@ namespace BuildingGenerator
         /// <returns>Current zone aspect ratio.</returns>
         public float GetZoneAspect()
         {
+            if (_zoneBorders == null) Debug.LogError($"{_zoneId} _zoneBorders is undefined. Total cells: {_cellsList.Count}");
             return (float)_zoneBorders[Side.Top].NumberOfCells / _zoneBorders[Side.Left].NumberOfCells;
+        }
+
+
+        /// <summary>
+        /// Get the zone aspect ration independent of orientation, or what side is larger. The max value is 1.
+        /// </summary>
+        /// <returns></returns>
+        public float GetZoneAspectOrientIndependent()
+        {
+            if (_zoneBorders == null)
+            {
+                Debug.LogError($"{_zoneId} _zoneBorders is undefined. Total cells: {_cellsList.Count}");
+                return 0;
+            }
+
+            if (_zoneBorders[Side.Left].NumberOfCells > _zoneBorders[Side.Top].NumberOfCells)
+            {
+                return (float)_zoneBorders[Side.Top].NumberOfCells / _zoneBorders[Side.Left].NumberOfCells;
+            }
+            else
+            {
+                return (float)_zoneBorders[Side.Left].NumberOfCells / _zoneBorders[Side.Top].NumberOfCells;
+            }
         }
 
         #endregion
@@ -301,13 +328,13 @@ namespace BuildingGenerator
         {
             if (lBorder == null)
             {
-                Utils.ConsoleDebug.DevError("L border can't be null");
+                Utils.Debug.DevError("L border can't be null");
                 return false;
             }
 
             if (_isLShaped)
             {
-                Utils.ConsoleDebug.DevError("Zone is already L shaped.");
+                Utils.Debug.DevError("Zone is already L shaped.");
                 return false;
             }
 
@@ -330,7 +357,7 @@ namespace BuildingGenerator
         {
             if (_isBaked)
             {
-                Utils.ConsoleDebug.DevError("Zone is already baked. If need to bake again use Unbake first.");
+                Utils.Debug.DevError("Zone is already baked. If need to bake again use Unbake first.");
                 return;
             }
 
@@ -341,7 +368,7 @@ namespace BuildingGenerator
             _isBaked = true;
             _isDirty = false;
 
-            Utils.ConsoleDebug.DevLog($"{_zoneId} baked.");
+            Utils.Debug.DevLog($"{_zoneId} baked.");
         }
 
         /// <summary>
@@ -365,7 +392,7 @@ namespace BuildingGenerator
         {
             if (_borderCells != null && _borderCells.Length > 0)
             {
-                Utils.ConsoleDebug.DevError("Border cells is already defined.");
+                Utils.Debug.DevError("Border cells is already defined.");
                 return;
             }
 
@@ -392,11 +419,53 @@ namespace BuildingGenerator
 
             foreach (Cell cell in _cellsArray)
             {
-                Cell neighborCell;
-
-                bool cellAdded = false;
-
                 // Check the neighbors
+                // Ignore diagonal cells to save processing.
+                // If cell neighbor don't exist or is from a different zone, the cell is in a border.
+                if (cell.TopNeighbor == null || (cell.TopNeighbor?.Zone != this && cell.TopNeighbor?.Zone?._parentZone != this))
+                {
+                    cell.SetIsBorderCell(true);
+                    borderCells.Add(cell);
+                }
+                else if (cell.TopRightNeighbor == null || (cell.TopRightNeighbor?.Zone != this && cell.TopRightNeighbor?.Zone?._parentZone != this))
+                {
+                    cell.SetIsBorderCell(true);
+                    borderCells.Add(cell);
+                }
+                else if (cell.RightNeighbor == null || (cell.RightNeighbor?.Zone != this && cell.RightNeighbor?.Zone?._parentZone != this))
+                {
+                    cell.SetIsBorderCell(true);
+                    borderCells.Add(cell);
+                }
+                else if (cell.RightBottomNeighbor == null || (cell.RightBottomNeighbor?.Zone != this && cell.RightBottomNeighbor?.Zone?._parentZone != this))
+                {
+                    cell.SetIsBorderCell(true);
+                    borderCells.Add(cell);
+                }
+                else if (cell.BottomNeighbor == null || (cell.BottomNeighbor?.Zone != this && cell.BottomNeighbor?.Zone?._parentZone != this))
+                {
+                    cell.SetIsBorderCell(true);
+                    borderCells.Add(cell);
+                }
+                else if (cell.BottomLeftNeighbor == null || (cell.BottomLeftNeighbor?.Zone != this && cell.BottomLeftNeighbor?.Zone?._parentZone != this))
+                {
+                    cell.SetIsBorderCell(true);
+                    borderCells.Add(cell);
+                }
+                else if (cell.LeftNeighbor == null || (cell.LeftNeighbor?.Zone != this && cell.LeftNeighbor?.Zone?._parentZone != this))
+                {
+                    cell.SetIsBorderCell(true);
+                    borderCells.Add(cell);
+                }
+                else if (cell.LeftTopNeighbor == null || (cell.LeftTopNeighbor?.Zone != this && cell.LeftTopNeighbor?.Zone?._parentZone != this))
+                {
+                    cell.SetIsBorderCell(true);
+                    borderCells.Add(cell);
+                }
+
+                /*
+                Cell neighborCell;
+                bool cellAdded = false;
                 for (int x = -1; x <= 1; x++)
                 {
                     for (int y = -1; y <= 1; y++)
@@ -415,6 +484,7 @@ namespace BuildingGenerator
 
                     if (cellAdded) break; // Break the iteration to void adding the same cell multiple times.
                 }
+                */
             }
 
             return borderCells.ToArray();
@@ -435,7 +505,7 @@ namespace BuildingGenerator
         {
             if (_isLShaped)
             {
-                Utils.ConsoleDebug.DevError("Don't use when L-shaped.");
+                Utils.Debug.DevError("Don't use when L-shaped.");
                 return default;
             }
 
@@ -448,7 +518,7 @@ namespace BuildingGenerator
         {
             if (_isLShaped)
             {
-                Utils.ConsoleDebug.DevError("Don't use when L-shaped.");
+                Utils.Debug.DevError("Don't use when L-shaped.");
                 return default;
             }
 
@@ -496,7 +566,7 @@ namespace BuildingGenerator
         {
             if (_isLShaped)
             {
-                Utils.ConsoleDebug.DevError("Trying to use rectangular expansion in L-Shaped zone.");
+                Utils.Debug.DevError("Trying to use rectangular expansion in L-Shaped zone.");
                 return false;
             }
 
@@ -820,12 +890,12 @@ namespace BuildingGenerator
                 {
                     if (!CellIsAvailable(cell))
                     {
-                        Utils.ConsoleDebug.DevWarning($"Cell already have a zone in same hierarchy level. Cell zone: {cell.Zone}");
+                        Utils.Debug.DevWarning($"Cell already have a zone in same hierarchy level. Cell zone: {cell.Zone}");
                     }
                 }
                 else
                 {
-                    Utils.ConsoleDebug.DevError($"Trying to assign a cell in a invalid Grid position.({x},{y})");
+                    Utils.Debug.DevError($"Trying to assign a cell in a invalid Grid position.({x},{y})");
                     return false;
                 }
 
@@ -903,7 +973,7 @@ namespace BuildingGenerator
 
         public bool CheckZoneCellsConsistency()
         {
-            Utils.ConsoleDebug.DevLog($"{ZoneId}: [BakedCells:{_cellsArray.Length}] / [NonBaked: {_cellsList.Count}]. Border cells count:{_borderCells?.Length}");
+            Utils.Debug.DevLog($"{ZoneId}: [BakedCells:{_cellsArray.Length}] / [NonBaked: {_cellsList.Count}]. Border cells count:{_borderCells?.Length}");
             return _cellsArray.Length == _cellsList.Count;
         }
         #endregion

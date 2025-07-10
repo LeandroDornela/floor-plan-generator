@@ -28,14 +28,14 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.19212434
     - serializedVersion: 3
-      time: 0.5
-      value: 0.5
-      inSlope: -2.9793541
-      outSlope: -2.9793541
+      time: 0.32553104
+      value: 0.43228376
+      inSlope: -1.6089617
+      outSlope: -1.6089617
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.052776147
+      inWeight: 0.12572864
+      outWeight: 0.103197105
     - serializedVersion: 3
       time: 1
       value: -0.0017700195
@@ -61,16 +61,16 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.15
-      value: 1
-      inSlope: 0
-      outSlope: -4.4311924
-      tangentMode: 1
+      time: 0.3183203
+      value: 0.49691772
+      inSlope: -3.0097144
+      outSlope: -3.0097144
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.36116326
-      outWeight: 0.026604403
+      inWeight: 0.010918772
+      outWeight: 0.033007197
     - serializedVersion: 3
-      time: 1.0013428
+      time: 0.7
       value: 0
       inSlope: -0.34737808
       outSlope: -0.34737808
@@ -85,7 +85,7 @@ MonoBehaviour:
   _borderWeightMultiplier: 1
   _ignoreBorderWeights: 0
   _ignoreAdjacentWeights: 0
-  _minLCorridorWidth: 3
+  _minLCorridorWidth: 2
   _ignoreDesiredAreaInRect: 0
-  _unassignedCellsAction: 0
+  _unassignedCellsAction: 2
   _maxNeighborsToHaveDoor: 2

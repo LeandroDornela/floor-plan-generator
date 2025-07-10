@@ -5,40 +5,53 @@ using UnityEngine.Profiling;
 
 namespace BuildingGenerator
 {
-public class BuildingGenerator : MonoBehaviour
-{
-    // OBS: Uma varialvel com a ref de uma classe serializada exposta no editor "nunca" será nula.
-    [SerializeField] private FloorPlanGenerator _floorPlanGenerator;
-    [SerializeField] private BuildingDataManager _buildingDataManager;
-
-    int counter = 0;
-
-    void Start()
+    [System.Serializable]
+    public class BuildingGenerator
     {
-        
+        // OBS: Uma varialvel com a ref de uma classe serializada exposta no editor "nunca" será nula.
+        private FloorPlanGenerator _floorPlanGenerator;
+        //[SerializeField] private BuildingDataManager _buildingDataManager;
+
+        //public BuildingGeneratorSettings buildingGeneratorSettings;
+
+        /*
+        [ProButton]
+        public async void GenerateBuilding()
+        {
+            if (!Application.isPlaying) return;
+
+            var result = await _floorPlanGenerator.GenerateFloorPlans(_buildingDataManager.GetFloorPlanData(), 1);
+
+            foreach (var plan in result)
+                plan.PrintFloorPlan();
+        }
+        */
+
+
+        public async void GenerateBuilding(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, FloorPlanGenSceneDebugger sceneDebugger, IFloorPlanConfig floorPlanConfig)
+        {
+            if (buildingGeneratorSettings.EnableDevLogs)
+            {
+                Utils.Debug._enable = true;
+            }
+            else
+            {
+                Utils.Debug._enable = false;
+            }
+
+            _floorPlanGenerator = new FloorPlanGenerator();
+            var result = await _floorPlanGenerator.GenerateFloorPlans(buildingGeneratorSettings, methodGrowthSettings, sceneDebugger, floorPlanConfig.GetFloorPlanData(), 1);
+        }
+
+
+        public float GenerationProgress()
+        {
+            if (_floorPlanGenerator != null)
+            {
+                return _floorPlanGenerator.GenerationProgress;
+            }
+            
+            return -1;
+        }
     }
-
-    void Update()
-    {
-        
-    }
-
-
-    [ProButton]
-    public async void GenerateBuilding()
-    {
-        if(!Application.isPlaying) return;
-
-        var result = await _floorPlanGenerator.GenerateFloorPlans(_buildingDataManager.GetFloorPlanData(), 1);
-        
-        foreach(var plan in result)
-         plan.PrintFloorPlan();
-    }
-
-
-    void OnDrawGizmos()
-    {
-        Handles.Label(transform.position, counter.ToString());
-    }
-}
 }

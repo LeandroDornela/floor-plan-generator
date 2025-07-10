@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 /*
@@ -60,11 +62,9 @@ namespace BuildingGenerator
         /// <returns></returns>
         bool Init(FloorPlanData floorPlanConfig)
         {
-            //Debug.Log("Initializing floor plan manager.");
-
             if(!floorPlanConfig.IsValid())
             {
-                Debug.LogError("Invalid general floor plan config.");
+                Utils.Debug.DevError("Invalid general floor plan config.");
                 return false;
             }
             
@@ -140,7 +140,7 @@ namespace BuildingGenerator
                     }
                     else
                     {
-                        Debug.LogError("Only one root zone is allowed. Add a parent to all zones except the root.");
+                        Utils.Debug.DevError("Only one root zone is allowed. Add a parent to all zones except the root.");
                     }
                 }
             }
@@ -164,7 +164,7 @@ namespace BuildingGenerator
         {
             if(zone == null || cellsGrid == null)
             {
-                Debug.LogError("Zone or grid unassigned.");
+                Utils.Debug.DevError("Zone or grid unassigned.");
                 return;
             }
 
@@ -181,14 +181,14 @@ namespace BuildingGenerator
                 // expansion since expansion is initially blocked to predefined areas.
                 if(zone.ParentZone != _rootZone && zone != _rootZone)
                 {
-                    Debug.LogError($"Only the root zone and it's children can be predefined. Zone: {zone.ZoneId}");
+                    Utils.Debug.DevError($"Only the root zone and it's children can be predefined. Zone: {zone.ZoneId}");
                     return;
                 }
 
                 // Validate preset area size.
                 if(zoneData.PresetArea.Length != cellsGrid.Cells.Length)
                 {
-                    Debug.LogError("Preset area number of cells don't match the grid number of cells.");
+                    Utils.Debug.DevError("Preset area number of cells don't match the grid number of cells.");
                     return;
                 }
 
@@ -213,7 +213,7 @@ namespace BuildingGenerator
                 // Validate root zone.
                 if(_rootZone == null)
                 {
-                    Debug.LogError("Root zone undefined.");
+                    Utils.Debug.DevError("Root zone undefined.");
                     return;
                 }
 
@@ -242,7 +242,7 @@ namespace BuildingGenerator
         {
             if(zone == null)
             {
-                Debug.LogError("Invalid zone.");
+                Utils.Debug.DevError("Invalid zone.");
                 return false;
             }
 
@@ -278,7 +278,7 @@ namespace BuildingGenerator
         {
             if(cell == null)
             {
-                Debug.LogError("Invalid cell.");
+                Utils.Debug.DevError("Invalid cell.");
                 return false;
             }
 
@@ -325,6 +325,89 @@ namespace BuildingGenerator
         }
 
 
+        public float DesiredAreaIndex()
+        {
+            float distancesAreaSum = 0;
+            int zonesCount = 0;
+
+            foreach (Zone zone in _zonesInstances.Values)
+            {
+                if (!zone.IsLeaf)
+                {
+                    continue;
+                }
+
+                zonesCount++;
+
+                distancesAreaSum += Mathf.Clamp(MathF.Abs(zone.Area / zone.DesiredArea), 0, 1);
+            }
+
+            return distancesAreaSum / zonesCount;
+        }
+
+
+        public float DesiredAspectIndex()
+        {
+            float aspDistSum = 0;
+            int totalZonesCounter = 0;
+
+            foreach (Zone zone in _zonesInstances.Values)
+            {
+                if (!zone.IsLeaf)
+                {
+                    continue;
+                }
+
+                totalZonesCounter++;
+
+                if (zone.IsLShaped)
+                {
+                    // L shaped is maximum aspect distance. 0 points.
+                }
+                else
+                {
+                    aspDistSum += MathF.Abs(zone.DesiredAspect - zone.GetZoneAspectOrientIndependent());
+                }
+            }
+
+            return 1.0f - (aspDistSum / totalZonesCounter);
+        }
+
+
+        /// <summary>
+        /// Return the percentage of leaf zones(rooms) that are rectangular.
+        /// 1 means all leaf zones are rectangular.
+        /// </summary>
+        /// <returns></returns>
+        public float RectZonesIndex()
+        {
+            int rectZonesCounter = 0;
+            int totalZonesCounter = 0;
+
+            foreach (Zone zone in _zonesInstances.Values)
+            {
+                // Ignore the zone if its not a leaf,or a "room".
+                if (!zone.IsLeaf)
+                {
+                    continue;
+                }
+
+                totalZonesCounter++;
+
+                // TODO: can give wrong results when unassigned cells are given to the zone.
+                // Maybe need to add a tag for it.
+                // If the zone is rectangular.
+                if (!zone.IsLShaped)
+                {
+                    rectZonesCounter++;
+                }
+            }
+
+            return (float)rectZonesCounter / totalZonesCounter;
+        }
+
+
+        [Obsolete]
         public int RegularZonesCount()
         {
             int counter = 0;

@@ -53,6 +53,10 @@ namespace BuildingGenerator
                 // Vertical
                 else if (aspect > zone.DesiredAspect && (side == Zone.Side.Top || side == Zone.Side.Bottom))
                 {
+                    if (zone.GetExpansionSpaceRect(side, _checkFullSpace).isFullLine)
+                    {
+                        return zone.TryExpandShapeRect(side);
+                    }
                     if (TryGrowFromSide(side, zone, cellsGrid))
                     {
                         return true;
@@ -86,7 +90,7 @@ namespace BuildingGenerator
 
 
         /// <summary>
-        /// L expansion variation 1
+        /// L expansion variation 1. BROKEN
         /// </summary>
         /// <param name="zone"></param>
         /// <param name="cellsGrid"></param>
@@ -99,7 +103,7 @@ namespace BuildingGenerator
                 return zone.TryExpandShapeL(true);
             }
 
-            var largestFreeSpace = zone.GetLargestExpansionSpaceRect(false);
+            var largestFreeSpace = zone.GetLargestExpansionSpaceRect(_checkFullSpace);
 
             // No side to expand
             if (largestFreeSpace.distance == 0)
@@ -139,7 +143,7 @@ namespace BuildingGenerator
             var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>();
             foreach (var side in sides)
             {
-                if (zone.GetExpansionSpaceRect(side, false).isFullLine)
+                if (zone.GetExpansionSpaceRect(side, _checkFullSpace).isFullLine)
                 {
                     if (zone.TryExpandShapeRect(side))
                     {
@@ -149,14 +153,14 @@ namespace BuildingGenerator
             }
 
             // If wasn't able to expand any side, try to start L
-            var largestFreeSide = zone.GetLargestExpansionSpaceRect(false);
+            var largestFreeSide = zone.GetLargestExpansionSpaceRect(_checkFullSpace);
             if (largestFreeSide.distance == 0) // No free side
             {
                 return false;
             }
             if (largestFreeSide.isFullLine) // Just in case
             {
-                UnityEngine.Debug.LogWarning("At this point it should not have a full border available.");
+                Utils.Debug.DevWarning("At this point it should not have a full border available.");
             }
 
             if (largestFreeSide.freeLineDescription.NumberOfCells >= _settings.MinLCorridorWidth)
@@ -178,7 +182,7 @@ namespace BuildingGenerator
         /// <returns></returns>
         bool TryGrowFromSide(Zone.Side side, Zone zone, CellsGrid cellsGrid)
         {
-            if (zone.GetExpansionSpaceRect(side, false).isFullLine)
+            if (zone.GetExpansionSpaceRect(side, _checkFullSpace).isFullLine)
             {
                 return zone.TryExpandShapeRect(side);
             }

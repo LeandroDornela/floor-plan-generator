@@ -76,7 +76,7 @@ namespace BuildingGenerator
                 return zone;
             }
 
-            UnityEngine.Debug.LogError("Unable to get a zone.");
+            Utils.Debug.DevError("Unable to get a zone.");
             return null;
         }
     }

@@ -36,13 +36,13 @@ namespace BuildingGenerator
                             Cell currentFillCell = cellsToCheck.Pop();
                             visited[currentFillCell.GridPosition.x, currentFillCell.GridPosition.y] = true;
 
-                            Cell neighbor = currentFillCell.GetTopNeighbor(grid);
+                            Cell neighbor = currentFillCell.TopNeighbor;
                             TryAddNeighborToChunk(neighbor, visited, ref unassignedCellCount, newCellsChunk, cellsToCheck);
-                            neighbor = currentFillCell.GetRightNeighbor(grid);
+                            neighbor = currentFillCell.RightNeighbor;
                             TryAddNeighborToChunk(neighbor, visited, ref unassignedCellCount, newCellsChunk, cellsToCheck);
-                            neighbor = currentFillCell.GetBottomNeighbor(grid);
+                            neighbor = currentFillCell.BottomNeighbor;
                             TryAddNeighborToChunk(neighbor, visited, ref unassignedCellCount, newCellsChunk, cellsToCheck);
-                            neighbor = currentFillCell.GetLeftNeighbor(grid);
+                            neighbor = currentFillCell.LeftNeighbor;
                             TryAddNeighborToChunk(neighbor, visited, ref unassignedCellCount, newCellsChunk, cellsToCheck);
                         }
 
@@ -60,13 +60,13 @@ namespace BuildingGenerator
                 Zone selectedZone = null;
                 foreach (Cell cell in chunk)
                 {
-                    Cell neighbor = cell.GetTopNeighbor(grid);
+                    Cell neighbor = cell.TopNeighbor;
                     FindNeighborZonesCells(neighbor, neighborZonesCells, ref zoneWithBiggestDesiredAreaDif);
-                    neighbor = cell.GetRightNeighbor(grid);
+                    neighbor = cell.RightNeighbor;
                     FindNeighborZonesCells(neighbor, neighborZonesCells, ref zoneWithBiggestDesiredAreaDif);
-                    neighbor = cell.GetBottomNeighbor(grid);
+                    neighbor = cell.BottomNeighbor;
                     FindNeighborZonesCells(neighbor, neighborZonesCells, ref zoneWithBiggestDesiredAreaDif);
-                    neighbor = cell.GetLeftNeighbor(grid);
+                    neighbor = cell.LeftNeighbor;
                     FindNeighborZonesCells(neighbor, neighborZonesCells, ref zoneWithBiggestDesiredAreaDif);
                 }
 

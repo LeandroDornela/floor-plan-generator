@@ -1,3 +1,5 @@
+#define TEST
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +15,8 @@ namespace BuildingGenerator
         /// <param name="zonesToGrow"></param>
         void PlotFirstZoneCell(Zone zone, List<Zone> zonesToGrow, FloorPlanManager floorPlanManager)
         {
+            Utils.Debug.DevLog($"Plotting first cell of: {zone.ZoneId}");
+
             if (zone.ParentZone != null)
             {
                 // Weighted selection
@@ -25,11 +29,17 @@ namespace BuildingGenerator
 #endif
                 {
                     //_floorPlanManager.AssignCellToZone(cell.GridPosition.x, cell.GridPosition.y, zone);
+                    Utils.Debug.DevLog($"Adding first cell of: {zone.ZoneId}");
                     floorPlanManager.AssignCellToZone(cell, zone);
+                }
+                else
+                {
+                    Utils.Debug.DevError($"{zone.ZoneId} can't get a cell from parent zone {zone.ParentZone.ZoneId}. Failed to plot zone. Parent have [{zone.ParentZone.Cells?.Length}] cells.");
                 }
             }
             else
             {
+                //Utils.ConsoleDebug.DevLog($"{zone.ZoneId} zone.ParentZone == null");
                 Vector2Int position = new Vector2Int(Utils.Random.RandomRange(0, floorPlanManager.CellsGrid.Dimensions.x),
                                                      Utils.Random.RandomRange(0, floorPlanManager.CellsGrid.Dimensions.y));
 
@@ -71,6 +81,10 @@ namespace BuildingGenerator
                 Cell cell = cellsToCalc[i];
                 float weight = 0;
 
+                // Skip weights.
+                //_cellsWeights.AddAt(i, weight);
+                //continue;
+
                 // Cell outside the current parent zone, the context zone.
                 // Safe check. For when testing using the full grid.
                 if (cell.Zone != parentZone)
@@ -96,6 +110,7 @@ namespace BuildingGenerator
                     {
                         // Smaller distance > expected side size, the cell is too far.
                         weight = 0;
+                        //weight = _settings.BorderDistanceCurve.Evaluate(smallerDistance / desiredZoneSqSize) * _settings.BorderWeightMultiplier;
                     }
                     else
                     {
@@ -224,7 +239,7 @@ namespace BuildingGenerator
                     }
                 }
 
-
+                weight = Mathf.Clamp(weight, 0, float.MaxValue);
                 _cellsWeights.AddAt(i, weight);
 
                 if (weight != 0 && hasAnAvailableCell == false)
@@ -232,6 +247,9 @@ namespace BuildingGenerator
                     hasAnAvailableCell = true;
                 }
             }
+
+
+            GenerationStats.Instance._zonePlotWeightGrids.Add(new GenerationStats.NamedGrid(zoneToPlot.ZoneId, _cellsWeights.Values, cellsGrid.Dimensions.x));
 
 
             if (!hasAnAvailableCell)
@@ -254,7 +272,7 @@ namespace BuildingGenerator
 
             if (!hasAnAvailableCell)
             {
-                UnityEngine.Debug.LogError($"No valid positions to plot the zone {zoneToPlot.ZoneId}.");
+                Utils.Debug.DevError($"No valid positions to plot the zone {zoneToPlot.ZoneId}.");
             }
 
             //Debug.Log($"=============<color=yellow>{zoneToPlot.ZoneId}</color>");

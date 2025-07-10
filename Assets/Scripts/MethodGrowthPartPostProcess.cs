@@ -35,7 +35,7 @@ namespace BuildingGenerator
                     Cell currentCell;
                     if (!grid.GetCell(x, y, out currentCell))
                     {
-                        Debug.LogError("Invalid dimensions.");
+                        Utils.Debug.DevError("Invalid dimensions.");
                         return false;
                     }
                     // By default should not happen since the grid is initialized with new cells instances.
@@ -54,32 +54,34 @@ namespace BuildingGenerator
                     Cell neighborCell;
 
                     // Evaluate TOP matrix threshold.
-                    EvaluateMatrixTopLeftThresholds(Axis.Y, y, currentCell, grid, floorPlanManager, doorsCandidates);
+                    EvaluateMatrixTopLeftThresholds(UniGridPosModifiers.TOP_MOD, y, currentCell, floorPlanManager, doorsCandidates);
 
                     // Check BOTTOM
-                    grid.GetCell(currentCell.GridPosition.x, currentCell.GridPosition.y + 1, out neighborCell);
+                    //grid.GetCell(currentCell.GridPosition.x, currentCell.GridPosition.y + 1, out neighborCell);
+                    neighborCell = currentCell.BottomNeighbor;
                     if (neighborCell == null)
                     {
                         // Neighbor is on bottom out.
-                        neighborCell = new Cell(currentCell.GridPosition.x, currentCell.GridPosition.y + 1, null);
+                        neighborCell = new Cell(currentCell.GridPosition.x + UniGridPosModifiers.BOTTOM_MOD.x, currentCell.GridPosition.y + UniGridPosModifiers.BOTTOM_MOD.y, null);
                     }
 
-                    CreateWallTupleForInternalMatrixCells(currentCell, neighborCell, grid, doorsCandidates, floorPlanManager);
+                    CreateWallTupleForInternalMatrixCells(currentCell, neighborCell, doorsCandidates, floorPlanManager);
 
                     //========================================================================= Horizontal check
 
                     // Evaluate LEFT matrix threshold.
-                    EvaluateMatrixTopLeftThresholds(Axis.X, x, currentCell, grid, floorPlanManager, doorsCandidates);
+                    EvaluateMatrixTopLeftThresholds(UniGridPosModifiers.LEFT_MOD, x, currentCell, floorPlanManager, doorsCandidates);
 
                     // Check RIGHT
-                    grid.GetCell(currentCell.GridPosition.x + 1, currentCell.GridPosition.y, out neighborCell);
+                    //grid.GetCell(currentCell.GridPosition.x + 1, currentCell.GridPosition.y, out neighborCell);
+                    neighborCell = currentCell.RightNeighbor;
                     if (neighborCell == null)
                     {
                         // Neighbor cell is on right out.
-                        neighborCell = new Cell(currentCell.GridPosition.x + 1, currentCell.GridPosition.y, null);
+                        neighborCell = new Cell(currentCell.GridPosition.x + UniGridPosModifiers.RIGHT_MOD.x, currentCell.GridPosition.y + UniGridPosModifiers.RIGHT_MOD.y, null);
                     }
 
-                    CreateWallTupleForInternalMatrixCells(currentCell, neighborCell, grid, doorsCandidates, floorPlanManager);
+                    CreateWallTupleForInternalMatrixCells(currentCell, neighborCell, doorsCandidates, floorPlanManager);
                     // ==================== End check neighbors
                 }
             }
@@ -106,31 +108,16 @@ namespace BuildingGenerator
         /// <param name="grid"></param>
         /// <param name="floorPlanManager"></param>
         /// <param name="doorsCandidates"></param>
-        void EvaluateMatrixTopLeftThresholds(Axis axis, int axisCoord, Cell currentCell, CellsGrid grid, FloorPlanManager floorPlanManager, DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
+        void EvaluateMatrixTopLeftThresholds(Vector2Int coordModifier, int axisCoord, Cell currentCell, FloorPlanManager floorPlanManager, DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
         {
-            Vector2Int axisModifier = new Vector2Int();
-
-            if (axis == Axis.X)
-            {
-                axisModifier = Vector2Int.right;
-            }
-            else if (axis == Axis.Y)
-            {
-                axisModifier = Vector2Int.up;
-            }
-            else
-            {
-                Debug.LogError("Invalid axis.");
-            }
-
             if (axisCoord == 0 && currentCell.Zone != null) // Cell is border at matrix left threshold.
             {
-                // Neighbor cell is on top out.
-                var newTuple = new CellsTuple(currentCell, new Cell(currentCell.GridPosition.x - 1 * axisModifier.x, currentCell.GridPosition.y - 1 * axisModifier.y, null), false);
+                // Neighbor cell is on top out. Create a fake cell for the neighbor cell.
+                var newTuple = new CellsTuple(currentCell, new Cell(currentCell.GridPosition.x + coordModifier.x, currentCell.GridPosition.y + coordModifier.y, null), false);
                 newTuple.SetOutsideBorder(true);
                 floorPlanManager.WallCellsTuples.Add(newTuple);
 
-                if (currentCell.Zone.HasOutsideDoor && currentCell.NumNeighborsInSameZone(grid) <= _settings.MaxNeighborsToHaveDoor)
+                if (currentCell.Zone.HasOutsideDoor && currentCell.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor)
                 {
                     doorsCandidates.AddValue(currentCell.Zone.ZoneId, _outsideZoneId, newTuple);
                 }
@@ -146,7 +133,7 @@ namespace BuildingGenerator
         /// <param name="grid"></param>
         /// <param name="doorsCandidates"></param>
         /// <param name="floorPlanManager"></param>
-        void CreateWallTupleForInternalMatrixCells(Cell currentCell, Cell neighborCell, CellsGrid grid, DictionaryDictionaryList<string, CellsTuple> doorsCandidates, FloorPlanManager floorPlanManager)
+        void CreateWallTupleForInternalMatrixCells(Cell currentCell, Cell neighborCell, DictionaryDictionaryList<string, CellsTuple> doorsCandidates, FloorPlanManager floorPlanManager)
         {
             if (neighborCell?.Zone != currentCell?.Zone)
             {
@@ -154,11 +141,11 @@ namespace BuildingGenerator
 
                 if (currentCell.Zone != null && neighborCell.Zone != null && currentCell.Zone.MustBeAdjacentTo(neighborCell.Zone))
                 {
-                    if (currentCell.NumNeighborsInSameZone(grid) < 3 || neighborCell.NumNeighborsInSameZone(grid) < 3)
+                    if (currentCell.NumNeighborsInSameZone() < 3 || neighborCell.NumNeighborsInSameZone() < 3)
                         doorsCandidates.AddValue(currentCell.Zone.ZoneId, neighborCell.Zone.ZoneId, newTuple);
                 }
 
-                if (CanTupleHaveADoor(currentCell, neighborCell, grid))
+                if (CanTupleHaveADoor(currentCell, neighborCell))
                 {
                     if (currentCell.Zone != null && neighborCell.Zone == null && currentCell.Zone.HasOutsideDoor)
                     {
@@ -184,12 +171,12 @@ namespace BuildingGenerator
         /// <param name="cellB"></param>
         /// <param name="grid"></param>
         /// <returns></returns>
-        bool CanTupleHaveADoor(Cell cellA, Cell cellB, CellsGrid grid)
+        bool CanTupleHaveADoor(Cell cellA, Cell cellB)
         {
             // One cell have a number of neighbors between a min and max value
             // Or the cell have a number of neighbors between a min and max value
-            return cellA.NumNeighborsInSameZone(grid) <= _settings.MaxNeighborsToHaveDoor ||
-                   cellB.NumNeighborsInSameZone(grid) <= _settings.MaxNeighborsToHaveDoor;
+            return cellA.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor ||
+                   cellB.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor;
         }
 
 
@@ -254,13 +241,13 @@ namespace BuildingGenerator
                         if (listOfDoorCandidates.Count == 0)
                         {
                             // At least one adjacency constraint not meet.
-                            //Debug.LogError($"Post process: Adjacency not meet for <b>{zone}</b> and <b>{adjacentZone}</b>");
+                            Utils.Debug.DevError($"Post process: Adjacency not meet for <b>{zone}</b> and <b>{adjacentZone}</b>");
                             return false;
                         }
                     }
                     else
                     {
-                        //Debug.LogError($"<color=red>Adjacency not meet</color> for <b>{zone}</b> and <b>{adjacentZone}</b>");
+                        Utils.Debug.DevError($"<color=red>Adjacency not meet</color> for <b>{zone}</b> and <b>{adjacentZone}</b>");
                         return false;
                     }
                     //Debug.Log($"<color=green>Adjacencies ok for the pair.</color>");
