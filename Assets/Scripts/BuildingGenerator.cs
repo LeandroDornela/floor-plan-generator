@@ -28,7 +28,7 @@ namespace BuildingGenerator
         */
 
 
-        public async void GenerateBuilding(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, FloorPlanGenSceneDebugger sceneDebugger, IFloorPlanConfig floorPlanConfig)
+        public async void GenerateBuilding(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, FloorPlanGenSceneDebugger sceneDebugger)
         {
             if (buildingGeneratorSettings.EnableDevLogs)
             {
@@ -40,7 +40,8 @@ namespace BuildingGenerator
             }
 
             _floorPlanGenerator = new FloorPlanGenerator();
-            var result = await _floorPlanGenerator.GenerateFloorPlans(buildingGeneratorSettings, methodGrowthSettings, sceneDebugger, floorPlanConfig.GetFloorPlanData(), 1);
+            FloorPlanData floorPlanData = buildingGeneratorSettings._testingFloorPlanConfig.ConvertToFloorPlanData();
+            var result = await _floorPlanGenerator.GenerateFloorPlans(buildingGeneratorSettings, methodGrowthSettings, sceneDebugger, floorPlanData, 1);
         }
 
 

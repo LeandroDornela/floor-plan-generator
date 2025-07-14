@@ -74,7 +74,7 @@ namespace BuildingGenerator
 
             Debug.Log($"Seed: {_seed}");
 
-            await UniTask.SwitchToThreadPool();
+            //await UniTask.SwitchToThreadPool();
 
             // Loop for generating the final desired number of floor plans
             for (int amountCount = 0; amountCount < amount; amountCount++)
@@ -184,7 +184,7 @@ namespace BuildingGenerator
                 _selectedFloorPlans.Add(selectedFloorPlan);
             }
 
-            await UniTask.SwitchToMainThread();
+            //await UniTask.SwitchToMainThread();
 
             // Random reset, optional.
             Utils.Random.ClearSeed();

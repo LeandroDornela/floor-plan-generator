@@ -87,7 +87,7 @@ namespace BuildingGenerator
 
 
         /// <summary>
-        /// 
+        /// TODO: use zone guid instead of id to avoid duplicated, zone.key is guid
         /// </summary>
         /// <param name="zonesConfigs"></param>
         /// <param name="adjacencies"></param>
@@ -105,23 +105,24 @@ namespace BuildingGenerator
             // Set the parents and children of the zones.
             foreach(var zone in _zonesInstances)
             {
-                string parentZoneId = zonesConfigs[zone.Key].ParentZoneId;
+                //string parentZoneId = zonesConfigs[zone.Key].ParentZoneId;
+                string parentZoneGUID = zonesConfigs[zone.Key].ParentZoneGUID;
 
-                if (parentZoneId != string.Empty)
+                if (parentZoneGUID != string.Empty)
                 {
-                    Zone parentZone = _zonesInstances[parentZoneId];
+                    Zone parentZone = _zonesInstances[parentZoneGUID];
                     zone.Value.SetParentZone(parentZone);
                     parentZone.AddChildZone(zone.Value);
                 }
             }
 
             // For each zone with adjacencies configured, set the adjacent zones.
-            foreach(var zoneId in adjacencies)
+            foreach(var zoneGUID in adjacencies)
             {
-                foreach(var adjacentZoneId in zoneId.Value)
+                foreach(var adjacentZoneGUID in zoneGUID.Value)
                 {
-                    _zonesInstances[zoneId.Key].AddAdjacentZone(_zonesInstances[adjacentZoneId]);
-                    _zonesInstances[adjacentZoneId].AddAdjacentZone(_zonesInstances[zoneId.Key]);
+                    _zonesInstances[zoneGUID.Key].AddAdjacentZone(_zonesInstances[adjacentZoneGUID]);
+                    _zonesInstances[adjacentZoneGUID].AddAdjacentZone(_zonesInstances[zoneGUID.Key]);
                 }
             }
 

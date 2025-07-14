@@ -12,9 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a0bbf1eba5eae046be77660da6c1e57, type: 3}
   m_Name: MethodSettings_default
   m_EditorClassIdentifier: 
-  _delay: 0.01
-  _stopAtInitialPlot: 0
-  _skipToFinalResult: 1
   _borderDistanceCurve:
     serializedVersion: 2
     m_Curve:
@@ -28,14 +25,14 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.19212434
     - serializedVersion: 3
-      time: 0.32553104
-      value: 0.43228376
-      inSlope: -1.6089617
-      outSlope: -1.6089617
+      time: 0.3574503
+      value: 0.50153005
+      inSlope: -2.1851113
+      outSlope: -2.1851113
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.12572864
-      outWeight: 0.103197105
+      inWeight: 0.41811892
+      outWeight: 0.037221566
     - serializedVersion: 3
       time: 1
       value: -0.0017700195
@@ -61,14 +58,14 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.3183203
-      value: 0.49691772
-      inSlope: -3.0097144
-      outSlope: -3.0097144
+      time: 0.2046029
+      value: 0.44498155
+      inSlope: -2.2682023
+      outSlope: -2.2682023
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.010918772
-      outWeight: 0.033007197
+      outWeight: 0.042504374
     - serializedVersion: 3
       time: 0.7
       value: 0
@@ -83,9 +80,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   _adjacencyWeightMultiplier: 1
   _borderWeightMultiplier: 1
+  _minLCorridorWidth: 2
+  _unassignedCellsAction: 1
+  _maxNeighborsToHaveDoor: 2
+  _delay: 0.01
+  _stopAtInitialPlot: 0
+  _skipToFinalResult: 1
+  _ignoreDesiredAreaInRect: 0
   _ignoreBorderWeights: 0
   _ignoreAdjacentWeights: 0
-  _minLCorridorWidth: 2
-  _ignoreDesiredAreaInRect: 0
-  _unassignedCellsAction: 2
-  _maxNeighborsToHaveDoor: 2

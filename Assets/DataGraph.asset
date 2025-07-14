@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
+  m_Name: DataGraph
+  m_EditorClassIdentifier: 
+  nodes:
+  - guid: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
+    position: {x: 114, y: 307}
+    zoneId: 
+    areaRatio: 1
+    hasOutsideDoor: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs:
+    - 521f5942-eac6-48bb-a63e-f83484fd33f1
+    adjacenciesGUIDs: []
+  - guid: 521f5942-eac6-48bb-a63e-f83484fd33f1
+    position: {x: 479, y: 131}
+    zoneId: 
+    areaRatio: 1
+    hasOutsideDoor: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
+    childrenGUIDs:
+    - 3edaf155-1f83-4de8-a46b-a538251b3076
+    adjacenciesGUIDs: []
+  - guid: 3edaf155-1f83-4de8-a46b-a538251b3076
+    position: {x: 860, y: 0}
+    zoneId: 
+    areaRatio: 1
+    hasOutsideDoor: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 2d4e578e-59c6-4be7-8aed-09f214e6cd6d
+    position: {x: 914, y: 380}
+    zoneId: 
+    areaRatio: 1
+    hasOutsideDoor: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
+    position: {x: 0, y: 0}
+    zoneId: 
+    areaRatio: 1
+    hasOutsideDoor: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs: []
+    adjacenciesGUIDs: []

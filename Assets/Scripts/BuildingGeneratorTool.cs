@@ -10,6 +10,7 @@ namespace BuildingGenerator
         public MethodGrowthSettings methodGrowthSettings; // Config
         public IFloorPlanConfig floorPlanConfig; // TODO: Will be replace by a full building config with more than one floor plan config.
         public FloorPlanGenSceneDebugger floorPlanGenSceneDebugger; // Debug
+        public GameObject floorPlanGenSceneDebuggerPrefab;
 
         private BuildingGenerator buildingGenerator;
         private Vector2 scrollPos;
@@ -38,19 +39,20 @@ namespace BuildingGenerator
             GUILayout.Space(10); // Add spacing below tabs
 
             // Switch content based on selected tab
+            var paddingTabs = new RectOffset(16, 16, 0, 132);
             switch (selectedTab)
             {
                 case 0:
-                    DrawGeneralTab(largeLabel);
+                    DrawGeneralTab(largeLabel, paddingTabs);
                     break;
                 case 1:
-                    DrawBuildingGenSetsTab(largeLabel);
+                    DrawBuildingGenSetsTab(largeLabel, paddingTabs);
                     break;
                 case 2:
-                    DrawGenMethodSetsTab(largeLabel);
+                    DrawGenMethodSetsTab(largeLabel, paddingTabs);
                     break;
                 case 3:
-                    DrawDebugTab(largeLabel);
+                    DrawDebugTab(largeLabel, paddingTabs);
                     break;
             }
 
@@ -59,11 +61,14 @@ namespace BuildingGenerator
                 buildingGenerator = new BuildingGenerator();
             }
 
+            // =================================== Bottom part ===================================
+
             GUIStyle customButtonStyle = new GUIStyle(GUI.skin.button);
             customButtonStyle.fontSize = 12; // Set desired font size
             customButtonStyle.fontStyle = FontStyle.Bold; // Optional: Bold, Italic, etc.
+            customButtonStyle.padding = new RectOffset(16, 16, 16, 16);
 
-            if (buildingGeneratorSettings == null || methodGrowthSettings == null || floorPlanConfig == null)
+            if (buildingGeneratorSettings == null || methodGrowthSettings == null || floorPlanConfig == null || floorPlanGenSceneDebugger == null)
             {
                 customButtonStyle.normal.textColor = Color.red;
             }
@@ -73,32 +78,32 @@ namespace BuildingGenerator
             }
 
 
+            // GENERATE BUTTON
             GUILayout.Space(16);
-            EditorGUILayout.BeginHorizontal();
+            //EditorGUILayout.BeginHorizontal();
             //GUILayout.FlexibleSpace();
             if (!Application.isPlaying)
             {
-                if (GUILayout.Button("Generate", customButtonStyle, GUILayout.Height(40)))
+                if (GUILayout.Button("Generate", customButtonStyle))
                 {
                     floorPlanGenSceneDebugger.Init(buildingGeneratorSettings.BuildingAssetsPack);
-                    buildingGenerator.GenerateBuilding(buildingGeneratorSettings, methodGrowthSettings, floorPlanGenSceneDebugger, floorPlanConfig);
+                    buildingGenerator.GenerateBuilding(buildingGeneratorSettings, methodGrowthSettings, floorPlanGenSceneDebugger);
                 }
             }
             else
             {
-                if (GUILayout.Button("Generate Debugging", customButtonStyle, GUILayout.Height(40)))
+                if (GUILayout.Button("Generate Debugging", customButtonStyle))
                 {
                     if (Application.isPlaying)
                     {
                         floorPlanGenSceneDebugger.Init(buildingGeneratorSettings.BuildingAssetsPack);
-                        buildingGenerator.GenerateBuilding(buildingGeneratorSettings, methodGrowthSettings, floorPlanGenSceneDebugger, floorPlanConfig);
+                        buildingGenerator.GenerateBuilding(buildingGeneratorSettings, methodGrowthSettings, floorPlanGenSceneDebugger);
                     }
                 }
             }
+            //EditorGUILayout.EndHorizontal();
 
-
-            EditorGUILayout.EndHorizontal();
-
+            // PROGRESS BAR
             //GUILayout.FlexibleSpace();
             float progress = buildingGenerator.GenerationProgress();
             if (progress >= 0 && progress < 1)
@@ -138,9 +143,12 @@ namespace BuildingGenerator
             */
         }
 
-        private void DrawGeneralTab(GUIStyle largeLabel)
+        private void DrawGeneralTab(GUIStyle largeLabel, RectOffset padding)
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 120));
+            GUIStyle scrollStyle = new GUIStyle(GUI.skin.scrollView);
+            scrollStyle.padding = padding;
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, scrollStyle);
+            //scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width - _spacing), GUILayout.Height(position.height - 120));
 
             // FLOOR PLAN CONGIF
             //GUILayout.Space(16);
@@ -158,9 +166,12 @@ namespace BuildingGenerator
             EditorGUILayout.EndScrollView();
         }
 
-        private void DrawBuildingGenSetsTab(GUIStyle largeLabel)
+        private void DrawBuildingGenSetsTab(GUIStyle largeLabel, RectOffset padding)
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 120));
+            GUIStyle scrollStyle = new GUIStyle(GUI.skin.scrollView);
+            scrollStyle.padding = padding;
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, scrollStyle);
+            //scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width - _spacing), GUILayout.Height(position.height - 120));
 
             // BUILDING GENERATOR SETTINGS
             //GUILayout.Space(16);
@@ -178,9 +189,12 @@ namespace BuildingGenerator
             EditorGUILayout.EndScrollView();
         }
 
-        private void DrawGenMethodSetsTab(GUIStyle largeLabel)
+        private void DrawGenMethodSetsTab(GUIStyle largeLabel, RectOffset padding)
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 120));
+            GUIStyle scrollStyle = new GUIStyle(GUI.skin.scrollView);
+            scrollStyle.padding = padding;
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, scrollStyle);
+            //scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width - _spacing), GUILayout.Height(position.height - 120));
 
             // METHOD SETTINGS
             //GUILayout.Space(16);
@@ -198,16 +212,32 @@ namespace BuildingGenerator
             EditorGUILayout.EndScrollView();
         }
 
-        private void DrawDebugTab(GUIStyle largeLabel)
+        private void DrawDebugTab(GUIStyle largeLabel, RectOffset padding)
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width), GUILayout.Height(position.height - 120));
+            GUIStyle scrollStyle = new GUIStyle(GUI.skin.scrollView);
+            scrollStyle.padding = padding;
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, scrollStyle);
+            //scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width - _spacing), GUILayout.Height(position.height - 120));
 
             // SCENE DEBUGGER
             //GUILayout.Space(16);
             //GUILayout.Label("Scene Debug", largeLabel);
             floorPlanGenSceneDebugger = (FloorPlanGenSceneDebugger)EditorGUILayout.ObjectField("Scene Debugger", floorPlanGenSceneDebugger, typeof(FloorPlanGenSceneDebugger), true);
 
+            GUILayout.Space(16);
+            floorPlanGenSceneDebuggerPrefab = (GameObject)EditorGUILayout.ObjectField("Scene Debugger Prefab", floorPlanGenSceneDebuggerPrefab, typeof(GameObject), false);
+            if (GUILayout.Button("Create Scene Debugger Object"))
+            {
+                CreateSceneDebugger();
+            }
+
             EditorGUILayout.EndScrollView();
+        }
+
+        private void CreateSceneDebugger()
+        {
+            var go = Instantiate(floorPlanGenSceneDebuggerPrefab);
+            floorPlanGenSceneDebugger = go.GetComponent<FloorPlanGenSceneDebugger>();
         }
     }
 }

@@ -8,36 +8,37 @@ namespace BuildingGenerator
     {
         public enum UnassignedCellsActionEnum { Nullify, ToDesAreaDifference, ToNeighborCellCount, none }
 
-
-        [Header("General Testing")]
-        [SerializeField] private float _delay = 0.01f;
-        [SerializeField] private bool _stopAtInitialPlot = false;
-        [SerializeField] private bool _skipToFinalResult = false;
-
+        [Header("General settings")]
         // DATA
-        [Header("Weights")]
+        //[Header("Weights")]
+        [Space]
         [SerializeField] private AnimationCurve _borderDistanceCurve;
         [SerializeField] private AnimationCurve _adjacencyDistanceCurve;
         [SerializeField] private float _adjacencyWeightMultiplier = 1;
         [SerializeField] private float _borderWeightMultiplier = 1;
 
-        [Header("Weights Testing")]
-        [SerializeField] private bool _ignoreBorderWeights = false;
-        [SerializeField] private bool _ignoreAdjacentWeights = false;
-
-
-        [Header("Growth Steps")]
+        //[Header("Growth Steps")]
+         [Space]
         [SerializeField, Min(1)] private int _minLCorridorWidth = 2; // TODO: change to zone side percentage.
 
-        [Header("Growth Steps Testing")]
-        [SerializeField] private bool _ignoreDesiredAreaInRect = false;
-
-
-        [Header("Missing Cells assign")]
+        //[Header("Missing Cells Assign Step")]
+         [Space]
         [SerializeField] private UnassignedCellsActionEnum _unassignedCellsAction = UnassignedCellsActionEnum.ToNeighborCellCount;
 
-        [Header("Post process")]
+        //[Header("Post Process Step")]
+        [Space]
         [SerializeField, Range(0, 4)] private int _maxNeighborsToHaveDoor = 2;
+
+
+        [Header("Debug")]
+        [SerializeField] private float _delay = 0.01f;
+        [SerializeField] private bool _stopAtInitialPlot = false;
+        [SerializeField] private bool _skipToFinalResult = false;
+        // Growth Steps Testing
+        [SerializeField] private bool _ignoreDesiredAreaInRect = false;
+        // Weights Testing
+        [SerializeField] private bool _ignoreBorderWeights = false;
+        [SerializeField] private bool _ignoreAdjacentWeights = false;
 
 
         public float Delay => _delay;

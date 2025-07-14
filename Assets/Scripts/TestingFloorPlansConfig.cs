@@ -8,11 +8,12 @@ namespace BuildingGenerator
     [Serializable]
     public struct TestZoneConfig
     {
-        [SerializeField] private string _parentZoneId;
-        [SerializeField] private float _areaRatio;
-        [SerializeField] private Texture2D _presetArea;
-        [SerializeField] private bool _hasOutsideDoor;
-        [SerializeField] private bool _hasWindows;
+        public string _zoneID;
+        public string _parentZoneGUID;
+        public float _areaRatio;
+        public Texture2D _presetArea;
+        public bool _hasOutsideDoor;
+        public bool _hasWindows;
 
 
         public ZoneData ToZoneConfig(Vector2Int gridDimensions)
@@ -23,7 +24,7 @@ namespace BuildingGenerator
                 presetArea = TextureToIntArray(_presetArea, gridDimensions);
             }
 
-            return new ZoneData(_parentZoneId, _areaRatio, presetArea, _hasOutsideDoor, _hasWindows);
+            return new ZoneData(_zoneID, _parentZoneGUID, _areaRatio, presetArea, _hasOutsideDoor, _hasWindows);
         }
 
         public int[] TextureToIntArray(Texture2D texture, Vector2Int gridDimensions)
@@ -54,6 +55,7 @@ namespace BuildingGenerator
     [Serializable]
     public struct TestFloorPlanConfig
     {
+        public string FloorPlanGUID;
         public string FloorPlanId;
         public Vector2Int GridDimensions;
 
@@ -75,6 +77,7 @@ namespace BuildingGenerator
         {
             int index = 0;
 
+            var floorPlanGUID = FloorPlanConfigs[index].FloorPlanGUID;
             var planId = FloorPlanConfigs[index].FloorPlanId;
 
             // Get the grid dimensions.
@@ -91,7 +94,7 @@ namespace BuildingGenerator
             var adj = FloorPlanConfigs[index].Adjacencies;
 
             // Create a FloorPlanData from a TestFloorPlanConfig.
-            return new FloorPlanData(planId, dims, zonesConfigs, adj);
+            return new FloorPlanData(floorPlanGUID, planId, dims, zonesConfigs, adj);
         }
     }
 }
