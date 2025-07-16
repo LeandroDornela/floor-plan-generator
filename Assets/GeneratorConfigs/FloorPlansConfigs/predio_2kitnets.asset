@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
+  m_Name: predio_2kitnets
+  m_EditorClassIdentifier: 
+  nodes:
+  - guid: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    position: {x: 100, y: 200}
+    zoneId: predio
+    areaRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs:
+    - 262d31c3-1020-4897-b9d0-0ee34eab9c0d
+    - 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    - 10d44379-9e50-4d5b-bda5-b1e505366d04
+    adjacenciesGUIDs: []
+  - guid: 262d31c3-1020-4897-b9d0-0ee34eab9c0d
+    position: {x: 497, y: 200}
+    zoneId: circ
+    areaRatio: 0.134
+    hasOutsideDoor: 1
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 2a3b1ea8-94b4-4d6e-ad53-6157952bac5e
+    - bb3a662b-1df0-4137-afd1-4cea21e6002d
+  - guid: 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    position: {x: 483, y: -76}
+    zoneId: ap1
+    areaRatio: 0.402
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    childrenGUIDs:
+    - bb3a662b-1df0-4137-afd1-4cea21e6002d
+    - 968bc9a5-1260-4b3b-8941-7c2cee82ad0b
+    - d4453db2-aec1-41cd-a764-6b912601014e
+    adjacenciesGUIDs: []
+  - guid: 10d44379-9e50-4d5b-bda5-b1e505366d04
+    position: {x: 497, y: 438}
+    zoneId: ap2
+    areaRatio: 0.402
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    childrenGUIDs:
+    - 2a3b1ea8-94b4-4d6e-ad53-6157952bac5e
+    - ff61191a-eaa7-4012-a9fe-50e1a92c0fd9
+    - cb8f66a3-15f9-4cc7-bf3a-088835b9f600
+    adjacenciesGUIDs: []
+  - guid: bb3a662b-1df0-4137-afd1-4cea21e6002d
+    position: {x: 799, y: -252}
+    zoneId: s
+    areaRatio: 0.196
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 968bc9a5-1260-4b3b-8941-7c2cee82ad0b
+    - d4453db2-aec1-41cd-a764-6b912601014e
+  - guid: 968bc9a5-1260-4b3b-8941-7c2cee82ad0b
+    position: {x: 799, y: -76}
+    zoneId: b
+    areaRatio: 0.188
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: d4453db2-aec1-41cd-a764-6b912601014e
+    position: {x: 799, y: 100}
+    zoneId: q
+    areaRatio: 0.152
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 2a3b1ea8-94b4-4d6e-ad53-6157952bac5e
+    position: {x: 799, y: 376}
+    zoneId: s
+    areaRatio: 0.125
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 10d44379-9e50-4d5b-bda5-b1e505366d04
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - ff61191a-eaa7-4012-a9fe-50e1a92c0fd9
+    - cb8f66a3-15f9-4cc7-bf3a-088835b9f600
+  - guid: cb8f66a3-15f9-4cc7-bf3a-088835b9f600
+    position: {x: 799, y: 728}
+    zoneId: q
+    areaRatio: 0.143
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 10d44379-9e50-4d5b-bda5-b1e505366d04
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: ff61191a-eaa7-4012-a9fe-50e1a92c0fd9
+    position: {x: 799, y: 552}
+    zoneId: b
+    areaRatio: 0.143
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 10d44379-9e50-4d5b-bda5-b1e505366d04
+    childrenGUIDs: []
+    adjacenciesGUIDs: []

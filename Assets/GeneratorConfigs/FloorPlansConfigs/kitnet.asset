@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - guid: 41feca1d-c98e-41a5-93df-b670619eb6b5
-    position: {x: 109, y: 245}
-    zoneId: casa
+    position: {x: 111, y: 245}
+    zoneId: kitnet
     areaRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
@@ -23,46 +23,46 @@ MonoBehaviour:
     parentGUID: 
     childrenGUIDs:
     - 3faba487-14a3-485e-bc2c-676a835cddb0
-    - 7bf6028c-9e9e-49e5-987b-17e90c890667
+    - fb90edab-8e61-45d7-b74a-183c7c7f0ad1
+    adjacenciesGUIDs: []
+  - guid: 7bf6028c-9e9e-49e5-987b-17e90c890667
+    position: {x: 1092, y: 383}
+    zoneId: quarto
+    areaRatio: 0.402
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 3faba487-14a3-485e-bc2c-676a835cddb0
+    childrenGUIDs: []
     adjacenciesGUIDs: []
   - guid: 3faba487-14a3-485e-bc2c-676a835cddb0
-    position: {x: 483, y: 90}
-    zoneId: publico
-    areaRatio: 0.607
+    position: {x: 615, y: 525}
+    zoneId: privado
+    areaRatio: 0.5
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 41feca1d-c98e-41a5-93df-b670619eb6b5
     childrenGUIDs:
-    - fb90edab-8e61-45d7-b74a-183c7c7f0ad1
     - cb76abee-7ca6-4c1e-a836-d68ac236bfcc
-    adjacenciesGUIDs: []
-  - guid: 7bf6028c-9e9e-49e5-987b-17e90c890667
-    position: {x: 483, y: 400}
-    zoneId: quarto
-    areaRatio: 0.25
-    hasOutsideDoor: 0
-    HasOutsideWindows: 0
-    presetAreaTexture: {fileID: 0}
-    parentGUID: 41feca1d-c98e-41a5-93df-b670619eb6b5
-    childrenGUIDs: []
+    - 7bf6028c-9e9e-49e5-987b-17e90c890667
     adjacenciesGUIDs: []
   - guid: fb90edab-8e61-45d7-b74a-183c7c7f0ad1
-    position: {x: 804, y: -73}
+    position: {x: 615, y: 245}
     zoneId: sala
-    areaRatio: 0.33
+    areaRatio: 0.5
     hasOutsideDoor: 1
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
-    parentGUID: 3faba487-14a3-485e-bc2c-676a835cddb0
+    parentGUID: 41feca1d-c98e-41a5-93df-b670619eb6b5
     childrenGUIDs: []
     adjacenciesGUIDs:
     - cb76abee-7ca6-4c1e-a836-d68ac236bfcc
     - 7bf6028c-9e9e-49e5-987b-17e90c890667
   - guid: cb76abee-7ca6-4c1e-a836-d68ac236bfcc
-    position: {x: 804, y: 143}
+    position: {x: 1092, y: 582}
     zoneId: banheiro
-    areaRatio: 0.161
+    areaRatio: 0.098
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}

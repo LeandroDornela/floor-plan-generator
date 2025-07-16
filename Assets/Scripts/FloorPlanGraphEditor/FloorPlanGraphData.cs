@@ -13,7 +13,7 @@ namespace BuildingGenerator
         public override FloorPlanData GetFloorPlanData()
         {
             var planId = "testing";
-            var planDimensions = new Vector2Int(10, 10);
+            var planDimensions = new Vector2Int(25, 25);
 
             // Covert the data in the List "nodes data models" to ZoneData Dictionary.
             // And the adjacency rules for the nodes that have a adjacent zone set.

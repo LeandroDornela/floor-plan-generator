@@ -49,6 +49,8 @@ namespace BuildingGenerator
         public Dictionary<Guid, Zone> ZonesInstances => _zonesInstances;
         public Dictionary<Guid, Guid[]> Adjacencies => _adjacencies;
 
+        private Guid _rootGuid;
+
 
         public FloorPlanManager(FloorPlanData floorPlanConfig)
         {
@@ -98,13 +100,13 @@ namespace BuildingGenerator
             _zonesInstances = new Dictionary<Guid, Zone>();
 
             // Create all zones.
-            foreach(var zone in zonesConfigs)
+            foreach (var zone in zonesConfigs)
             {
                 _zonesInstances.Add(zone.Key, new Zone(this, zone.Key, zone.Value.ZoneID, zone.Value.AreaRatio, zone.Value.HasOutsideDoor, zone.Value.HasWindows));
             }
 
             // Set the parents and children of the zones.
-            foreach(var zone in _zonesInstances)
+            foreach (var zone in _zonesInstances)
             {
                 //string parentZoneId = zonesConfigs[zone.Key].ParentZoneId;
                 Guid parentZoneGUID = zonesConfigs[zone.Key].ParentZoneGUID;
@@ -118,9 +120,9 @@ namespace BuildingGenerator
             }
 
             // For each zone with adjacencies configured, set the adjacent zones.
-            foreach(var zoneGUID in adjacencies)
+            foreach (var zoneGUID in adjacencies)
             {
-                foreach(var adjacentZoneGUID in zoneGUID.Value)
+                foreach (var adjacentZoneGUID in zoneGUID.Value)
                 {
                     _zonesInstances[zoneGUID.Key].AddAdjacentZone(_zonesInstances[adjacentZoneGUID]);
                     _zonesInstances[adjacentZoneGUID].AddAdjacentZone(_zonesInstances[zoneGUID.Key]);
@@ -131,14 +133,15 @@ namespace BuildingGenerator
             // <!--
             // order:-30
             // -->
-            foreach(var zone in _zonesInstances)
+            foreach (var zone in _zonesInstances)
             {
                 // If is a root.
-                if(zone.Value.ParentZone == null)
+                if (zone.Value.ParentZone == null)
                 {
-                    if(_rootZone == null)
+                    if (_rootZone == null)
                     {
                         _rootZone = zone.Value;
+                        _rootGuid = zone.Key;
                     }
                     else
                     {
@@ -149,10 +152,24 @@ namespace BuildingGenerator
 
 
             // After all zones created and parents assigned, check for preset area.
-            foreach(var zone in _zonesInstances)
+            // first assign to root, then assign to the other zones.
+            CheckAndAssignPresetArea(_rootZone, zonesConfigs[_rootGuid], cellsGrid);
+            foreach (var zone in _zonesInstances)
             {
-                CheckAndAssignPresetArea(zone.Value, zonesConfigs[zone.Key], cellsGrid);
+                if (zone.Key != _rootGuid) CheckAndAssignPresetArea(zone.Value, zonesConfigs[zone.Key], cellsGrid);
             }
+            /*
+            // Bake the preset zones.
+            foreach (Zone zone in ZonesInstances.Values)
+            {
+                if (zone.IsDirty)
+                {
+                    Utils.Debug.DevLog($"{zone.ZoneId} is dirty. Re-baking...");
+                    zone.Unbake();
+                    zone.Bake();
+                }
+            }
+            */
         }
 
 
@@ -164,14 +181,14 @@ namespace BuildingGenerator
         /// <param name="cellsGrid"></param>
         void CheckAndAssignPresetArea(Zone zone, ZoneData zoneData, CellsGrid cellsGrid)
         {
-            if(zone == null || cellsGrid == null)
+            if (zone == null || cellsGrid == null)
             {
                 Utils.Debug.DevError("Zone or grid unassigned.");
                 return;
             }
 
 
-            if(zoneData.HasPresetArea)
+            if (zoneData.HasPresetArea)
             {
                 // Check if the zone can be predefined.
                 // This validation can be done before, checking the in data.
@@ -181,31 +198,42 @@ namespace BuildingGenerator
                 // at the moment of grow area A it must expand to include the cells set to B, what is not guaranteed. One
                 // way to do it would be recursively assign the cells of B to the parent A and its parents and permit A
                 // expansion since expansion is initially blocked to predefined areas.
-                if(zone.ParentZone != _rootZone && zone != _rootZone)
+                if (zone.ParentZone != _rootZone && zone != _rootZone)
                 {
                     Utils.Debug.DevError($"Only the root zone and it's children can be predefined. Zone: {zone.ZoneId}");
                     return;
                 }
 
                 // Validate preset area size.
-                if(zoneData.PresetArea.Length != cellsGrid.Cells.Length)
+                if (zoneData.PresetArea.Length != cellsGrid.Cells.Length)
                 {
                     Utils.Debug.DevError("Preset area number of cells don't match the grid number of cells.");
                     return;
                 }
 
                 // Assign the correct cell grid cells to the zone.
-                for(int y = 0; y < cellsGrid.Dimensions.y; y++)
+                for (int y = 0; y < cellsGrid.Dimensions.y; y++)
                 {
-                    for(int x = 0; x < cellsGrid.Dimensions.x; x++)
+                    for (int x = 0; x < cellsGrid.Dimensions.x; x++)
                     {
-                        if(zoneData.PresetArea[Utils.MatrixToArrayIndex(x, y, cellsGrid.Dimensions.x)] == 1)
+                        if (zoneData.PresetArea[Utils.MatrixToArrayIndex(x, y, cellsGrid.Dimensions.x)] == 1)
                         {
                             // Assign the cell to the zone, but only if it is inside the zone's parent. Avoid adding cells
                             // outside the current context.
-                            TryAssignCellToZone(x, y, zone);
+                            // TODO: ERRO, if root and a child are preset but root runs after the child, it will replace the child preset.
+                            if (!TryAssignPresetCellToZone(x, y, zone))
+                            {
+                                Utils.Debug.DevError($"Failed to assign preset cell to zone {zoneData.ZoneID}");
+                            }
                         }
                     }
+                }
+
+                
+                if (zone != _rootZone && _rootZone.IsBaked)
+                {
+                    _rootZone.Unbake();
+                    _rootZone.Bake();
                 }
 
                 zone.Bake();
@@ -213,16 +241,16 @@ namespace BuildingGenerator
             else // ROOT DEFAULT. If zone don't have a preset area and is the root. Assign all cells by default.
             {
                 // Validate root zone.
-                if(_rootZone == null)
+                if (_rootZone == null)
                 {
                     Utils.Debug.DevError("Root zone undefined.");
                     return;
                 }
 
                 // Check if is root and assign cells.
-                if(zone == _rootZone)
+                if (zone == _rootZone)
                 {
-                    foreach(Cell cell in cellsGrid.Cells)
+                    foreach (Cell cell in cellsGrid.Cells)
                     {
                         AssignCellToZone(cell, zone);
                     }
@@ -230,6 +258,18 @@ namespace BuildingGenerator
                     zone.Bake();
                 }
             }
+            
+            /*
+            foreach (Zone z in ZonesInstances.Values)
+            {
+                if (z.IsDirty)
+                {
+                    Utils.Debug.DevLog($"{z.ZoneId} is dirty. Re-baking...");
+                    z.Unbake();
+                    z.Bake();
+                }
+            }
+            */
         }
 
 
@@ -319,6 +359,23 @@ namespace BuildingGenerator
                 {
                     return false;
                 }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool TryAssignPresetCellToZone(int x, int y, Zone zone)
+        {
+            if (_cellsGrid.GetCell(x, y, out Cell cell))
+            {
+                if (cell.Zone != null)
+                {
+                    Utils.Debug.DevWarning($"Assign preset cell that already belong to a zone. Cell belong to {cell.Zone.ZoneId}");
+                }
+                
+                return AssignCellToZone(cell, zone);
             }
             else
             {

@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
+  m_Name: DataGraph
+  m_EditorClassIdentifier: 
+  nodes:
+  - guid: 3edaf155-1f83-4de8-a46b-a538251b3076
+    position: {x: 865, y: 330}
+    zoneId: sala
+    areaRatio: 0.25
+    hasOutsideDoor: 1
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - b51eb503-fa2b-4889-ad26-91cef0d33ac1
+    - 7b941e90-8cc5-4bcd-b4c6-eebad263f9a9
+  - guid: b51eb503-fa2b-4889-ad26-91cef0d33ac1
+    position: {x: 1184, y: 330}
+    zoneId: corredor
+    areaRatio: 0.018
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 2d4e578e-59c6-4be7-8aed-09f214e6cd6d
+    - 17e32742-0a45-4d3d-ae96-e04d002b733b
+    - a13338ad-ac7a-4ce8-8333-e3980aa88fca
+  - guid: 2d4e578e-59c6-4be7-8aed-09f214e6cd6d
+    position: {x: 1512, y: 330}
+    zoneId: cozinha
+    areaRatio: 0.268
+    hasOutsideDoor: 1
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: a13338ad-ac7a-4ce8-8333-e3980aa88fca
+    position: {x: 1512, y: 555}
+    zoneId: q2
+    areaRatio: 0.222
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 7b941e90-8cc5-4bcd-b4c6-eebad263f9a9
+    position: {x: 1184, y: 555}
+    zoneId: q1
+    areaRatio: 0.198
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 521f5942-eac6-48bb-a63e-f83484fd33f1
+    position: {x: 516, y: 87}
+    zoneId: publico
+    areaRatio: 0.464
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
+    parentGUID: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
+    childrenGUIDs:
+    - 3edaf155-1f83-4de8-a46b-a538251b3076
+    - 2d4e578e-59c6-4be7-8aed-09f214e6cd6d
+    - b51eb503-fa2b-4889-ad26-91cef0d33ac1
+    - 17e32742-0a45-4d3d-ae96-e04d002b733b
+    adjacenciesGUIDs: []
+  - guid: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
+    position: {x: 516, y: 607}
+    zoneId: privado
+    areaRatio: 0.509
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
+    childrenGUIDs:
+    - 7b941e90-8cc5-4bcd-b4c6-eebad263f9a9
+    - a13338ad-ac7a-4ce8-8333-e3980aa88fca
+    adjacenciesGUIDs: []
+  - guid: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
+    position: {x: 181, y: 330}
+    zoneId: casa
+    areaRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs:
+    - 521f5942-eac6-48bb-a63e-f83484fd33f1
+    - 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
+    adjacenciesGUIDs: []
+  - guid: 17e32742-0a45-4d3d-ae96-e04d002b733b
+    position: {x: 1512, y: 94}
+    zoneId: banheiro
+    areaRatio: 0.168
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
+    childrenGUIDs: []
+    adjacenciesGUIDs: []

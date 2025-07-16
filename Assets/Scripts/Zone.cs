@@ -379,6 +379,8 @@ namespace BuildingGenerator
         /// </summary>
         public void Unbake()
         {
+            if (!_isBaked) return;
+            
             _isBaked = false;
             Array.Clear(_cellsArray, 0, _cellsArray.Length);
             _cellsArray = null;

@@ -164,7 +164,7 @@ namespace BuildingGenerator
             float hueValue = 0;
             foreach (var zone in floorPlan.ZonesInstances)
             {
-                _zoneColors.Add(zone.Value.ZoneId, Color.HSVToRGB(hueValue, 0.8f, 0.8f));
+                _zoneColors.TryAdd(zone.Value.ZoneId, Color.HSVToRGB(hueValue, 0.8f, 0.8f));
                 hueValue += colorInterval;
             }
 

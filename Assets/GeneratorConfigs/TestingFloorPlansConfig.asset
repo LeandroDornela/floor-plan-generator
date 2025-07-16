@@ -13,252 +13,299 @@ MonoBehaviour:
   m_Name: TestingFloorPlansConfig
   m_EditorClassIdentifier: 
   FloorPlanConfigs:
-  - FloorPlanGUID: Artigo-1-guid
-    FloorPlanId: Artigo-1
-    GridDimensions: {x: 12, y: 12}
-    ZonesConfigs:
-      _serializedList:
-      - Key: casa
-        Value:
-          _parentZoneGUID: 
-          _areaRatio: 1
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: privado
-        Value:
-          _parentZoneGUID: casa
-          _areaRatio: 0.5
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: publico
-        Value:
-          _parentZoneGUID: casa
-          _areaRatio: 0.5
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: sala
-        Value:
-          _parentZoneGUID: publico
-          _areaRatio: 0.3
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 1
-          _hasWindows: 0
-      - Key: cozinha
-        Value:
-          _parentZoneGUID: publico
-          _areaRatio: 0.2
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 1
-          _hasWindows: 0
-      - Key: corredor
-        Value:
-          _parentZoneGUID: privado
-          _areaRatio: 0.01
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: banheiro
-        Value:
-          _parentZoneGUID: privado
-          _areaRatio: 0.15
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-      - Key: quarto
-        Value:
-          _parentZoneGUID: privado
-          _areaRatio: 0.25
-          _presetArea: {fileID: 0}
-          _hasOutsideDoor: 0
-          _hasWindows: 0
-    Adjacencies:
-      _serializedList:
-      - Key: sala
-        Value:
-        - cozinha
-        - corredor
-      - Key: corredor
-        Value:
-        - banheiro
-        - quarto
-  - FloorPlanGUID: 
-    FloorPlanId: Artigo-2-opt
+  - FloorPlanId: Artigo-2-opt
     GridDimensions: {x: 20, y: 20}
     ZonesConfigs:
       _serializedList:
-      - Key: casa
+      - Key: 310739b8-cde7-489b-8f0d-3ca99504b0a0
         Value:
+          _zoneID: casa
+          _zoneGUID: 310739b8-cde7-489b-8f0d-3ca99504b0a0
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: publico
+      - Key: fe2c1b0d-8203-44ad-b78f-21e271da9961
         Value:
-          _parentZoneGUID: 
+          _zoneID: publico
+          _zoneGUID: fe2c1b0d-8203-44ad-b78f-21e271da9961
+          _parentZoneGUID: 310739b8-cde7-489b-8f0d-3ca99504b0a0
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: privado1
+      - Key: 4eedfab0-b591-4104-80fb-121236095b8a
         Value:
-          _parentZoneGUID: 
+          _zoneID: privado1
+          _zoneGUID: 4eedfab0-b591-4104-80fb-121236095b8a
+          _parentZoneGUID: 310739b8-cde7-489b-8f0d-3ca99504b0a0
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: privado2
+      - Key: 5c8902ab-2b20-43f4-825a-c85cb8966e01
         Value:
-          _parentZoneGUID: 
+          _zoneID: privado2
+          _zoneGUID: 5c8902ab-2b20-43f4-825a-c85cb8966e01
+          _parentZoneGUID: 310739b8-cde7-489b-8f0d-3ca99504b0a0
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: corredor
+      - Key: 18764e83-699c-4e42-96db-8bde039a5ef1
         Value:
-          _parentZoneGUID: 
+          _zoneID: corredor
+          _zoneGUID: 18764e83-699c-4e42-96db-8bde039a5ef1
+          _parentZoneGUID: 4eedfab0-b591-4104-80fb-121236095b8a
           _areaRatio: 0.05
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: sala
+      - Key: b3f88ae4-f5f4-4e31-b065-bd1ac947a5ce
         Value:
-          _parentZoneGUID: 
+          _zoneID: sala
+          _zoneGUID: b3f88ae4-f5f4-4e31-b065-bd1ac947a5ce
+          _parentZoneGUID: fe2c1b0d-8203-44ad-b78f-21e271da9961
           _areaRatio: 0.18
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: cozinha
+      - Key: ab109cef-b00a-433a-856b-a488a4bf2452
         Value:
-          _parentZoneGUID: 
+          _zoneID: cozinha
+          _zoneGUID: ab109cef-b00a-433a-856b-a488a4bf2452
+          _parentZoneGUID: fe2c1b0d-8203-44ad-b78f-21e271da9961
           _areaRatio: 0.12
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto1
+      - Key: bdd32600-ef54-4247-9b9c-d34a3904c235
         Value:
-          _parentZoneGUID: 
+          _zoneID: quarto1
+          _zoneGUID: bdd32600-ef54-4247-9b9c-d34a3904c235
+          _parentZoneGUID: 4eedfab0-b591-4104-80fb-121236095b8a
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto2
+      - Key: 1af5767c-bbdf-4d10-b5be-7989fa3098ef
         Value:
-          _parentZoneGUID: 
+          _zoneID: quarto2
+          _zoneGUID: 1af5767c-bbdf-4d10-b5be-7989fa3098ef
+          _parentZoneGUID: 4eedfab0-b591-4104-80fb-121236095b8a
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro1
+      - Key: 4ac9f922-4d17-4ddb-bad2-5e031974ad21
         Value:
-          _parentZoneGUID: 
+          _zoneID: banheiro1
+          _zoneGUID: 4ac9f922-4d17-4ddb-bad2-5e031974ad21
+          _parentZoneGUID: 4eedfab0-b591-4104-80fb-121236095b8a
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto3
+      - Key: fb6b6dca-23ae-49db-8379-e349007c01f5
         Value:
-          _parentZoneGUID: 
+          _zoneID: quarto3
+          _zoneGUID: fb6b6dca-23ae-49db-8379-e349007c01f5
+          _parentZoneGUID: 5c8902ab-2b20-43f4-825a-c85cb8966e01
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro2
+      - Key: 3fbac1ba-f960-4a35-85d4-d2d7e14edfdf
         Value:
-          _parentZoneGUID: 
+          _zoneID: banheiro2
+          _zoneGUID: 3fbac1ba-f960-4a35-85d4-d2d7e14edfdf
+          _parentZoneGUID: 5c8902ab-2b20-43f4-825a-c85cb8966e01
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: closed
+      - Key: d8c02db3-9009-438d-9476-f496bcc03732
         Value:
-          _parentZoneGUID: 
+          _zoneID: closed
+          _zoneGUID: d8c02db3-9009-438d-9476-f496bcc03732
+          _parentZoneGUID: 5c8902ab-2b20-43f4-825a-c85cb8966e01
           _areaRatio: 0.05
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: sala
+      - Key: b3f88ae4-f5f4-4e31-b065-bd1ac947a5ce
         Value:
-        - cozinha
-        - corredor
-      - Key: quarto3
+        - ab109cef-b00a-433a-856b-a488a4bf2452
+        - 18764e83-699c-4e42-96db-8bde039a5ef1
+  - FloorPlanId: Artigo-1
+    GridDimensions: {x: 30, y: 30}
+    ZonesConfigs:
+      _serializedList:
+      - Key: 0491c455-0016-4952-ae27-d5e55dc41b21
         Value:
-        - banheiro2
-        - closed
-      - Key: corredor
+          _zoneID: casa
+          _zoneGUID: 0491c455-0016-4952-ae27-d5e55dc41b21
+          _parentZoneGUID: 
+          _areaRatio: 1
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: 7de6650f-d20d-489d-bf7d-aecba1c3c4e4
         Value:
-        - quarto1
-        - quarto2
-        - quarto3
-        - banheiro1
-  - FloorPlanGUID: 
-    FloorPlanId: CasaPopular
+          _zoneID: privado
+          _zoneGUID: 7de6650f-d20d-489d-bf7d-aecba1c3c4e4
+          _parentZoneGUID: 0491c455-0016-4952-ae27-d5e55dc41b21
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: 35b0ce8b-1f8f-4a27-a875-7bcd3567515d
+        Value:
+          _zoneID: publico
+          _zoneGUID: 35b0ce8b-1f8f-4a27-a875-7bcd3567515d
+          _parentZoneGUID: 0491c455-0016-4952-ae27-d5e55dc41b21
+          _areaRatio: 0.5
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: 3dcffb4e-8b3a-44fd-adb5-115f6a028cea
+        Value:
+          _zoneID: sala
+          _zoneGUID: 3dcffb4e-8b3a-44fd-adb5-115f6a028cea
+          _parentZoneGUID: 35b0ce8b-1f8f-4a27-a875-7bcd3567515d
+          _areaRatio: 0.3
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 1
+          _hasWindows: 0
+      - Key: 9e572abe-d08f-4ebc-8cb2-15528273217a
+        Value:
+          _zoneID: cozinha
+          _zoneGUID: 9e572abe-d08f-4ebc-8cb2-15528273217a
+          _parentZoneGUID: 35b0ce8b-1f8f-4a27-a875-7bcd3567515d
+          _areaRatio: 0.2
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 1
+          _hasWindows: 0
+      - Key: 3d64f8c4-1f4d-48ee-a3b6-ab49be27bef8
+        Value:
+          _zoneID: corredor
+          _zoneGUID: 3d64f8c4-1f4d-48ee-a3b6-ab49be27bef8
+          _parentZoneGUID: 7de6650f-d20d-489d-bf7d-aecba1c3c4e4
+          _areaRatio: 0.01
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: 4cafdcc9-51d8-4e2d-952e-dc2b056bddab
+        Value:
+          _zoneID: banheiro
+          _zoneGUID: 4cafdcc9-51d8-4e2d-952e-dc2b056bddab
+          _parentZoneGUID: 7de6650f-d20d-489d-bf7d-aecba1c3c4e4
+          _areaRatio: 0.15
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+      - Key: 56a336da-cc9f-4aab-ad04-4562b18247e6
+        Value:
+          _zoneID: quarto
+          _zoneGUID: 56a336da-cc9f-4aab-ad04-4562b18247e6
+          _parentZoneGUID: 7de6650f-d20d-489d-bf7d-aecba1c3c4e4
+          _areaRatio: 0.25
+          _presetArea: {fileID: 0}
+          _hasOutsideDoor: 0
+          _hasWindows: 0
+    Adjacencies:
+      _serializedList:
+      - Key: 3dcffb4e-8b3a-44fd-adb5-115f6a028cea
+        Value:
+        - 9e572abe-d08f-4ebc-8cb2-15528273217a
+        - 3d64f8c4-1f4d-48ee-a3b6-ab49be27bef8
+      - Key: 3d64f8c4-1f4d-48ee-a3b6-ab49be27bef8
+        Value:
+        - 4cafdcc9-51d8-4e2d-952e-dc2b056bddab
+        - 56a336da-cc9f-4aab-ad04-4562b18247e6
+  - FloorPlanId: CasaPopular
     GridDimensions: {x: 10, y: 8}
     ZonesConfigs:
       _serializedList:
-      - Key: casa
+      - Key: f959cfa7-f04b-4099-a058-7f2171329466
         Value:
+          _zoneID: casa
+          _zoneGUID: f959cfa7-f04b-4099-a058-7f2171329466
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: privado
+      - Key: bc2d4a73-48cb-4b39-acdc-32069ca1680d
         Value:
+          _zoneID: privado
+          _zoneGUID: bc2d4a73-48cb-4b39-acdc-32069ca1680d
           _parentZoneGUID: 
           _areaRatio: 0.5
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: publico
+      - Key: 1b73d615-ab19-4c09-8bb0-6535cda9f55b
         Value:
+          _zoneID: publico
+          _zoneGUID: 1b73d615-ab19-4c09-8bb0-6535cda9f55b
           _parentZoneGUID: 
           _areaRatio: 0.5
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: sala
+      - Key: 59de8838-4735-4bc3-9798-30a7b328fef3
         Value:
+          _zoneID: sala
+          _zoneGUID: 59de8838-4735-4bc3-9798-30a7b328fef3
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: corredor
+      - Key: 43ce7989-0c52-4fde-8cab-90a6e9c231be
         Value:
+          _zoneID: corredor
+          _zoneGUID: 43ce7989-0c52-4fde-8cab-90a6e9c231be
           _parentZoneGUID: 
           _areaRatio: 0.01
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro
+      - Key: cf384a80-e9c6-4dda-85bf-a88ff5208ea1
         Value:
+          _zoneID: banheiro
+          _zoneGUID: cf384a80-e9c6-4dda-85bf-a88ff5208ea1
           _parentZoneGUID: 
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: cozinha
+      - Key: b43aef9b-304c-46e1-8640-292cf4692b54
         Value:
+          _zoneID: cozinha
+          _zoneGUID: b43aef9b-304c-46e1-8640-292cf4692b54
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: quarto1
+      - Key: 9ddbf2ec-989e-4447-b7e7-666510c8e533
         Value:
+          _zoneID: quarto1
+          _zoneGUID: 9ddbf2ec-989e-4447-b7e7-666510c8e533
           _parentZoneGUID: 
           _areaRatio: 0.25
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto2
+      - Key: 1e0ea6ae-2a70-4e93-8f6f-8958508ee555
         Value:
+          _zoneID: quarto2
+          _zoneGUID: 1e0ea6ae-2a70-4e93-8f6f-8958508ee555
           _parentZoneGUID: 
           _areaRatio: 0.25
           _presetArea: {fileID: 0}
@@ -266,64 +313,77 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: sala
+      - Key: 59de8838-4735-4bc3-9798-30a7b328fef3
         Value:
-        - corredor
-        - quarto1
-      - Key: corredor
+        - 43ce7989-0c52-4fde-8cab-90a6e9c231be
+        - 9ddbf2ec-989e-4447-b7e7-666510c8e533
+      - Key: 43ce7989-0c52-4fde-8cab-90a6e9c231be
         Value:
-        - banheiro
-        - cozinha
-        - quarto2
-  - FloorPlanGUID: 
-    FloorPlanId: CasaPopular-semSub
+        - cf384a80-e9c6-4dda-85bf-a88ff5208ea1
+        - b43aef9b-304c-46e1-8640-292cf4692b54
+        - 1e0ea6ae-2a70-4e93-8f6f-8958508ee555
+  - FloorPlanId: CasaPopular-semSub
     GridDimensions: {x: 10, y: 9}
     ZonesConfigs:
       _serializedList:
-      - Key: casa
+      - Key: a3884649-92f6-47de-873c-6a0f892b4ff9
         Value:
+          _zoneID: casa
+          _zoneGUID: a3884649-92f6-47de-873c-6a0f892b4ff9
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: sala
+      - Key: b11a1339-d335-4418-a85b-9577bab0a737
         Value:
+          _zoneID: sala
+          _zoneGUID: b11a1339-d335-4418-a85b-9577bab0a737
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: corredor
+      - Key: ab2c8d84-a7bc-4a91-b0e0-9609958852e4
         Value:
+          _zoneID: corredor
+          _zoneGUID: ab2c8d84-a7bc-4a91-b0e0-9609958852e4
           _parentZoneGUID: 
           _areaRatio: 0.01
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro
+      - Key: 0d8b3182-7905-42a2-b25e-e4c6fa12cb61
         Value:
+          _zoneID: banheiro
+          _zoneGUID: 0d8b3182-7905-42a2-b25e-e4c6fa12cb61
           _parentZoneGUID: 
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: cozinha
+      - Key: a9d291fb-2d58-4b9d-a38f-9738ea4f980a
         Value:
+          _zoneID: cozinha
+          _zoneGUID: a9d291fb-2d58-4b9d-a38f-9738ea4f980a
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: quarto1
+      - Key: 71d5c087-28d3-45d3-bc5e-67ca967af0df
         Value:
+          _zoneID: quarto1
+          _zoneGUID: 71d5c087-28d3-45d3-bc5e-67ca967af0df
           _parentZoneGUID: 
           _areaRatio: 0.25
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto2
+      - Key: 570a245d-9e5d-4cff-a51a-80b07b37b6ee
         Value:
+          _zoneID: quarto2
+          _zoneGUID: 570a245d-9e5d-4cff-a51a-80b07b37b6ee
           _parentZoneGUID: 
           _areaRatio: 0.25
           _presetArea: {fileID: 0}
@@ -331,85 +391,104 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: sala
+      - Key: b11a1339-d335-4418-a85b-9577bab0a737
         Value:
-        - corredor
-        - quarto1
-      - Key: corredor
+        - ab2c8d84-a7bc-4a91-b0e0-9609958852e4
+        - 71d5c087-28d3-45d3-bc5e-67ca967af0df
+      - Key: ab2c8d84-a7bc-4a91-b0e0-9609958852e4
         Value:
-        - banheiro
-        - cozinha
-        - quarto2
-  - FloorPlanGUID: 
-    FloorPlanId: MinhaCasa
+        - 0d8b3182-7905-42a2-b25e-e4c6fa12cb61
+        - a9d291fb-2d58-4b9d-a38f-9738ea4f980a
+        - 570a245d-9e5d-4cff-a51a-80b07b37b6ee
+  - FloorPlanId: MinhaCasa
     GridDimensions: {x: 20, y: 10}
     ZonesConfigs:
       _serializedList:
-      - Key: casa
+      - Key: 88f2beda-d0bc-4620-8c6b-3278767c4afd
         Value:
+          _zoneID: casa
+          _zoneGUID: 88f2beda-d0bc-4620-8c6b-3278767c4afd
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: 7b090068f68251f45abb92f4b7eed239, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: publico
+      - Key: 4501e7b5-134c-41c5-9b49-f30f7293272a
         Value:
+          _zoneID: publico
+          _zoneGUID: 4501e7b5-134c-41c5-9b49-f30f7293272a
           _parentZoneGUID: 
           _areaRatio: 0.4
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: privado
+      - Key: d5d7af62-e0c0-4e3d-8320-26ab56e027bb
         Value:
+          _zoneID: privado
+          _zoneGUID: d5d7af62-e0c0-4e3d-8320-26ab56e027bb
           _parentZoneGUID: 
           _areaRatio: 0.6
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: sala
+      - Key: 8b980b02-c79c-43a4-b89b-c9c893dae038
         Value:
+          _zoneID: sala
+          _zoneGUID: 8b980b02-c79c-43a4-b89b-c9c893dae038
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: cozinha
+      - Key: 20e260e2-2cd9-40b4-8e8e-9abbd2dca731
         Value:
+          _zoneID: cozinha
+          _zoneGUID: 20e260e2-2cd9-40b4-8e8e-9abbd2dca731
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto
+      - Key: d5a6a37c-7185-4d7b-bea4-377dc61a49d3
         Value:
+          _zoneID: quarto
+          _zoneGUID: d5a6a37c-7185-4d7b-bea4-377dc61a49d3
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: escritorio
+      - Key: f9a005a0-769a-4d56-8281-48179d13c4cb
         Value:
+          _zoneID: escritorio
+          _zoneGUID: f9a005a0-769a-4d56-8281-48179d13c4cb
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro
+      - Key: bd42926a-1ad0-4aad-9717-64896290df4d
         Value:
+          _zoneID: banheiro
+          _zoneGUID: bd42926a-1ad0-4aad-9717-64896290df4d
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: corredor
+      - Key: a64fbc79-f907-4f87-9608-c21093a817ad
         Value:
+          _zoneID: corredor
+          _zoneGUID: a64fbc79-f907-4f87-9608-c21093a817ad
           _parentZoneGUID: 
           _areaRatio: 0.05
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: area
+      - Key: 8ec2ddf7-be0e-4a27-82a1-50e7fb8028b3
         Value:
+          _zoneID: area
+          _zoneGUID: 8ec2ddf7-be0e-4a27-82a1-50e7fb8028b3
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
@@ -417,67 +496,80 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: sala
+      - Key: 8b980b02-c79c-43a4-b89b-c9c893dae038
         Value:
-        - cozinha
-        - corredor
-      - Key: corredor
+        - 20e260e2-2cd9-40b4-8e8e-9abbd2dca731
+        - a64fbc79-f907-4f87-9608-c21093a817ad
+      - Key: a64fbc79-f907-4f87-9608-c21093a817ad
         Value:
-        - banheiro
-        - quarto
-        - escritorio
-      - Key: cozinha
+        - bd42926a-1ad0-4aad-9717-64896290df4d
+        - d5a6a37c-7185-4d7b-bea4-377dc61a49d3
+        - f9a005a0-769a-4d56-8281-48179d13c4cb
+      - Key: 20e260e2-2cd9-40b4-8e8e-9abbd2dca731
         Value:
-        - area
-  - FloorPlanGUID: 
-    FloorPlanId: Plan 1
+        - 8ec2ddf7-be0e-4a27-82a1-50e7fb8028b3
+  - FloorPlanId: Plan 1
     GridDimensions: {x: 30, y: 30}
     ZonesConfigs:
       _serializedList:
-      - Key: A
+      - Key: 467b179c-7c33-41de-bbf1-22995d3ad1fc
         Value:
+          _zoneID: A
+          _zoneGUID: 467b179c-7c33-41de-bbf1-22995d3ad1fc
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: B
+      - Key: 70af4751-30ed-48ee-af80-6a0de3d38f2e
         Value:
+          _zoneID: B
+          _zoneGUID: 70af4751-30ed-48ee-af80-6a0de3d38f2e
           _parentZoneGUID: 
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: C
+      - Key: a8d4b32c-8d88-4ea7-b043-877356abe0c6
         Value:
+          _zoneID: C
+          _zoneGUID: a8d4b32c-8d88-4ea7-b043-877356abe0c6
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: D
+      - Key: 3d608ca5-59b2-4be0-84d0-b78ef0e3846e
         Value:
+          _zoneID: D
+          _zoneGUID: 3d608ca5-59b2-4be0-84d0-b78ef0e3846e
           _parentZoneGUID: 
           _areaRatio: 0.2
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: E
+      - Key: 5195cb8b-ee92-4236-a323-2316e72b460e
         Value:
+          _zoneID: E
+          _zoneGUID: 5195cb8b-ee92-4236-a323-2316e72b460e
           _parentZoneGUID: 
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: F
+      - Key: bcf91cce-45db-4891-89d0-6bce30b0644d
         Value:
+          _zoneID: F
+          _zoneGUID: bcf91cce-45db-4891-89d0-6bce30b0644d
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: G
+      - Key: 63686f1c-3cb4-40cd-a1d1-a53aaacfd088
         Value:
+          _zoneID: G
+          _zoneGUID: 63686f1c-3cb4-40cd-a1d1-a53aaacfd088
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
@@ -485,93 +577,116 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: F
+      - Key: bcf91cce-45db-4891-89d0-6bce30b0644d
         Value:
-        - G
-  - FloorPlanGUID: 
-    FloorPlanId: Artigo-2-opt
+        - 63686f1c-3cb4-40cd-a1d1-a53aaacfd088
+  - FloorPlanId: Artigo-2-opt
     GridDimensions: {x: 15, y: 15}
     ZonesConfigs:
       _serializedList:
-      - Key: casa
+      - Key: b68badc7-16e6-4118-82e0-46d4b516e517
         Value:
+          _zoneID: casa
+          _zoneGUID: b68badc7-16e6-4118-82e0-46d4b516e517
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: publico
+      - Key: b10ac4f4-688c-45a6-a524-eb20335e0d27
         Value:
+          _zoneID: publico
+          _zoneGUID: b10ac4f4-688c-45a6-a524-eb20335e0d27
           _parentZoneGUID: 
           _areaRatio: 0.35
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: privado1
+      - Key: 2d676c75-93b4-4af6-9471-b53affdcc2fa
         Value:
+          _zoneID: privado1
+          _zoneGUID: 2d676c75-93b4-4af6-9471-b53affdcc2fa
           _parentZoneGUID: 
           _areaRatio: 0.65
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: sala
+      - Key: 82111478-a877-4563-b365-4479375cf095
         Value:
+          _zoneID: sala
+          _zoneGUID: 82111478-a877-4563-b365-4479375cf095
           _parentZoneGUID: 
           _areaRatio: 0.18
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: cozinha
+      - Key: e0342d3a-6ee2-4d5f-acbf-888d4d92933a
         Value:
+          _zoneID: cozinha
+          _zoneGUID: e0342d3a-6ee2-4d5f-acbf-888d4d92933a
           _parentZoneGUID: 
           _areaRatio: 0.12
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto1
+      - Key: 650a4e81-95b2-4cca-8748-9fd1f31cf645
         Value:
+          _zoneID: quarto1
+          _zoneGUID: 650a4e81-95b2-4cca-8748-9fd1f31cf645
           _parentZoneGUID: 
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto2
+      - Key: 2a829ca9-fcff-4834-966e-88de517f72e0
         Value:
+          _zoneID: quarto2
+          _zoneGUID: 2a829ca9-fcff-4834-966e-88de517f72e0
           _parentZoneGUID: 
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro1
+      - Key: 96d59f0e-5a22-42c1-a610-f0c1200bb099
         Value:
+          _zoneID: banheiro1
+          _zoneGUID: 96d59f0e-5a22-42c1-a610-f0c1200bb099
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto3
+      - Key: 8815cd4f-154b-43a5-af2c-b0e6687c91ba
         Value:
+          _zoneID: quarto3
+          _zoneGUID: 8815cd4f-154b-43a5-af2c-b0e6687c91ba
           _parentZoneGUID: 
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro2
+      - Key: 3c2e246c-b65d-4d1c-98ae-1aa7d9c427e0
         Value:
+          _zoneID: banheiro2
+          _zoneGUID: 3c2e246c-b65d-4d1c-98ae-1aa7d9c427e0
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: closed
+      - Key: 167072a3-6a0c-4434-abd6-873931ef47b4
         Value:
+          _zoneID: closed
+          _zoneGUID: 167072a3-6a0c-4434-abd6-873931ef47b4
           _parentZoneGUID: 
           _areaRatio: 0.05
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: corredor
+      - Key: 96d55d41-a38b-48ee-bb6a-25f0042bb744
         Value:
+          _zoneID: corredor
+          _zoneGUID: 96d55d41-a38b-48ee-bb6a-25f0042bb744
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
@@ -579,55 +694,64 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: sala
+      - Key: 82111478-a877-4563-b365-4479375cf095
         Value:
-        - cozinha
-        - corredor
-      - Key: corredor
+        - e0342d3a-6ee2-4d5f-acbf-888d4d92933a
+        - 96d55d41-a38b-48ee-bb6a-25f0042bb744
+      - Key: 96d55d41-a38b-48ee-bb6a-25f0042bb744
         Value:
-        - banheiro1
-        - quarto1
-        - quarto2
-        - quarto3
-      - Key: quarto3
+        - 96d59f0e-5a22-42c1-a610-f0c1200bb099
+        - 650a4e81-95b2-4cca-8748-9fd1f31cf645
+        - 2a829ca9-fcff-4834-966e-88de517f72e0
+        - 8815cd4f-154b-43a5-af2c-b0e6687c91ba
+      - Key: 8815cd4f-154b-43a5-af2c-b0e6687c91ba
         Value:
-        - banheiro2
-        - closed
-  - FloorPlanGUID: 
-    FloorPlanId: Teste Pesos
+        - 3c2e246c-b65d-4d1c-98ae-1aa7d9c427e0
+        - 167072a3-6a0c-4434-abd6-873931ef47b4
+  - FloorPlanId: Teste Pesos
     GridDimensions: {x: 20, y: 20}
     ZonesConfigs:
       _serializedList:
-      - Key: A
+      - Key: 97b0d8fd-7fce-498c-a0aa-2e3758dfeb4a
         Value:
+          _zoneID: A
+          _zoneGUID: 97b0d8fd-7fce-498c-a0aa-2e3758dfeb4a
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: B
+      - Key: 115c9c8e-4da6-40d1-bfb5-ae34ecca5620
         Value:
+          _zoneID: B
+          _zoneGUID: 115c9c8e-4da6-40d1-bfb5-ae34ecca5620
           _parentZoneGUID: 
           _areaRatio: 0.5
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: C
+      - Key: 4df37ba8-21aa-418f-b73b-1a6ba098cd54
         Value:
+          _zoneID: C
+          _zoneGUID: 4df37ba8-21aa-418f-b73b-1a6ba098cd54
           _parentZoneGUID: 
           _areaRatio: 0.5
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: D
+      - Key: 768c337c-d51f-4c84-a9b7-8f2702a29164
         Value:
+          _zoneID: D
+          _zoneGUID: 768c337c-d51f-4c84-a9b7-8f2702a29164
           _parentZoneGUID: 
           _areaRatio: 0.25
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: E
+      - Key: 9503c234-e960-4067-8b7a-42bcd73378a3
         Value:
+          _zoneID: E
+          _zoneGUID: 9503c234-e960-4067-8b7a-42bcd73378a3
           _parentZoneGUID: 
           _areaRatio: 0.25
           _presetArea: {fileID: 0}
@@ -635,73 +759,90 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: D
+      - Key: 768c337c-d51f-4c84-a9b7-8f2702a29164
         Value:
-        - E
-        - B
-  - FloorPlanGUID: 
-    FloorPlanId: TesteDun
+        - 9503c234-e960-4067-8b7a-42bcd73378a3
+        - 115c9c8e-4da6-40d1-bfb5-ae34ecca5620
+  - FloorPlanId: TesteDun
     GridDimensions: {x: 12, y: 12}
     ZonesConfigs:
       _serializedList:
-      - Key: base
+      - Key: 1c6187cf-6b28-4996-a0cb-389ed35b0672
         Value:
+          _zoneID: base
+          _zoneGUID: 1c6187cf-6b28-4996-a0cb-389ed35b0672
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: A1
+      - Key: 03b774dc-a7f7-4092-89b6-b66ed78a0757
         Value:
+          _zoneID: A1
+          _zoneGUID: 03b774dc-a7f7-4092-89b6-b66ed78a0757
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: A2
+      - Key: 331cdba1-10c8-411f-b012-6adb73309548
         Value:
+          _zoneID: A2
+          _zoneGUID: 331cdba1-10c8-411f-b012-6adb73309548
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: A3
+      - Key: 56c36cd7-d944-4bc9-ba90-5436a0c9c087
         Value:
+          _zoneID: A3
+          _zoneGUID: 56c36cd7-d944-4bc9-ba90-5436a0c9c087
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: A4
+      - Key: 07a204c8-0640-491a-9ec7-e75a047bd420
         Value:
+          _zoneID: A4
+          _zoneGUID: 07a204c8-0640-491a-9ec7-e75a047bd420
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: A5
+      - Key: d9dd2cc1-94b3-4940-ab8e-a03003903eb2
         Value:
+          _zoneID: A5
+          _zoneGUID: d9dd2cc1-94b3-4940-ab8e-a03003903eb2
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: A6
+      - Key: f2f56d1f-f2f5-4178-b930-80a5c07f8c9c
         Value:
+          _zoneID: A6
+          _zoneGUID: f2f56d1f-f2f5-4178-b930-80a5c07f8c9c
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: A7
+      - Key: f588fffa-1998-455f-9f77-87997e48f874
         Value:
+          _zoneID: A7
+          _zoneGUID: f588fffa-1998-455f-9f77-87997e48f874
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: A8
+      - Key: 035e07e8-cf5f-4d23-8a86-cc08d649909b
         Value:
+          _zoneID: A8
+          _zoneGUID: 035e07e8-cf5f-4d23-8a86-cc08d649909b
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
@@ -709,95 +850,114 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: A1
+      - Key: 03b774dc-a7f7-4092-89b6-b66ed78a0757
         Value:
-        - A2
-      - Key: A2
+        - 331cdba1-10c8-411f-b012-6adb73309548
+      - Key: 331cdba1-10c8-411f-b012-6adb73309548
         Value:
-        - A3
-        - A5
-      - Key: A3
+        - 56c36cd7-d944-4bc9-ba90-5436a0c9c087
+        - d9dd2cc1-94b3-4940-ab8e-a03003903eb2
+      - Key: 56c36cd7-d944-4bc9-ba90-5436a0c9c087
         Value:
-        - A4
-      - Key: A5
+        - 07a204c8-0640-491a-9ec7-e75a047bd420
+      - Key: d9dd2cc1-94b3-4940-ab8e-a03003903eb2
         Value:
-        - A6
-      - Key: A6
+        - f2f56d1f-f2f5-4178-b930-80a5c07f8c9c
+      - Key: f2f56d1f-f2f5-4178-b930-80a5c07f8c9c
         Value:
-        - A7
-      - Key: A7
+        - f588fffa-1998-455f-9f77-87997e48f874
+      - Key: f588fffa-1998-455f-9f77-87997e48f874
         Value:
-        - A8
-  - FloorPlanGUID: 
-    FloorPlanId: Plan 0
+        - 035e07e8-cf5f-4d23-8a86-cc08d649909b
+  - FloorPlanId: Plan 0
     GridDimensions: {x: 10, y: 10}
     ZonesConfigs:
       _serializedList:
-      - Key: A
+      - Key: d074041f-e400-4949-8e31-def5439f0b1e
         Value:
+          _zoneID: A
+          _zoneGUID: d074041f-e400-4949-8e31-def5439f0b1e
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: B
+      - Key: dded2718-c2fa-4833-8737-1ec3fdef0f97
         Value:
+          _zoneID: B
+          _zoneGUID: dded2718-c2fa-4833-8737-1ec3fdef0f97
           _parentZoneGUID: 
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: C
+      - Key: 17618c2c-8e3d-45e3-986c-630af586d59c
         Value:
+          _zoneID: C
+          _zoneGUID: 17618c2c-8e3d-45e3-986c-630af586d59c
           _parentZoneGUID: 
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: D
+      - Key: f956ef2c-b2ad-428b-a56c-e75b5959cadc
         Value:
+          _zoneID: D
+          _zoneGUID: f956ef2c-b2ad-428b-a56c-e75b5959cadc
           _parentZoneGUID: 
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: E
+      - Key: 87c49e7c-808a-4bed-a1ec-bb282ab0ad34
         Value:
+          _zoneID: E
+          _zoneGUID: 87c49e7c-808a-4bed-a1ec-bb282ab0ad34
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: F
+      - Key: 0178ac24-4098-456a-b777-47c5ab9ddbed
         Value:
+          _zoneID: F
+          _zoneGUID: 0178ac24-4098-456a-b777-47c5ab9ddbed
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: G
+      - Key: e3980b62-2620-417a-934f-ff37bb837e09
         Value:
+          _zoneID: G
+          _zoneGUID: e3980b62-2620-417a-934f-ff37bb837e09
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: H
+      - Key: 3956e1b3-e8a3-4b92-acf1-64acacf7d33e
         Value:
+          _zoneID: H
+          _zoneGUID: 3956e1b3-e8a3-4b92-acf1-64acacf7d33e
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: I
+      - Key: 4fa369d1-c89b-45be-ba99-1af5e2516b91
         Value:
+          _zoneID: I
+          _zoneGUID: 4fa369d1-c89b-45be-ba99-1af5e2516b91
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: J
+      - Key: 9d043c2b-6df4-4c38-ad22-78da4952a8ad
         Value:
+          _zoneID: J
+          _zoneGUID: 9d043c2b-6df4-4c38-ad22-78da4952a8ad
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
@@ -805,80 +965,99 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: E
+      - Key: 87c49e7c-808a-4bed-a1ec-bb282ab0ad34
         Value:
-        - F
-        - H
-  - FloorPlanGUID: 
-    FloorPlanId: Plan 0.1
+        - 0178ac24-4098-456a-b777-47c5ab9ddbed
+        - 3956e1b3-e8a3-4b92-acf1-64acacf7d33e
+  - FloorPlanId: Plan 0.1
     GridDimensions: {x: 30, y: 30}
     ZonesConfigs:
       _serializedList:
-      - Key: A
+      - Key: 2fc31c60-b613-4adc-93af-08e841a41f7c
         Value:
+          _zoneID: A
+          _zoneGUID: 2fc31c60-b613-4adc-93af-08e841a41f7c
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: 709323a3745f22041ac93456f7f5efe0, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: B
+      - Key: 79ae151e-3ea7-4d14-9434-6437c51454b2
         Value:
+          _zoneID: B
+          _zoneGUID: 79ae151e-3ea7-4d14-9434-6437c51454b2
           _parentZoneGUID: 
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: C
+      - Key: aa703155-f1af-4347-8148-e05851886a68
         Value:
+          _zoneID: C
+          _zoneGUID: aa703155-f1af-4347-8148-e05851886a68
           _parentZoneGUID: 
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: D
+      - Key: f0113b3d-c31e-45ab-aeef-9c3d7dbc3494
         Value:
+          _zoneID: D
+          _zoneGUID: f0113b3d-c31e-45ab-aeef-9c3d7dbc3494
           _parentZoneGUID: 
           _areaRatio: 0.3
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: E
+      - Key: 7f70354b-077f-4ebc-b164-d62141d0b2c1
         Value:
+          _zoneID: E
+          _zoneGUID: 7f70354b-077f-4ebc-b164-d62141d0b2c1
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: F
+      - Key: 7913d25c-0988-4eef-a506-5d6820964481
         Value:
+          _zoneID: F
+          _zoneGUID: 7913d25c-0988-4eef-a506-5d6820964481
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: G
+      - Key: ec36105d-e76d-4bd3-bfbd-bedf32d48bfa
         Value:
+          _zoneID: G
+          _zoneGUID: ec36105d-e76d-4bd3-bfbd-bedf32d48bfa
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: H
+      - Key: 1d939c32-c93c-41c2-b406-195d2c4afe6f
         Value:
+          _zoneID: H
+          _zoneGUID: 1d939c32-c93c-41c2-b406-195d2c4afe6f
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: I
+      - Key: 2877beda-47b7-4664-a594-97643eacdbac
         Value:
+          _zoneID: I
+          _zoneGUID: 2877beda-47b7-4664-a594-97643eacdbac
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: J
+      - Key: afa7f648-3fbf-4c57-aa2d-03369fb1ce39
         Value:
+          _zoneID: J
+          _zoneGUID: afa7f648-3fbf-4c57-aa2d-03369fb1ce39
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
@@ -886,94 +1065,117 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: E
+      - Key: 7f70354b-077f-4ebc-b164-d62141d0b2c1
         Value:
-        - F
-        - H
-  - FloorPlanGUID: 
-    FloorPlanId: Artigo-2
+        - 7913d25c-0988-4eef-a506-5d6820964481
+        - 1d939c32-c93c-41c2-b406-195d2c4afe6f
+  - FloorPlanId: Artigo-2
     GridDimensions: {x: 15, y: 15}
     ZonesConfigs:
       _serializedList:
-      - Key: casa
+      - Key: 0e134ab3-dc26-4c03-bb31-5366148e0da2
         Value:
+          _zoneID: casa
+          _zoneGUID: 0e134ab3-dc26-4c03-bb31-5366148e0da2
           _parentZoneGUID: 
           _areaRatio: 1
           _presetArea: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: publico
+      - Key: 62174d39-cb2d-429e-8b90-3f11cc0d53bb
         Value:
+          _zoneID: publico
+          _zoneGUID: 62174d39-cb2d-429e-8b90-3f11cc0d53bb
           _parentZoneGUID: 
           _areaRatio: 0.35
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: privado1
+      - Key: d2e81484-6aa5-4e9d-b635-30a21d7af2b7
         Value:
+          _zoneID: privado1
+          _zoneGUID: d2e81484-6aa5-4e9d-b635-30a21d7af2b7
           _parentZoneGUID: 
           _areaRatio: 0.65
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: sala
+      - Key: 0abda830-d530-402f-84d9-2534cc69bdf5
         Value:
+          _zoneID: sala
+          _zoneGUID: 0abda830-d530-402f-84d9-2534cc69bdf5
           _parentZoneGUID: 
           _areaRatio: 0.18
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 1
           _hasWindows: 0
-      - Key: cozinha
+      - Key: 26c89e0b-3721-4fac-825d-58b25af10384
         Value:
+          _zoneID: cozinha
+          _zoneGUID: 26c89e0b-3721-4fac-825d-58b25af10384
           _parentZoneGUID: 
           _areaRatio: 0.12
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto1
+      - Key: cdab2156-1c96-4614-9725-f6bb69e04fe2
         Value:
+          _zoneID: quarto1
+          _zoneGUID: cdab2156-1c96-4614-9725-f6bb69e04fe2
           _parentZoneGUID: 
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto2
+      - Key: 9f807735-4c7c-4892-9103-afe00b20c352
         Value:
+          _zoneID: quarto2
+          _zoneGUID: 9f807735-4c7c-4892-9103-afe00b20c352
           _parentZoneGUID: 
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro1
+      - Key: 71f06292-2999-4cb7-a813-f3154abf4c5d
         Value:
+          _zoneID: banheiro1
+          _zoneGUID: 71f06292-2999-4cb7-a813-f3154abf4c5d
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: quarto3
+      - Key: 456f8cb3-5d7b-4a92-a251-7a0c8c6460f1
         Value:
+          _zoneID: quarto3
+          _zoneGUID: 456f8cb3-5d7b-4a92-a251-7a0c8c6460f1
           _parentZoneGUID: 
           _areaRatio: 0.15
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: banheiro2
+      - Key: 689229c9-7e63-4755-ab19-05ae7d3cbde6
         Value:
+          _zoneID: banheiro2
+          _zoneGUID: 689229c9-7e63-4755-ab19-05ae7d3cbde6
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: closed
+      - Key: 1b20fd86-f3db-4101-981f-3144ff1fb7f4
         Value:
+          _zoneID: closed
+          _zoneGUID: 1b20fd86-f3db-4101-981f-3144ff1fb7f4
           _parentZoneGUID: 
           _areaRatio: 0.05
           _presetArea: {fileID: 0}
           _hasOutsideDoor: 0
           _hasWindows: 0
-      - Key: corredor
+      - Key: 3404bf8f-9c13-49e2-90f1-5591118b3c43
         Value:
+          _zoneID: corredor
+          _zoneGUID: 3404bf8f-9c13-49e2-90f1-5591118b3c43
           _parentZoneGUID: 
           _areaRatio: 0.1
           _presetArea: {fileID: 0}
@@ -981,17 +1183,17 @@ MonoBehaviour:
           _hasWindows: 0
     Adjacencies:
       _serializedList:
-      - Key: sala
+      - Key: 0abda830-d530-402f-84d9-2534cc69bdf5
         Value:
-        - cozinha
-        - corredor
-      - Key: corredor
+        - 26c89e0b-3721-4fac-825d-58b25af10384
+        - 3404bf8f-9c13-49e2-90f1-5591118b3c43
+      - Key: 3404bf8f-9c13-49e2-90f1-5591118b3c43
         Value:
-        - banheiro1
-        - quarto1
-        - quarto2
-        - quarto3
-      - Key: quarto3
+        - 71f06292-2999-4cb7-a813-f3154abf4c5d
+        - cdab2156-1c96-4614-9725-f6bb69e04fe2
+        - 9f807735-4c7c-4892-9103-afe00b20c352
+        - 456f8cb3-5d7b-4a92-a251-7a0c8c6460f1
+      - Key: 456f8cb3-5d7b-4a92-a251-7a0c8c6460f1
         Value:
-        - banheiro2
-        - closed
+        - 689229c9-7e63-4755-ab19-05ae7d3cbde6
+        - 1b20fd86-f3db-4101-981f-3144ff1fb7f4
