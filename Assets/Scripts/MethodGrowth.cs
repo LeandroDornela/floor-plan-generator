@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 namespace BuildingGenerator
 {
@@ -23,7 +24,7 @@ namespace BuildingGenerator
 
         private MethodGrowthSettings _settings;
 
-        private const string _outsideZoneId = "outside";
+        private Guid _outsideZoneId = Guid.NewGuid();
         private bool _checkFullSpace = false;
 
 

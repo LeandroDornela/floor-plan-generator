@@ -1,70 +1,76 @@
 using UnityEngine;
 using System.Collections.Generic;
-using BuildingGenerator;
 using System;
+using UnityEditor;
 
-[CreateAssetMenu(fileName = "NewFloorPlanGraph", menuName = "Building Generator/Floor Plan Graph")]
-public class FloorPlanGraphData : ScriptableObject
+namespace BuildingGenerator
 {
-    public List<DataNodeModel> nodes = new();
-
-    public FloorPlanData ConvertToFloorPlanData()
+    [CreateAssetMenu(fileName = "NewFloorPlanGraph", menuName = "Building Generator/Floor Plan Graph")]
+    public class FloorPlanGraphData : IFloorPlanConfig
     {
-        var planGUID = Guid.NewGuid().ToString();
-        var planId = "testing";
+        public List<DataNodeModel> nodes = new List<DataNodeModel>();
 
-        // Get the grid dimensions.
-        var dims = new Vector2Int(10, 10);
-
-        // Convert TestZoneConfig's to ZoneData's.
-        Dictionary<string, ZoneData> zonesConfigs = new Dictionary<string, ZoneData>(nodes.Count);
-        foreach (var model in nodes)
+        public override FloorPlanData GetFloorPlanData()
         {
-            TestZoneConfig zoneConfig = new TestZoneConfig();
-            zoneConfig._zoneID = model.zoneId;
-            zoneConfig._parentZoneGUID = model.parentGUID;
-            zoneConfig._areaRatio = model.areaRatio;
-            zoneConfig._presetArea = model.presetAreaTexture;
-            zoneConfig._hasOutsideDoor = model.hasOutsideDoor;
+            var planId = "testing";
+            var planDimensions = new Vector2Int(10, 10);
 
-            zonesConfigs[model.guid] = zoneConfig.ToZoneConfig(dims);
-        }
-
-        // Get the adjacencies configuration.
-        Dictionary<string, string[]> adj = new Dictionary<string, string[]>();
-        foreach (var model in nodes)
-        {
-            if (model.adjacenciesGUIDs != null && model.adjacenciesGUIDs.Count > 0)
+            // Covert the data in the List "nodes data models" to ZoneData Dictionary.
+            // And the adjacency rules for the nodes that have a adjacent zone set.
+            Dictionary<Guid, ZoneData> zonesConfigs = new Dictionary<Guid, ZoneData>();
+            Dictionary<Guid, Guid[]> adjacencyRules = new Dictionary<Guid, Guid[]>();
+            foreach (var zDataModel in nodes)
             {
-                string[] adjacencies = new string[model.adjacenciesGUIDs.Count];
-
-                for (int i = 0; i < adjacencies.Length; i++)
+                // Convert preset area texture to int array.
+                int[] presetArea = null;
+                if (zDataModel.presetAreaTexture != null)
                 {
-                    adjacencies[i] = model.adjacenciesGUIDs[i];
+                    presetArea = Utils.TextureToIntArray(zDataModel.presetAreaTexture, planDimensions);
                 }
 
-                adj.Add(model.guid, adjacencies);
+                Guid guid = Guid.Parse(zDataModel.guid);
+                Guid parentGuid;
+                if (zDataModel.parentGUID == null || zDataModel.parentGUID == string.Empty)
+                {
+                    parentGuid = Guid.Empty;
+                }
+                else
+                {
+                    parentGuid = Guid.Parse(zDataModel.parentGUID);
+                }
+
+                // Create the ZoneData from zone config at the node model.
+                ZoneData newZoneData = new ZoneData
+                (
+                    guid,
+                    zDataModel.zoneId,
+                    parentGuid,
+                    zDataModel.areaRatio,
+                    presetArea,
+                    zDataModel.hasOutsideDoor,
+                    zDataModel.HasOutsideWindows
+                );
+
+                // Add the current zone data to the dictionary using the GUID AS KEY.
+                zonesConfigs.Add(new Guid(zDataModel.guid), newZoneData);
+
+                // the Check for adjacency rules.
+                if (zDataModel.adjacenciesGUIDs != null && zDataModel.adjacenciesGUIDs.Count > 0)
+                {
+                    Guid[] adjacencies = new Guid[zDataModel.adjacenciesGUIDs.Count];
+
+                    for (int i = 0; i < adjacencies.Length; i++)
+                    {
+                        adjacencies[i] = new Guid(zDataModel.adjacenciesGUIDs[i]);
+                    }
+
+                    // Add the current zone data to the dictionary using the GUID AS KEY.
+                    adjacencyRules.Add(new Guid(zDataModel.guid), adjacencies);
+                }
             }
+
+            // Create a FloorPlanData.
+            return new FloorPlanData(planId, planDimensions, zonesConfigs, adjacencyRules);
         }
-
-        // Create a FloorPlanData from a TestFloorPlanConfig.
-        return new FloorPlanData(planGUID, planId, dims, zonesConfigs, adj);
     }
-}
-
-
-[System.Serializable]
-public class DataNodeModel
-{
-    public string guid;
-    public Vector2 position;
-
-    public string zoneId;
-    public float areaRatio = 1;
-    public bool hasOutsideDoor;
-    public Texture2D presetAreaTexture;
-
-    public string parentGUID;
-    public List<string> childrenGUIDs = new();
-    public List<string> adjacenciesGUIDs = new();
 }

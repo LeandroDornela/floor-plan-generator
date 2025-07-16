@@ -230,6 +230,30 @@ namespace BuildingGenerator
         }
 
 
+        public static int[] TextureToIntArray(Texture2D texture, Vector2Int gridDimensions)
+        {
+
+            Texture2D resizedTex = ResizeWithNearest(texture, gridDimensions.x, gridDimensions.y);
+
+            Color[] colors = resizedTex.GetPixels();
+            int[] result = new int[colors.Length];
+
+            for (int i = 0; i < colors.Length; i++)
+            {
+                if (colors[i].r == 0)
+                {
+                    result[i] = 0;
+                }
+                else
+                {
+                    result[i] = 1;
+                }
+            }
+
+            return result;
+        }
+
+
         /// <summary>
         /// 
         /// </summary>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace BuildingGenerator
@@ -55,7 +56,7 @@ namespace BuildingGenerator
             // For each chunk, check the best neighbor zone the receive the cells, then assign the cells.
             foreach (var chunk in cellsChunks)
             {
-                DictionaryList<string, Cell> neighborZonesCells = new DictionaryList<string, Cell>();
+                DictionaryList<Guid, Cell> neighborZonesCells = new DictionaryList<Guid, Cell>();
                 Zone zoneWithBiggestDesiredAreaDif = null;
                 Zone selectedZone = null;
                 foreach (Cell cell in chunk)
@@ -139,7 +140,7 @@ namespace BuildingGenerator
         }
 
 
-        void FindNeighborZonesCells(Cell neighbor, DictionaryList<string, Cell> neighborZonesCells, ref Zone zoneWithBiggestDesiredAreaDif)
+        void FindNeighborZonesCells(Cell neighbor, DictionaryList<Guid, Cell> neighborZonesCells, ref Zone zoneWithBiggestDesiredAreaDif)
         {
             if (neighbor != null && neighbor.Zone != null && neighbor.IsAssignedToLeafZone)
             {
@@ -148,7 +149,7 @@ namespace BuildingGenerator
                     zoneWithBiggestDesiredAreaDif = neighbor.Zone;
                 }
 
-                neighborZonesCells.AddValue(neighbor.Zone.ZoneId, neighbor);
+                neighborZonesCells.AddValue(neighbor.Zone.GUID, neighbor);
             }
         }
     }

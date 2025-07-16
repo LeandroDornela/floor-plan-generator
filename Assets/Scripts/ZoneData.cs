@@ -1,16 +1,21 @@
+using System;
+using UnityEngine;
+
 namespace BuildingGenerator
 {
     public struct ZoneData
     {
+        private Guid _guid;
         private string _zoneID;
-        private string _parentZoneGUID;
+        private Guid _parentZoneGUID;
         private float _areaRatio;
         private int[] _presetArea;
         private bool _hasOutsideDoor;
         private bool _hasWindows;
 
+        public Guid GUID => _guid;
         public string ZoneID => _zoneID;
-        public string ParentZoneGUID => _parentZoneGUID;
+        public Guid ParentZoneGUID => _parentZoneGUID;
         public float AreaRatio => _areaRatio;
         public int[] PresetArea => _presetArea;
         public bool HasOutsideDoor => _hasOutsideDoor;
@@ -19,10 +24,16 @@ namespace BuildingGenerator
         public bool HasPresetArea => _presetArea?.Length > 0;
 
 
-        public ZoneData(string zoneID, string parentZoneGUID, float areaRatio, int[] presetArea, bool hasOutsideDoor, bool hasWindows)
+        public ZoneData(Guid guid, string zoneID, Guid parentZoneGUID, float areaRatio, int[] presetArea, bool hasOutsideDoor, bool hasWindows)
         {
-            _parentZoneGUID = parentZoneGUID;
+            if (guid == Guid.Empty)
+            {
+                Debug.LogError("Invalid zone GUID.");
+            }
+
+            _guid = guid;
             _zoneID = zoneID;
+            _parentZoneGUID = parentZoneGUID;
             _areaRatio = areaRatio;
             _presetArea = presetArea;
             _hasOutsideDoor = hasOutsideDoor;

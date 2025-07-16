@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /*------------------>x
@@ -29,13 +30,13 @@ namespace BuildingGenerator
         // PRIVATE
         private FloorPlanManager _floorPlanManager;
 
-
+        private Guid _guid;
         private string _zoneId;
         private float _areaRatio;
         [Range(0.001f, 1)] private float _desiredAspect = 1; // 1 is square. Max 1
         private Zone _parentZone;
-        private Dictionary<string, Zone> _childZones;
-        private Dictionary<string, Zone> _adjacentZones;
+        private Dictionary<Guid, Zone> _childZones;
+        private Dictionary<Guid, Zone> _adjacentZones;
         private bool _hasOutsideDoor;
         private bool _hasWindows;
 
@@ -61,14 +62,15 @@ namespace BuildingGenerator
 
 
         // PUBLIC PROP
+        public Guid GUID => _guid;
         public string ZoneId => _zoneId;
         public float AreaRatio => _areaRatio;
         public float DesiredAspect => _desiredAspect;
         public int Area => _cellsList.Count; // Get the zone area in cells units.
         public Cell OriginCell => (_cellsList != null && _cellsList.Count > 0) ? _cellsList[0] : null;
         public Zone ParentZone => _parentZone;
-        public Dictionary<string, Zone> ChildZones => _childZones;
-        public Dictionary<string, Zone> AdjacentZones => _adjacentZones;
+        public Dictionary<Guid, Zone> ChildZones => _childZones;
+        public Dictionary<Guid, Zone> AdjacentZones => _adjacentZones;
         public bool HasOutsideDoor => _hasOutsideDoor;
         public bool HasWindows => _hasWindows;
         /// <summary>
@@ -92,15 +94,16 @@ namespace BuildingGenerator
         public float DesiredArea => _desiredArea;
 
 
-        public Zone(FloorPlanManager floorPlanManager, string zoneId, float areaRatio, bool hasOutsideDoor, bool hasWindows)
+        public Zone(FloorPlanManager floorPlanManager, Guid guid, string zoneId, float areaRatio, bool hasOutsideDoor, bool hasWindows)
         {
             _floorPlanManager = floorPlanManager;
+            _guid = guid;
             _zoneId = zoneId;
             _areaRatio = areaRatio;
             _parentZone = null;
             _cellsList = new List<Cell>();
-            _childZones = new Dictionary<string, Zone>();
-            _adjacentZones = new Dictionary<string, Zone>();
+            _childZones = new Dictionary<Guid, Zone>();
+            _adjacentZones = new Dictionary<Guid, Zone>();
             _hasOutsideDoor = hasOutsideDoor;
             _hasWindows = hasWindows;
             _desiredArea = _areaRatio * _floorPlanManager.CellsGrid.Area;
@@ -193,7 +196,7 @@ namespace BuildingGenerator
                 return false;
             }
 
-            return _childZones.TryAdd(childZone.ZoneId, childZone);
+            return _childZones.TryAdd(childZone.GUID, childZone);
         }
 
 
@@ -210,7 +213,7 @@ namespace BuildingGenerator
                 return false;
             }
 
-            return _adjacentZones.TryAdd(adjacentZone.ZoneId, adjacentZone);
+            return _adjacentZones.TryAdd(adjacentZone.GUID, adjacentZone);
         }
 
 
@@ -262,7 +265,7 @@ namespace BuildingGenerator
         /// <returns></returns>
         public bool MustBeAdjacentTo(Zone zoneToTest)
         {
-            return _adjacentZones.ContainsKey(zoneToTest.ZoneId);
+            return _adjacentZones.ContainsKey(zoneToTest.GUID);
         }
 
 

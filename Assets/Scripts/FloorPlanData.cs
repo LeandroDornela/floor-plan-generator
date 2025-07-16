@@ -1,15 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace BuildingGenerator
 {
     public struct FloorPlanData
     {
-        public string FloorPlanGUID;
+        public Guid FloorPlanGUID;
         public string FloorPlanId;
         public Vector2Int GridDimensions;
-        public Dictionary<string, ZoneData> ZonesConfigs;
-        public Dictionary<string, string[]> Adjacencies;
+        public Dictionary<Guid, ZoneData> ZonesConfigs;
+        public Dictionary<Guid, Guid[]> Adjacencies;
 
         public bool IsValid()
         {
@@ -20,9 +21,9 @@ namespace BuildingGenerator
             return true;
         }
 
-        public FloorPlanData(string floorPlanGUID, string floorPlanId, Vector2Int gridDimensions, Dictionary<string, ZoneData> zonesConfigs, Dictionary<string, string[]> adjacencies)
+        public FloorPlanData(string floorPlanId, Vector2Int gridDimensions, Dictionary<Guid, ZoneData> zonesConfigs, Dictionary<Guid, Guid[]> adjacencies)
         {
-            FloorPlanGUID = floorPlanGUID;
+            FloorPlanGUID = Guid.NewGuid();
             FloorPlanId = floorPlanId;
             GridDimensions = gridDimensions;
             ZonesConfigs = zonesConfigs;

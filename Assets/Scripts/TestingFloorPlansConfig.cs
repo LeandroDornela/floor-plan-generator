@@ -2,13 +2,15 @@ using UnityEngine;
 using System;
 using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
+using com.cyborgAssets.inspectorButtonPro;
 
 namespace BuildingGenerator
 {
     [Serializable]
-    public struct TestZoneConfig
+    public class TestZoneConfig
     {
         public string _zoneID;
+        [NaughtyAttributes.ReadOnly] public string _zoneGUID = Guid.NewGuid().ToString();
         public string _parentZoneGUID;
         public float _areaRatio;
         public Texture2D _presetArea;
@@ -21,33 +23,12 @@ namespace BuildingGenerator
             int[] presetArea = null;
             if (_presetArea != null)
             {
-                presetArea = TextureToIntArray(_presetArea, gridDimensions);
+                presetArea = Utils.TextureToIntArray(_presetArea, gridDimensions);
             }
 
-            return new ZoneData(_zoneID, _parentZoneGUID, _areaRatio, presetArea, _hasOutsideDoor, _hasWindows);
-        }
+            Guid.TryParse(_parentZoneGUID, out var parentGUI);
 
-        public int[] TextureToIntArray(Texture2D texture, Vector2Int gridDimensions)
-        {
-
-            Texture2D resizedTex = Utils.ResizeWithNearest(texture, gridDimensions.x, gridDimensions.y);
-
-            Color[] colors = resizedTex.GetPixels();
-            int[] result = new int[colors.Length];
-
-            for (int i = 0; i < colors.Length; i++)
-            {
-                if (colors[i].r == 0)
-                {
-                    result[i] = 0;
-                }
-                else
-                {
-                    result[i] = 1;
-                }
-            }
-
-            return result;
+            return new ZoneData(Guid.NewGuid(), _zoneID, parentGUI, _areaRatio, presetArea, _hasOutsideDoor, _hasWindows);
         }
     }
 
@@ -55,14 +36,13 @@ namespace BuildingGenerator
     [Serializable]
     public struct TestFloorPlanConfig
     {
-        public string FloorPlanGUID;
         public string FloorPlanId;
         public Vector2Int GridDimensions;
 
-        [SerializedDictionary("Zone ID", "Config")]
+        [SerializedDictionary("Zone GUID", "Config")]
         public SerializedDictionary<string, TestZoneConfig> ZonesConfigs;
 
-        [SerializedDictionary("Zone ID", "Adj. IDs")]
+        [SerializedDictionary("Zone GUID", "Adj. IDs")]
         public SerializedDictionary<string, string[]> Adjacencies;
     }
 
@@ -77,24 +57,71 @@ namespace BuildingGenerator
         {
             int index = 0;
 
-            var floorPlanGUID = FloorPlanConfigs[index].FloorPlanGUID;
             var planId = FloorPlanConfigs[index].FloorPlanId;
 
             // Get the grid dimensions.
             var dims = FloorPlanConfigs[index].GridDimensions;
 
             // Convert TestZoneConfig's to ZoneData's.
-            Dictionary<string, ZoneData> zonesConfigs = new Dictionary<string, ZoneData>(FloorPlanConfigs[index].ZonesConfigs.Count);
+            Dictionary<Guid, ZoneData> zonesConfigs = new Dictionary<Guid, ZoneData>(FloorPlanConfigs[index].ZonesConfigs.Count);
             foreach (var zConf in FloorPlanConfigs[index].ZonesConfigs)
             {
-                zonesConfigs[zConf.Key] = zConf.Value.ToZoneConfig(dims);
+                zonesConfigs[Guid.Parse(zConf.Key)] = zConf.Value.ToZoneConfig(dims);
             }
 
             // Get the adjacencies configuration.
-            var adj = FloorPlanConfigs[index].Adjacencies;
+            Dictionary<Guid, Guid[]> adj = new Dictionary<Guid, Guid[]>();
+            foreach (var adjRule in FloorPlanConfigs[index].Adjacencies)
+            {
+                Guid[] zoneAdjs = new Guid[adjRule.Value.Length];
+
+                for (int i = 0; i < adjRule.Value.Length; i++)
+                {
+                    zoneAdjs[i] = Guid.Parse(adjRule.Value[i]);
+                }
+
+                adj.Add(Guid.Parse(adjRule.Key), zoneAdjs);
+            }
 
             // Create a FloorPlanData from a TestFloorPlanConfig.
-            return new FloorPlanData(floorPlanGUID, planId, dims, zonesConfigs, adj);
+            return new FloorPlanData(planId, dims, zonesConfigs, adj);
+        }
+
+
+        private void UpdateToGUIDSys()
+        {
+            for (int i = 1; i < FloorPlanConfigs.Length; i++)
+            {
+                UpdatePlan(ref FloorPlanConfigs[i]);
+            }
+        }
+        
+
+        void UpdatePlan(ref TestFloorPlanConfig plan)
+        {
+            // Adjacencies.
+            SerializedDictionary<string, string[]> newDict = new SerializedDictionary<string, string[]>();
+            foreach (var rule in plan.Adjacencies)
+            {
+                string[] newZonesGUIDs = new string[rule.Value.Length];
+                for (int i = 0; i < rule.Value.Length; i++)
+                {
+                    newZonesGUIDs[i] = plan.ZonesConfigs[rule.Value[i]]._zoneGUID;
+                }
+
+                newDict.Add(plan.ZonesConfigs[rule.Key]._zoneGUID, newZonesGUIDs);
+            }
+            plan.Adjacencies = new SerializedDictionary<string, string[]>(newDict);
+
+            // Zones
+            SerializedDictionary<string, TestZoneConfig> newZones = new SerializedDictionary<string, TestZoneConfig>();
+            foreach (var zone in plan.ZonesConfigs)
+            {
+                TestZoneConfig config = zone.Value;
+                config._zoneID = zone.Key;
+                newZones.Add(config._zoneGUID, config);
+            }
+            plan.ZonesConfigs = new SerializedDictionary<string, TestZoneConfig>(newZones);
         }
     }
 }

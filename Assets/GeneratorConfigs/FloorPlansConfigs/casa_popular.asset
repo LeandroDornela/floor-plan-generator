@@ -18,6 +18,7 @@ MonoBehaviour:
     zoneId: sala
     areaRatio: 0.25
     hasOutsideDoor: 1
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
     childrenGUIDs: []
@@ -29,6 +30,7 @@ MonoBehaviour:
     zoneId: corredor
     areaRatio: 0.018
     hasOutsideDoor: 0
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
     childrenGUIDs: []
@@ -41,6 +43,7 @@ MonoBehaviour:
     zoneId: cozinha
     areaRatio: 0.268
     hasOutsideDoor: 1
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
     childrenGUIDs: []
@@ -50,6 +53,7 @@ MonoBehaviour:
     zoneId: q2
     areaRatio: 0.222
     hasOutsideDoor: 0
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
     childrenGUIDs: []
@@ -59,6 +63,7 @@ MonoBehaviour:
     zoneId: q1
     areaRatio: 0.198
     hasOutsideDoor: 0
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
     childrenGUIDs: []
@@ -68,6 +73,7 @@ MonoBehaviour:
     zoneId: publico
     areaRatio: 0.464
     hasOutsideDoor: 0
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
     childrenGUIDs:
@@ -81,6 +87,7 @@ MonoBehaviour:
     zoneId: privado
     areaRatio: 0.509
     hasOutsideDoor: 0
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
     childrenGUIDs:
@@ -92,6 +99,7 @@ MonoBehaviour:
     zoneId: casa
     areaRatio: 1
     hasOutsideDoor: 0
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 
     childrenGUIDs:
@@ -103,6 +111,7 @@ MonoBehaviour:
     zoneId: banheiro
     areaRatio: 0.168
     hasOutsideDoor: 0
+    HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
     childrenGUIDs: []

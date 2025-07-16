@@ -31,7 +31,7 @@ namespace BuildingGenerator
 
         [SerializeField] private BuildingAssetsPack _buildingAssetsPack;
 
-        public FloorPlanGraphData _testingFloorPlanConfig;
+        public IFloorPlanConfig _testingFloorPlanConfig;
 
 
         [Header("Debug")]

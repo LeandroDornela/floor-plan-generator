@@ -40,7 +40,7 @@ namespace BuildingGenerator
             }
 
             _floorPlanGenerator = new FloorPlanGenerator();
-            FloorPlanData floorPlanData = buildingGeneratorSettings._testingFloorPlanConfig.ConvertToFloorPlanData();
+            FloorPlanData floorPlanData = buildingGeneratorSettings._testingFloorPlanConfig.GetFloorPlanData();
             var result = await _floorPlanGenerator.GenerateFloorPlans(buildingGeneratorSettings, methodGrowthSettings, sceneDebugger, floorPlanData, 1);
         }
 

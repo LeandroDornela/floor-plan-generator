@@ -13,6 +13,8 @@ y       [v][-][-][v]
 namespace BuildingGenerator
 {
     /// <summary>
+    /// Forma de armazenar a informação das células que compõe as bordas de uma zona retangular que
+    /// substitui o uso de listas.
     /// OBS: Seguindo o padão da grid, leitura esquerda->direita, cima->baixo
     /// </summary>
     public class CellsLineDescription

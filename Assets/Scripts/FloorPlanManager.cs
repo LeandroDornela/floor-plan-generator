@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -28,11 +29,11 @@ namespace BuildingGenerator
         private CellsGrid _cellsGrid;
         
         private Zone _rootZone;
-        private Dictionary<string, Zone> _zonesInstances;
+        private Dictionary<Guid, Zone> _zonesInstances;
         private bool _initialized = false;
 
         //Storing adjacencies to facilitate the adj. checking without redundance.
-        private Dictionary<string, string[]> _adjacencies;
+        private Dictionary<Guid, Guid[]> _adjacencies;
         private List<CellsTuple> _wallCellsTuples;
 
         
@@ -45,8 +46,8 @@ namespace BuildingGenerator
         /// The util floor plan zone, grid's cells outside this zone will not be used by the algorith.
         /// </summary>
         public Zone RootZone => _rootZone;
-        public Dictionary<string, Zone> ZonesInstances => _zonesInstances;
-        public Dictionary<string, string[]> Adjacencies => _adjacencies;
+        public Dictionary<Guid, Zone> ZonesInstances => _zonesInstances;
+        public Dictionary<Guid, Guid[]> Adjacencies => _adjacencies;
 
 
         public FloorPlanManager(FloorPlanData floorPlanConfig)
@@ -70,7 +71,7 @@ namespace BuildingGenerator
             
             _floorPlanId = floorPlanConfig.FloorPlanId;
 
-            _zonesInstances = new Dictionary<string, Zone>(); // a list/dictionary of all the zones instances, identified by the zone id.
+            _zonesInstances = new Dictionary<Guid, Zone>(); // a list/dictionary of all the zones instances, identified by the zone id.
 
             _cellsGrid = new CellsGrid(floorPlanConfig.GridDimensions);
 
@@ -92,23 +93,23 @@ namespace BuildingGenerator
         /// <param name="zonesConfigs"></param>
         /// <param name="adjacencies"></param>
         /// <param name="cellsGrid"></param>
-        void CreateZonesHierarchy(Dictionary<string, ZoneData> zonesConfigs, Dictionary<string, string[]> adjacencies, CellsGrid cellsGrid)
+        void CreateZonesHierarchy(Dictionary<Guid, ZoneData> zonesConfigs, Dictionary<Guid, Guid[]> adjacencies, CellsGrid cellsGrid)
         {
-            _zonesInstances = new Dictionary<string, Zone>();
+            _zonesInstances = new Dictionary<Guid, Zone>();
 
             // Create all zones.
             foreach(var zone in zonesConfigs)
             {
-                _zonesInstances.Add(zone.Key, new Zone(this, zone.Key, zone.Value.AreaRatio, zone.Value.HasOutsideDoor, zone.Value.HasWindows));
+                _zonesInstances.Add(zone.Key, new Zone(this, zone.Key, zone.Value.ZoneID, zone.Value.AreaRatio, zone.Value.HasOutsideDoor, zone.Value.HasWindows));
             }
 
             // Set the parents and children of the zones.
             foreach(var zone in _zonesInstances)
             {
                 //string parentZoneId = zonesConfigs[zone.Key].ParentZoneId;
-                string parentZoneGUID = zonesConfigs[zone.Key].ParentZoneGUID;
+                Guid parentZoneGUID = zonesConfigs[zone.Key].ParentZoneGUID;
 
-                if (parentZoneGUID != string.Empty)
+                if (parentZoneGUID != Guid.Empty) // Empty parent Guid means it is a root.
                 {
                     Zone parentZone = _zonesInstances[parentZoneGUID];
                     zone.Value.SetParentZone(parentZone);
