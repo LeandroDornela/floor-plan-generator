@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: predio_4kitnets_circ_preset
   m_EditorClassIdentifier: 
   planId: Pred-4-kit
-  gridDimensions: {x: 20, y: 20}
+  gridDimensions: {x: 15, y: 15}
   nodes:
   - guid: 58fb5d47-f18e-424e-b85d-fa118c6237f1
     position: {x: 483, y: -76}

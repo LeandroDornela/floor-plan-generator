@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: casa_popular
   m_EditorClassIdentifier: 
   planId: Casa popular
-  gridDimensions: {x: 8, y: 8}
+  gridDimensions: {x: 7, y: 9}
   nodes:
   - guid: 3edaf155-1f83-4de8-a46b-a538251b3076
     position: {x: 865, y: 330}
