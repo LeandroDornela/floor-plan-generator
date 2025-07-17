@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderer: {fileID: 2157114733137866506}
   _drawDebug: 1
+  _drawNeighborConnections: 0
 --- !u!1 &2913663536996157315
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,7 +113,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 828ee1fcd9446cc4da6ff8ccbc6eff75, type: 2}
+  - {fileID: 2100000, guid: c983707f30e4f2046ac2b583c13da301, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

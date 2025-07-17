@@ -85,7 +85,11 @@ public class VisualCell : MonoBehaviour
                 zoneId = "";
             }
 
-            Handles.Label(transform.position, $"[{transform.position.x}, {Mathf.Abs(transform.position.z)}]\n{zoneId}");
+            // Create a new GUIStyle
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = Color.black;
+            style.alignment = TextAnchor.MiddleCenter;
+            Handles.Label(transform.position, $"[{transform.position.x}, {Mathf.Abs(transform.position.z)}]\n{zoneId}", style);
 
             if(_cell != null && _drawNeighborConnections)
             {

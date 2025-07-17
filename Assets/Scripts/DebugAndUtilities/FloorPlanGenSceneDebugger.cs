@@ -92,6 +92,7 @@ namespace BuildingGenerator
                 else
                 {
                     _cellsGraphicsInstances[i].SetColor(Color.black, null);
+                    //DestroyImmediate(_cellsGraphicsInstances[i]);
                 }
             }
 
@@ -201,6 +202,8 @@ namespace BuildingGenerator
             // Instancia as celulas.
             foreach (var cell in floorPlan.CellsGrid.Cells)
             {
+                if (cell.Zone == null) continue;
+
                 VisualCell visualCell = Instantiate(buildingAssetsPack.floorPrefab,
                                                     new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y),
                                                     Quaternion.identity,
