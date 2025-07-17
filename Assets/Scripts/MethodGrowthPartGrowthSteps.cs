@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
 namespace BuildingGenerator
 {
@@ -19,60 +21,70 @@ namespace BuildingGenerator
             {
                 return false;
             }
-
-            /*
-            // INTERESSANTE, usar essa função sem checar espaço total gera formas retangulares, mas é mias custoso do q checar os aspect antes
-            var largestFreeSpace = zone.GetLargestExpansionSpaceRect(cellsGrid, false);
-            if(largestFreeSpace.isFullLine)
-            {
-                return zone.TryExpandShapeRect(largestFreeSpace.freeLineDescription.side, cellsGrid);
-            }
-            else
-            {
-                return false;
-            }
-            */
-
+            
             float aspect = zone.GetZoneAspect();
 
-            // Guid.NewGuid() provides a way to get unique randon numbers. Create a array with the directions
-            // and sort it using the guids.
-            //var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>().OrderBy(d => Guid.NewGuid());// NOT AFFECTED BY RANDOM SEED.
             var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>();
 
-            foreach (var side in sides)
+            // All directions
+            if (aspect == zone.DesiredAspect)
             {
-                // All directions
-                if (aspect == zone.DesiredAspect)
+                Zone.Side largestSide = default;
+                int distance = 0;
+
+                foreach (var side in sides)
                 {
-                    if (TryGrowFromSide(side, zone, cellsGrid))
+                    var line = zone.GetExpansionSpaceRect(side, _checkFullSpace);
+                    if (line.distance > distance)
+                    {
+                        largestSide = side;
+                        distance = line.distance;
+                    }
+                }
+
+                if (TryGrowFromSide(largestSide, zone, cellsGrid))
+                {
+                    return true;
+                }
+            }
+            // Vertical
+            else if (aspect > zone.DesiredAspect)
+            {
+                var lineTop = zone.GetExpansionSpaceRect(Zone.Side.Top, _checkFullSpace);
+                var lineBottom = zone.GetExpansionSpaceRect(Zone.Side.Bottom, _checkFullSpace);
+
+                if (lineTop.distance > lineBottom.distance)
+                {
+                    if (TryGrowFromSide(Zone.Side.Top, zone, cellsGrid))
                     {
                         return true;
                     }
                 }
-                // Vertical
-                else if (aspect > zone.DesiredAspect && (side == Zone.Side.Top || side == Zone.Side.Bottom))
+                else if (TryGrowFromSide(Zone.Side.Bottom, zone, cellsGrid))
                 {
-                    if (zone.GetExpansionSpaceRect(side, _checkFullSpace).isFullLine)
-                    {
-                        return zone.TryExpandShapeRect(side);
-                    }
-                    if (TryGrowFromSide(side, zone, cellsGrid))
+                    return true;
+                }
+            }
+            // Horizontal
+            else if (aspect < zone.DesiredAspect)
+            {
+                var lineLeft = zone.GetExpansionSpaceRect(Zone.Side.Left, _checkFullSpace);
+                var lineRight = zone.GetExpansionSpaceRect(Zone.Side.Right, _checkFullSpace);
+
+                if (lineLeft.distance > lineRight.distance)
+                {
+                    if (TryGrowFromSide(Zone.Side.Left, zone, cellsGrid))
                     {
                         return true;
                     }
                 }
-                // Horizontal
-                else if (aspect < zone.DesiredAspect && (side == Zone.Side.Left || side == Zone.Side.Right))
+                else if (TryGrowFromSide(Zone.Side.Right, zone, cellsGrid))
                 {
-                    if (TryGrowFromSide(side, zone, cellsGrid))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
-            return false; // can't grow.
+            return false;
         }
 
 

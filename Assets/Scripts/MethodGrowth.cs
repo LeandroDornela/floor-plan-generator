@@ -25,7 +25,7 @@ namespace BuildingGenerator
         private MethodGrowthSettings _settings;
 
         private Guid _outsideZoneId = Guid.NewGuid();
-        private bool _checkFullSpace = false;
+        private bool _checkFullSpace = true;
 
 
         /// <summary>
