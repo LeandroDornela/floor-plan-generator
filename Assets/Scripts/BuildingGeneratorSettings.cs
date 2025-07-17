@@ -30,8 +30,7 @@ namespace BuildingGenerator
         [SerializeField] private int _samples = 10;
 
         [SerializeField] private BuildingAssetsPack _buildingAssetsPack;
-
-        public IFloorPlanConfig _testingFloorPlanConfig;
+        [SerializeField] private IFloorPlanConfig _floorPlanConfig;
 
 
         [Header("Debug")]
@@ -48,6 +47,7 @@ namespace BuildingGenerator
         public bool EnableDevLogs => _enableDevLogs;
         public bool SaveGenStatsJson => _saveGenStatsJson;
         public BuildingAssetsPack BuildingAssetsPack => _buildingAssetsPack;
+        public IFloorPlanConfig FloorPlanConfig => _floorPlanConfig;
     }
 
 }

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
   m_Name: predio_2kitnets
   m_EditorClassIdentifier: 
+  planId: Pred-2-kit
+  gridDimensions: {x: 10, y: 5}
   nodes:
   - guid: 004996ce-6143-4a68-aa74-552ebd7d46fd
     position: {x: 100, y: 200}

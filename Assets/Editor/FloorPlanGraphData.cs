@@ -8,13 +8,12 @@ namespace BuildingGenerator
     [CreateAssetMenu(fileName = "NewFloorPlanGraph", menuName = "Building Generator/Floor Plan Graph")]
     public class FloorPlanGraphData : IFloorPlanConfig
     {
+        public string planId;
+        public Vector2Int gridDimensions;
         public List<DataNodeModel> nodes = new List<DataNodeModel>();
 
         public override FloorPlanData GetFloorPlanData()
         {
-            var planId = "testing";
-            var planDimensions = new Vector2Int(25, 25);
-
             // Covert the data in the List "nodes data models" to ZoneData Dictionary.
             // And the adjacency rules for the nodes that have a adjacent zone set.
             Dictionary<Guid, ZoneData> zonesConfigs = new Dictionary<Guid, ZoneData>();
@@ -25,7 +24,7 @@ namespace BuildingGenerator
                 int[] presetArea = null;
                 if (zDataModel.presetAreaTexture != null)
                 {
-                    presetArea = Utils.TextureToIntArray(zDataModel.presetAreaTexture, planDimensions);
+                    presetArea = Utils.TextureToIntArray(zDataModel.presetAreaTexture, gridDimensions);
                 }
 
                 Guid guid = Guid.Parse(zDataModel.guid);
@@ -70,7 +69,7 @@ namespace BuildingGenerator
             }
 
             // Create a FloorPlanData.
-            return new FloorPlanData(planId, planDimensions, zonesConfigs, adjacencyRules);
+            return new FloorPlanData(planId, gridDimensions, zonesConfigs, adjacencyRules);
         }
     }
 }

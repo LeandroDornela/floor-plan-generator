@@ -35,12 +35,12 @@ namespace BuildingGenerator
         private string _parentPrefix = "Parent Zone";
         private string _childPrefix = "Children Zones";
 
-        private Color _rootColor = new Color(1f, 0.8f, 0.5f); //new Color(0.9f, 0.9f, 0.9f);
-        private Color _branchColor = new Color(0.4f, 0.2f, 0.0f); //new Color(0.5f, 0.5f, 0.5f);
-        private Color _leafColor = new Color(0.3f, 0.5f, 0.1f); //new Color(0.1f, 0.1f, 0.1f);
+        private Color _rootColor =  new Color(0.125f, 0.125f, 0.125f); //new Color(1f, 0.8f, 0.5f); //new Color(0.9f, 0.9f, 0.9f);
+        private Color _branchColor = new Color(0.168f, 0.168f, 0.168f); //new Color(0.4f, 0.2f, 0.0f); //new Color(0.5f, 0.5f, 0.5f);
+        private Color _leafColor = new Color(0.4f, 0.4f, 0.4f); //new Color(0.3f, 0.5f, 0.1f); //new Color(0.1f, 0.1f, 0.1f);
 
-        private Color _familyPortCol = Color.white;
-        private Color _adjacencyPortColor = Color.yellow;
+        private Color _familyPortCol = Color.magenta;
+        private Color _adjacencyPortColor = Color.cyan;
 
 
         public bool IsAdjacenciesPort_In(Port portToTest)
@@ -86,7 +86,7 @@ namespace BuildingGenerator
                     var titleLabel = this.Q<Label>("title-label");
                     if (titleLabel != null)
                     {
-                        titleLabel.style.color = new StyleColor(Color.black);
+                        titleLabel.style.color = new StyleColor(Color.white);
                     }
                 }
                 else
@@ -177,6 +177,7 @@ namespace BuildingGenerator
 
 
                 var hasDoor = new Toggle("Has outside door");
+                hasDoor.value = _hasOutsideDoor;
                 hasDoor.RegisterValueChangedCallback(evt =>
                 {
                     _hasOutsideDoor = evt.newValue;

@@ -1,3 +1,4 @@
+using System;
 using com.cyborgAssets.inspectorButtonPro;
 using UnityEditor;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace BuildingGenerator
         */
 
 
-        public async void GenerateBuilding(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, FloorPlanGenSceneDebugger sceneDebugger)
+        public async void GenerateBuilding(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, FloorPlanGenSceneDebugger sceneDebugger, Action onGenerationFinished)
         {
             if (buildingGeneratorSettings.EnableDevLogs)
             {
@@ -40,8 +41,11 @@ namespace BuildingGenerator
             }
 
             _floorPlanGenerator = new FloorPlanGenerator();
-            FloorPlanData floorPlanData = buildingGeneratorSettings._testingFloorPlanConfig.GetFloorPlanData();
+            FloorPlanData floorPlanData = buildingGeneratorSettings.FloorPlanConfig.GetFloorPlanData();
+
             var result = await _floorPlanGenerator.GenerateFloorPlans(buildingGeneratorSettings, methodGrowthSettings, sceneDebugger, floorPlanData, 1);
+
+            onGenerationFinished.Invoke();
         }
 
 

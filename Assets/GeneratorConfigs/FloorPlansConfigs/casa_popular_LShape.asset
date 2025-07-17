@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
   m_Name: casa_popular_LShape
   m_EditorClassIdentifier: 
+  planId: Casa popular irreg
+  gridDimensions: {x: 10, y: 10}
   nodes:
   - guid: 3edaf155-1f83-4de8-a46b-a538251b3076
     position: {x: 865, y: 330}

@@ -8,7 +8,6 @@ namespace BuildingGenerator
     {
         public BuildingGeneratorSettings buildingGeneratorSettings; // Config
         public MethodGrowthSettings methodGrowthSettings; // Config
-        public IFloorPlanConfig floorPlanConfig; // TODO: Will be replace by a full building config with more than one floor plan config.
         public FloorPlanGenSceneDebugger floorPlanGenSceneDebugger; // Debug
         public GameObject floorPlanGenSceneDebuggerPrefab;
 
@@ -16,13 +15,21 @@ namespace BuildingGenerator
         private Vector2 scrollPos;
 
         private int selectedTab = 0;
-        private string[] tabNames = { "Plan Config", "Building Sets", "Method Sets", "Debug" };
+        private string[] tabNames = { "Building Sets", "Method Sets", "Debug" };
+
+        private bool _generationRunning = false;
 
 
         [MenuItem("Tools/Building Generator")]
         public static void ShowWindow()
         {
             GetWindow<BuildingGeneratorTool>("Building Generator");
+        }
+
+
+        private void OnDisable()
+        {
+            _generationRunning = false;
         }
 
 
@@ -43,15 +50,12 @@ namespace BuildingGenerator
             switch (selectedTab)
             {
                 case 0:
-                    DrawGeneralTab(largeLabel, paddingTabs);
-                    break;
-                case 1:
                     DrawBuildingGenSetsTab(largeLabel, paddingTabs);
                     break;
-                case 2:
+                case 1:
                     DrawGenMethodSetsTab(largeLabel, paddingTabs);
                     break;
-                case 3:
+                case 2:
                     DrawDebugTab(largeLabel, paddingTabs);
                     break;
             }
@@ -68,17 +72,28 @@ namespace BuildingGenerator
             customButtonStyle.fontStyle = FontStyle.Bold; // Optional: Bold, Italic, etc.
             customButtonStyle.padding = new RectOffset(16, 16, 16, 16);
 
-            if (buildingGeneratorSettings == null || methodGrowthSettings == null || floorPlanConfig == null || floorPlanGenSceneDebugger == null)
+            bool enableGenBut = false;
+
+            if (buildingGeneratorSettings == null ||
+                buildingGeneratorSettings.FloorPlanConfig == null ||
+                buildingGeneratorSettings.BuildingAssetsPack == null ||
+                methodGrowthSettings == null ||
+                floorPlanGenSceneDebugger == null ||
+                floorPlanGenSceneDebuggerPrefab == null ||
+                _generationRunning)
             {
-                customButtonStyle.normal.textColor = Color.red;
+                //customButtonStyle.normal.textColor = Color.red;
+                enableGenBut = false;
             }
             else
             {
-                customButtonStyle.normal.textColor = Color.white;
+                //customButtonStyle.normal.textColor = Color.white;
+                enableGenBut = true;
             }
 
 
             // GENERATE BUTTON
+            GUI.enabled = enableGenBut;
             GUILayout.Space(16);
             //EditorGUILayout.BeginHorizontal();
             //GUILayout.FlexibleSpace();
@@ -87,7 +102,8 @@ namespace BuildingGenerator
                 if (GUILayout.Button("Generate", customButtonStyle))
                 {
                     floorPlanGenSceneDebugger.Init(buildingGeneratorSettings.BuildingAssetsPack);
-                    buildingGenerator.GenerateBuilding(buildingGeneratorSettings, methodGrowthSettings, floorPlanGenSceneDebugger);
+                    buildingGenerator.GenerateBuilding(buildingGeneratorSettings, methodGrowthSettings, floorPlanGenSceneDebugger, GenerationFinished);
+                    _generationRunning = true;
                 }
             }
             else
@@ -97,10 +113,12 @@ namespace BuildingGenerator
                     if (Application.isPlaying)
                     {
                         floorPlanGenSceneDebugger.Init(buildingGeneratorSettings.BuildingAssetsPack);
-                        buildingGenerator.GenerateBuilding(buildingGeneratorSettings, methodGrowthSettings, floorPlanGenSceneDebugger);
+                        buildingGenerator.GenerateBuilding(buildingGeneratorSettings, methodGrowthSettings, floorPlanGenSceneDebugger, GenerationFinished);
+                        _generationRunning = true;
                     }
                 }
             }
+            GUI.enabled = true;
             //EditorGUILayout.EndHorizontal();
 
             // PROGRESS BAR
@@ -143,28 +161,6 @@ namespace BuildingGenerator
             */
         }
 
-        private void DrawGeneralTab(GUIStyle largeLabel, RectOffset padding)
-        {
-            GUIStyle scrollStyle = new GUIStyle(GUI.skin.scrollView);
-            scrollStyle.padding = padding;
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, scrollStyle);
-            //scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(position.width - _spacing), GUILayout.Height(position.height - 120));
-
-            // FLOOR PLAN CONGIF
-            //GUILayout.Space(16);
-            //GUILayout.Label("Floor Plan Configuration", largeLabel);
-            //EditorGUILayout.BeginVertical("box");
-            floorPlanConfig = (IFloorPlanConfig)EditorGUILayout.ObjectField("Floor Plan Config", floorPlanConfig, typeof(IFloorPlanConfig), false);
-            if (floorPlanConfig != null)
-            {
-                Editor editor = Editor.CreateEditor(floorPlanConfig);
-                editor.OnInspectorGUI(); // This expands the ScriptableObject fields
-                DestroyImmediate(editor);
-            }
-            //EditorGUILayout.EndVertical();
-
-            EditorGUILayout.EndScrollView();
-        }
 
         private void DrawBuildingGenSetsTab(GUIStyle largeLabel, RectOffset padding)
         {
@@ -238,6 +234,11 @@ namespace BuildingGenerator
         {
             var go = Instantiate(floorPlanGenSceneDebuggerPrefab);
             floorPlanGenSceneDebugger = go.GetComponent<FloorPlanGenSceneDebugger>();
+        }
+
+        void GenerationFinished()
+        {
+            _generationRunning = false;
         }
     }
 }

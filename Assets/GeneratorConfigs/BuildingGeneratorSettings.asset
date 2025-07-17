@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _useSeed: 0
   _seed: -332506511
-  _maxGenerationTries: 50
-  _samples: 10
-  _buildingAssetsPack: {fileID: 11400000, guid: 115243d1d79195040b61d97e561c63f0, type: 2}
-  _testingFloorPlanConfig: {fileID: 11400000, guid: 95a10565df0d17e47828b56289aba16b, type: 2}
+  _maxGenerationTries: 10
+  _samples: 50
+  _buildingAssetsPack: {fileID: 11400000, guid: 01344a3fc81912f469565eebb3cc737d, type: 2}
+  _floorPlanConfig: {fileID: 11400000, guid: 4b6b3cc58184e804fa1710cdc716a60e, type: 2}
   _screenshotPlan: 0
   _enableDevLogs: 0
   _saveGenStatsJson: 0

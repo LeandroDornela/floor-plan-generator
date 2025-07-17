@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
   m_Name: kitnet
   m_EditorClassIdentifier: 
+  planId: Kitnet
+  gridDimensions: {x: 6, y: 6}
   nodes:
   - guid: 41feca1d-c98e-41a5-93df-b670619eb6b5
     position: {x: 111, y: 245}

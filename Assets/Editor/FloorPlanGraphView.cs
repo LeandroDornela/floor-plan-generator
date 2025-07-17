@@ -9,6 +9,9 @@ namespace BuildingGenerator
 {
     public class DataGraphView : GraphView
     {
+        public string PlanId = "New Floor Plan";
+        public Vector2Int GridDimensions = new Vector2Int(10, 10);
+        
 
         public DataGraphView()
         {
@@ -219,9 +222,12 @@ namespace BuildingGenerator
         #region  SAVE/LOAD
         public void SaveGraphTo(FloorPlanGraphData asset)
         {
+            asset.planId = PlanId;
+            asset.gridDimensions = GridDimensions;
+
             // Map GUID to node
             var nodeMap = nodes.OfType<ZoneNode>().ToDictionary(n => n.GUID, n => n);
-            
+
             asset.nodes.Clear();
 
             foreach (var node in nodeMap.Values)
@@ -246,6 +252,9 @@ namespace BuildingGenerator
 
         public void LoadGraphFrom(FloorPlanGraphData asset)
         {
+            PlanId = asset.planId;
+            GridDimensions = asset.gridDimensions;
+
             graphElements.ForEach(RemoveElement);
 
             Dictionary<string, ZoneNode> nodeMap = new();
@@ -253,8 +262,6 @@ namespace BuildingGenerator
             // Create nodes first
             foreach (var model in asset.nodes)
             {
-                Debug.Log(model.guid);
-
                 bool isRoot = false;
                 if (model.parentGUID == "")
                 {
