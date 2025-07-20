@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37a140f82c35fc4ea5b44a0a978758e, type: 3}
+  m_Name: BuildingAssetsPack_casinha
+  m_EditorClassIdentifier: 
+  floorPrefab: {fileID: 969024835764510083, guid: 3a50744ac5d151347b6d45b9b1b5d4d5, type: 3}
+  wallPrefab: {fileID: 1036700833597567119, guid: 021f8a98bf8e6ed4c957c72623efa167, type: 3}
+  doorPrefab: {fileID: 6096296068141340284, guid: 6bc18b1c10170de4bb226fd52c4bc2fa, type: 3}

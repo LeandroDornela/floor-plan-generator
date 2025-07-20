@@ -26,13 +26,15 @@ namespace BuildingGenerator
 
         private Guid _outsideZoneId = Guid.NewGuid();
         private bool _checkFullSpace = true;
+        
+        public Event<FloorPlanManager> FloorPlanUpdatedEvent = new Event<FloorPlanManager>();
 
 
         /// <summary>
         /// ASYNC METHOD
         /// </summary>
         /// <returns></returns>
-        public async UniTask<bool> Run(MethodGrowthSettings methodGrowthSettings, FloorPlanManager floorPlanManager, FloorPlanGenSceneDebugger sceneDebugger)
+        public async UniTask<bool> Run(MethodGrowthSettings methodGrowthSettings, FloorPlanManager floorPlanManager)
         {
 #if TEST
         Utils.Debug.DevWarning("Running in TEST mode.");
@@ -45,7 +47,7 @@ namespace BuildingGenerator
                 return false;
             }
             */
-            
+
             // Start the timer.
             Utils.Stopwatch timer = new Utils.Stopwatch();
 
@@ -86,7 +88,8 @@ namespace BuildingGenerator
 
                     if (!_settings.SkipToFinalResult)
                     {
-                        sceneDebugger.OnFloorPlanUpdated(floorPlanManager);
+                        //sceneDebugger.OnFloorPlanUpdated(floorPlanManager);
+                        FloorPlanUpdatedEvent.Invoke(floorPlanManager);
                         await UniTask.WaitForSeconds(_settings.Delay + 0.1f, cancellationToken: _cts.Token);
                     }
                 }
@@ -110,7 +113,8 @@ namespace BuildingGenerator
 
                     if (!_settings.SkipToFinalResult)
                     {
-                        sceneDebugger.OnFloorPlanUpdated(floorPlanManager);
+                        //sceneDebugger.OnFloorPlanUpdated(floorPlanManager);
+                        FloorPlanUpdatedEvent.Invoke(floorPlanManager);
                         await UniTask.WaitForSeconds(_settings.Delay, cancellationToken: _cts.Token);
                     }
                 }

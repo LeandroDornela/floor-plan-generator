@@ -1,71 +1,91 @@
 using System;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
-using Unity.Mathematics;
+using com.cyborgAssets.inspectorButtonPro;
 using UnityEditor;
 using UnityEngine;
 
 namespace BuildingGenerator
 {
-    public class FloorPlanGenSceneDebugger : MonoBehaviour
+    public class FloorPlanGenSceneDebugger : IBuildingInterpreter
     {
-        //[SerializeField] private GameObject _cellGraphicsPrefab;
-
         public Transform wallsHolder;
         public Transform cellsHolder;
 
-        private string _currentFloorPlanId;
+        [SerializeField] private BuildingAssetsPack _buildingAssetsPack;
         private SerializedDictionary<string, Color> _zoneColors;
-        private List<VisualCell> _cellsGraphicsInstances;
+        [SerializeReference] private List<VisualCell> _cellsGraphicsInstances;
+        [SerializeReference] private List<GameObject> _wallInstances;
+        [SerializeReference] private GeneratedBuildingData _generatedBuildingData;
+        [Obsolete] private FloorPlanManager _currentFloorPlan;
+        
 
-        private FloorPlanManager _currentFloorPlan;
-
-        //private string _gridPreview;
-
-        //private static FloorPlanGenSceneDebugger _instance;
-        //public static FloorPlanGenSceneDebugger Instance => _instance;
-
-        //public GameObject wallPrefab;
-        //public GameObject doorPrefab;
-
-        private List<GameObject> _wallInstances;
-
-        private BuildingAssetsPack buildingAssetsPack;
-
+        [Header("Debug")]
         public bool _debugBorders;
         public bool _debugWallSharers;
         public bool _debugWallLines;
 
-/*
-        private void Awake()
-        {
-            if (_instance != null && _instance != this)
-            {
-                Destroy(this.gameObject);
-            }
-            else
-            {
-                _instance = this;
-            }
-        }
-*/
 
-        public void Init(BuildingAssetsPack _buildingAssetsPack)
-        {
-/*
-            if (_instance != null && _instance != this)
-            {
-                Destroy(this.gameObject);
-            }
-            else
-            {
-                _instance = this;
-            }
-*/
+        private Event<FloorPlanManager> _floorPlanUpdatedEvent;
+        private Event<GeneratedBuildingData> _generationFinishedEvent;
 
-            buildingAssetsPack = _buildingAssetsPack;
+        private int yModifier = 1;
+
+
+        public override void Init(BuildingGenerator buildingGenerator, BuildingAssetsPack buildingAssetsPack)
+        {
+            _buildingAssetsPack = buildingAssetsPack;
+
+            buildingGenerator.FloorPlanUpdatedEvent.Register(OnFloorPlanUpdated);
+            _floorPlanUpdatedEvent = buildingGenerator.FloorPlanUpdatedEvent;
+            buildingGenerator.GenerationFinishedEvent.Register(OnGenerationFinished);
+            _generationFinishedEvent = buildingGenerator.GenerationFinishedEvent;
         }
 
+
+        [ProButton]
+        public override void InterpretBuildingData(GeneratedBuildingData generatedBuildingData)
+        {
+            _generatedBuildingData = generatedBuildingData;
+
+            OnFloorPlanUpdated(_generatedBuildingData.GeneratedFloorPlans[0]);
+        }
+
+        void OnGenerationFinished(GeneratedBuildingData generatedBuildingData)
+        {
+            _floorPlanUpdatedEvent.Unregister(OnFloorPlanUpdated);
+            _generationFinishedEvent.Unregister(OnGenerationFinished);
+
+            _generatedBuildingData = generatedBuildingData;
+
+            _currentFloorPlan = generatedBuildingData.GeneratedFloorPlans[0];
+        }
+
+        void OnDisable()
+        {
+            _floorPlanUpdatedEvent?.Unregister(OnFloorPlanUpdated);
+            _generationFinishedEvent?.Unregister(OnGenerationFinished);
+        }
+
+
+        [ProButton]
+        public void UpdateAssets()
+        {
+            if (_buildingAssetsPack == null)
+            {
+                Debug.LogError("Assets pack undefined.");
+                return;
+            }
+
+            if (_currentFloorPlan == null)
+            {
+                Debug.LogError("Current floor plan undefined.");
+                return;
+            }
+
+            SetNewFloorPlan(_currentFloorPlan, _buildingAssetsPack);
+            UpdateWalls(_buildingAssetsPack);
+        }
 
         /// <summary>
         /// 
@@ -75,12 +95,10 @@ namespace BuildingGenerator
         {
             if (_currentFloorPlan != floorPlan)
             {
-                SetNewFloorPlan(floorPlan, buildingAssetsPack);
-                UpdateWalls(buildingAssetsPack);
+                SetNewFloorPlan(floorPlan, _buildingAssetsPack);
+                UpdateWalls(_buildingAssetsPack);
                 return;
             }
-
-            //_gridPreview = _floorPlanGenerator._currentFloorPlan.CellsGrid.GridToString();
 
             for (int i = 0; i < floorPlan.CellsGrid.Cells.Length; i++)
             {
@@ -96,7 +114,7 @@ namespace BuildingGenerator
                 }
             }
 
-            UpdateWalls(buildingAssetsPack);
+            UpdateWalls(_buildingAssetsPack);
         }
 
         void UpdateWalls(BuildingAssetsPack buildingAssetsPack)
@@ -125,13 +143,13 @@ namespace BuildingGenerator
 
                     Vector3 cellAPos = new Vector3(cellsTuple.CellA.GridPosition.x,
                                                    0,
-                                                   -cellsTuple.CellA.GridPosition.y);
+                                                   yModifier*cellsTuple.CellA.GridPosition.y);
                     Vector3 cellBPos = new Vector3(cellsTuple.CellB.GridPosition.x,
                                                    0,
-                                                   -cellsTuple.CellB.GridPosition.y);
+                                                   yModifier*cellsTuple.CellB.GridPosition.y);
                     Vector3 dif = cellAPos - cellBPos;
                     dif.Scale(new Vector3(0.5f, 0.5f, 0.5f));
-                    Vector3 pos = cellBPos + dif;
+                    Vector3 pos = cellBPos + dif + transform.position;
                     Quaternion rot = Quaternion.LookRotation(dif, Vector3.up);
 
                     if (cellsTuple.HasDoor)
@@ -153,7 +171,6 @@ namespace BuildingGenerator
         /// <param name="floorPlan"></param>
         void SetNewFloorPlan(FloorPlanManager floorPlan, BuildingAssetsPack buildingAssetsPack)
         {
-            _currentFloorPlanId = floorPlan.FloorPlanId;
             _currentFloorPlan = floorPlan;
 
             ResetDebugger();
@@ -205,7 +222,7 @@ namespace BuildingGenerator
                 if (cell.Zone == null) continue;
 
                 VisualCell visualCell = Instantiate(buildingAssetsPack.floorPrefab,
-                                                    new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y),
+                                                    new Vector3(transform.position.x + cell.GridPosition.x, transform.position.y, transform.position.z + yModifier * cell.GridPosition.y),
                                                     Quaternion.identity,
                                                     cellsHolder).GetComponent<VisualCell>();
 
@@ -231,15 +248,16 @@ namespace BuildingGenerator
 
             if (_currentFloorPlan != null)
             {
+                if(_currentFloorPlan.WallCellsTuples != null)
                 foreach (CellsTuple cellsTuple in _currentFloorPlan.WallCellsTuples)
                 {
                     // Converte posição da grid para o ambiente 3D.
                     Vector3 cellAPos = new Vector3(cellsTuple.CellA.GridPosition.x,
                                                    0,
-                                                   -cellsTuple.CellA.GridPosition.y);
+                                                   yModifier * cellsTuple.CellA.GridPosition.y);
                     Vector3 cellBPos = new Vector3(cellsTuple.CellB.GridPosition.x,
                                                    0,
-                                                   -cellsTuple.CellB.GridPosition.y);
+                                                   yModifier * cellsTuple.CellB.GridPosition.y);
 
                     Vector3 dif = cellAPos - cellBPos;
                     dif.Scale(new Vector3(0.5f, 0.5f, 0.5f));
@@ -272,7 +290,7 @@ namespace BuildingGenerator
                             foreach (Cell cell in zone.BorderCells)
                             {
                                 Gizmos.color = Color.black;
-                                Gizmos.DrawWireSphere(new Vector3(cell.GridPosition.x, 0, -cell.GridPosition.y), 0.1f);
+                                Gizmos.DrawWireSphere(new Vector3(cell.GridPosition.x, 0, yModifier*cell.GridPosition.y), 0.1f);
                             }
                     }
 

@@ -3,25 +3,25 @@ using UnityEngine;
 
 namespace BuildingGenerator
 {
-public class VisualCell : MonoBehaviour
-{
-    public Renderer _renderer;
-    private Cell _cell;
+    public class VisualCell : MonoBehaviour
+    {
+        public Renderer _renderer;
+        [SerializeReference] private Cell _cell;
 
-    public bool _drawDebug = false;
-    public bool _drawNeighborConnections = false;
+        public bool _drawDebug = false;
+        public bool _drawNeighborConnections = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
-    {
-        if (_renderer == null) { _renderer = GetComponent<Renderer>(); }
-    }
+        {
+            if (_renderer == null) { _renderer = GetComponent<Renderer>(); }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
 
         public void Init(Cell cell)
         {
@@ -55,20 +55,20 @@ public class VisualCell : MonoBehaviour
         }
 
         public void SetSelectedState(bool state)
-    {
-        if (state)
         {
-            Debug.Log("selected");
-            Color origCol = _renderer.material.color;
-            _renderer.material.color = new Color(origCol.r, origCol.g, origCol.b, 0.5f);
+            if (state)
+            {
+                Debug.Log("selected");
+                Color origCol = _renderer.material.color;
+                _renderer.material.color = new Color(origCol.r, origCol.g, origCol.b, 0.5f);
+            }
+            else
+            {
+                Debug.Log("deselected");
+                Color origCol = _renderer.material.color;
+                _renderer.material.color = new Color(origCol.r, origCol.g, origCol.b, 1f);
+            }
         }
-        else
-        {
-            Debug.Log("deselected");
-            Color origCol = _renderer.material.color;
-            _renderer.material.color = new Color(origCol.r, origCol.g, origCol.b, 1f);
-        }
-    }
 
         void OnDrawGizmos()
         {
@@ -89,9 +89,9 @@ public class VisualCell : MonoBehaviour
             GUIStyle style = new GUIStyle();
             style.normal.textColor = Color.black;
             style.alignment = TextAnchor.MiddleCenter;
-            Handles.Label(transform.position, $"[{transform.position.x}, {Mathf.Abs(transform.position.z)}]\n{zoneId}", style);
+            Handles.Label(transform.position, $"[{_cell.GridPosition.x}, {Mathf.Abs(_cell.GridPosition.y)}]\n{zoneId}", style);
 
-            if(_cell != null && _drawNeighborConnections)
+            if (_cell != null && _drawNeighborConnections)
             {
                 Gizmos.color = Color.yellow;
                 Cell neighbor;

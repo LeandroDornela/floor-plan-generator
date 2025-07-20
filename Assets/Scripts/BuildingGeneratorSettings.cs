@@ -1,36 +1,29 @@
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace BuildingGenerator
 {
-    [CreateAssetMenu(fileName = "BuildingGeneratorSettings", menuName = "Scriptable Objects/Building Generator Settings")]
+    [CreateAssetMenu(fileName = "BuildingGeneratorSettings", menuName = "Building Generator/Building Generator Settings")]
     [System.Serializable]
     public class BuildingGeneratorSettings : ScriptableObject
     {
-        [Header("Floor Plan Generator")]
-
-        /// <summary>
-        /// 
-        /// </summary>
+        [Tooltip("")]
         [SerializeField] private bool _useSeed = false;
-
-        /// <summary>
-        /// 
-        /// </summary>
+        [Tooltip("")]
         [SerializeField] private int _seed = 0;
-
-        /// <summary>
-        /// Maximum number that it will request the generation method to generate a valid floor plan.
-        /// </summary>
+        [Tooltip("Maximum number that it will request the generation method to generate a valid floor plan.")]
         [SerializeField] private int _maxGenerationTries = 10;
-
-        /// <summary>
-        /// Number of valid floor plans to generate. At the end choose the best option from the samples.
-        /// Worst case generation = (_maxGenerationTries * _samples)
-        /// </summary>
+        [Tooltip("Number of valid floor plans to generate. At the end choose the best option from the samples. Worst case generation = (_maxGenerationTries * _samples)")]
         [SerializeField] private int _samples = 10;
-
-        [SerializeField] private BuildingAssetsPack _buildingAssetsPack;
-        [SerializeField] private IFloorPlanConfig _floorPlanConfig;
+        [Space]
+        [Tooltip("")]
+        [SerializeField] private bool _saveGeneratedPlanToAsset = false;
+        [SerializeField] private string _planGenPlanAssetsFolder = "Generated Plans";
+        [Space]
+        [Tooltip("")]
+        [SerializeField] private BuildingConfig _buildingConfig;
+        [Tooltip("")]
+        [SerializeField] private IBuildingInterpreter _buildingDataInterpreterPrefab;
 
 
         [Header("Debug")]
@@ -46,8 +39,10 @@ namespace BuildingGenerator
         public bool ScreenshotPlan => _screenshotPlan;
         public bool EnableDevLogs => _enableDevLogs;
         public bool SaveGenStatsJson => _saveGenStatsJson;
-        public BuildingAssetsPack BuildingAssetsPack => _buildingAssetsPack;
-        public IFloorPlanConfig FloorPlanConfig => _floorPlanConfig;
+        public BuildingConfig BuildingConfig => _buildingConfig;
+        public IBuildingInterpreter BuildingDataInterpreterPrefab => _buildingDataInterpreterPrefab;
+        public bool SaveGeneratedPlanToAsset => _saveGeneratedPlanToAsset;
+        public string PlanGenPlanAssetsFolder => _planGenPlanAssetsFolder;
     }
 
 }

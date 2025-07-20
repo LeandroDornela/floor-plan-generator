@@ -9,32 +9,6 @@ namespace BuildingGenerator
     [System.Serializable]
     public class FloorPlanGenerator
     {
-        /*
-        public bool _useSeed = false;
-
-        public int _seed = 0;
-
-        /// <summary>
-        /// Maximum number that it will request the generation method to generate a valid floor plan.
-        /// </summary>
-        public int _maxGenerationTries = 10;
-
-        /// <summary>
-        /// Number of valid floor plans to generate. At the end choose the best option from the samples.
-        /// Worst case generation = (_maxGenerationTries * _samples)
-        /// </summary>
-        public int _samples = 10;
-
-
-        public MethodGrowthSettings _generationMethodSettings;
-
-
-        [Header("Debug")]
-        [SerializeField] private FloorPlanGenSceneDebugger _sceneDebugger;
-        [SerializeField] private bool _screenshotPlan = true;
-        [SerializeField] private bool _enableDebug = false;
-        */
-
         private bool _running = false;
         private MethodGrowth _generationMethod;
         private FloorPlanManager _currentFloorPlan;
@@ -43,8 +17,10 @@ namespace BuildingGenerator
 
         public float GenerationProgress => _generationProgress;
 
+        public Event<FloorPlanManager> FloorPlanUpdatedEvent = new Event<FloorPlanManager>();
 
-        public async UniTask<List<FloorPlanManager>> GenerateFloorPlans(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, FloorPlanGenSceneDebugger sceneDebugger, FloorPlanData floorPlanConfig, int amount = 1)
+
+        public async UniTask<List<FloorPlanManager>> GenerateFloorPlans(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, FloorPlanData floorPlanConfig, int amount = 1)
         {
             if (_running)
             {
@@ -97,7 +73,8 @@ namespace BuildingGenerator
                         _currentFloorPlan = new FloorPlanManager(floorPlanConfig);
                         Utils.Debug.DevLog("<color=yellow>Plan Gen start...</color>");
                         _generationMethod = new MethodGrowth(); // Create a new instance of the generation method to reset the runtime values from previous run.
-                        isValid = await _generationMethod.Run(methodGrowthSettings, _currentFloorPlan, sceneDebugger);
+                        _generationMethod.FloorPlanUpdatedEvent.Register(OnFloorPlanUpdated);
+                        isValid = await _generationMethod.Run(methodGrowthSettings, _currentFloorPlan);
                         if (isValid)
                         {
                             //Debug.LogError($"<color=green>Total generation tries until a valid result: {genTry + 1}/{_maxGenerationTries}</color>");
@@ -191,7 +168,8 @@ namespace BuildingGenerator
             _running = false;
 
             Utils.Debug.DevLog($"Selected - Regular:{_selectedFloorPlans[0].RectZonesIndex()}, Aspect:{_selectedFloorPlans[0].DesiredAspectIndex()}, Area: {_selectedFloorPlans[0].DesiredAreaIndex()}");
-            sceneDebugger.OnFloorPlanUpdated(_selectedFloorPlans[0]);
+            //sceneDebugger.OnFloorPlanUpdated(_selectedFloorPlans[0]);
+            FloorPlanUpdatedEvent.Invoke(_selectedFloorPlans[0]);
             await UniTask.NextFrame();
             Utils.Screenshot($"selected_tf{genStats._totalFails}");
 
@@ -203,6 +181,11 @@ namespace BuildingGenerator
             _generationProgress = 1;
 
             return _selectedFloorPlans;
+        }
+
+        void OnFloorPlanUpdated(FloorPlanManager floorPlanManager)
+        {
+            FloorPlanUpdatedEvent.Invoke(floorPlanManager);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace BuildingGenerator
     }
 
 
-    [CreateAssetMenu(fileName = "TestingFloorPlansConfig", menuName = "Scriptable Objects/TestingFloorPlansConfig")]
+    [CreateAssetMenu(fileName = "TestingFloorPlansConfig", menuName = "Building Generator/TestingFloorPlansConfig")]
     public class TestingFloorPlansConfig : IFloorPlanConfig
     {
         public TestFloorPlanConfig[] FloorPlanConfigs;

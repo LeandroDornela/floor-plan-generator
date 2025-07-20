@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BuildingGenerator
 {
-    [CreateAssetMenu(fileName = "MethodGrowthSettings", menuName = "Scriptable Objects/Method Growth Settings")]
+    [CreateAssetMenu(fileName = "MethodGrowthSettings", menuName = "Building Generator/Method Growth Settings")]
     [System.Serializable]
     public class MethodGrowthSettings : ScriptableObject
     {

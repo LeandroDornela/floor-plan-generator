@@ -23,11 +23,12 @@ namespace BuildingGenerator
     /// <summary>
     /// All floor plan grid changes must pass trough this class.
     /// </summary>
+    [System.Serializable]
     public class FloorPlanManager
     {
-        private string _floorPlanId;
+        [SerializeField] private string _floorPlanId;
         private CellsGrid _cellsGrid;
-        
+
         private Zone _rootZone;
         private Dictionary<Guid, Zone> _zonesInstances;
         private bool _initialized = false;
@@ -36,12 +37,12 @@ namespace BuildingGenerator
         private Dictionary<Guid, Guid[]> _adjacencies;
         private List<CellsTuple> _wallCellsTuples;
 
-        
+
         public string FloorPlanId => _floorPlanId;
         public CellsGrid CellsGrid => _cellsGrid;
         public List<CellsTuple> WallCellsTuples => _wallCellsTuples;
 
-        
+
         /// <summary>
         /// The util floor plan zone, grid's cells outside this zone will not be used by the algorith.
         /// </summary>
@@ -65,12 +66,12 @@ namespace BuildingGenerator
         /// <returns></returns>
         bool Init(FloorPlanData floorPlanConfig)
         {
-            if(!floorPlanConfig.IsValid())
+            if (!floorPlanConfig.IsValid())
             {
                 Utils.Debug.DevError("Invalid general floor plan config.");
                 return false;
             }
-            
+
             _floorPlanId = floorPlanConfig.FloorPlanId;
 
             _zonesInstances = new Dictionary<Guid, Zone>(); // a list/dictionary of all the zones instances, identified by the zone id.
@@ -229,7 +230,7 @@ namespace BuildingGenerator
                     }
                 }
 
-                
+
                 if (zone != _rootZone && _rootZone.IsBaked)
                 {
                     _rootZone.Unbake();
@@ -258,7 +259,7 @@ namespace BuildingGenerator
                     zone.Bake();
                 }
             }
-            
+
             /*
             foreach (Zone z in ZonesInstances.Values)
             {
@@ -282,18 +283,18 @@ namespace BuildingGenerator
         /// <returns></returns>
         public bool AssignCellToZone(int x, int y, Zone zone)
         {
-            if(zone == null)
+            if (zone == null)
             {
                 Utils.Debug.DevError("Invalid zone.");
                 return false;
             }
 
-            if(_cellsGrid.GetCell(x, y, out Cell cell))
+            if (_cellsGrid.GetCell(x, y, out Cell cell))
             {
                 // TODO: Replace by "return AssignCellToZone(cell, zone);"
-                
+
                 // Remove previous set cell zone.
-                if(cell.Zone != null)
+                if (cell.Zone != null)
                 {
                     cell.Zone.RemoveCell(cell);
                 }
@@ -318,7 +319,7 @@ namespace BuildingGenerator
         /// <returns></returns>
         public bool AssignCellToZone(Cell cell, Zone zone)
         {
-            if(cell == null)
+            if (cell == null)
             {
                 Utils.Debug.DevError("Invalid cell.");
                 return false;
@@ -334,7 +335,7 @@ namespace BuildingGenerator
             {
                 zone.AddCell(cell);
             }
-            
+
             cell.SetZone(zone);
 
             return true;
@@ -349,9 +350,9 @@ namespace BuildingGenerator
         /// <returns></returns>
         public bool TryAssignCellToZone(int x, int y, Zone zone)
         {
-            if(_cellsGrid.GetCell(x, y, out Cell cell))
+            if (_cellsGrid.GetCell(x, y, out Cell cell))
             {
-                if(cell.Zone == zone.ParentZone)
+                if (cell.Zone == zone.ParentZone)
                 {
                     return AssignCellToZone(cell, zone);
                 }
@@ -374,7 +375,7 @@ namespace BuildingGenerator
                 {
                     Utils.Debug.DevWarning($"Assign preset cell that already belong to a zone. Cell belong to {cell.Zone.ZoneId}");
                 }
-                
+
                 return AssignCellToZone(cell, zone);
             }
             else

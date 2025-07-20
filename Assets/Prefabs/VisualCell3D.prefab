@@ -124,7 +124,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1101520622583173426
 Transform:
@@ -156,7 +156,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 5793861258797148140}
+  _cell:
+    rid: -2
   _drawDebug: 0
+  _drawNeighborConnections: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1001 &112794125477872083
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -43,7 +43,7 @@ MonoBehaviour:
   - guid: 968bc9a5-1260-4b3b-8941-7c2cee82ad0b
     position: {x: 799, y: -76}
     zoneId: b
-    areaRatio: 0.188
+    areaRatio: 0.05
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -75,7 +75,7 @@ MonoBehaviour:
   - guid: ff61191a-eaa7-4012-a9fe-50e1a92c0fd9
     position: {x: 799, y: 479}
     zoneId: b
-    areaRatio: 0.143
+    areaRatio: 0.05
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   - guid: dc326163-ea21-4c03-963c-40c1bbe1c8b4
     position: {x: 799, y: 1053}
     zoneId: b
-    areaRatio: 0.17
+    areaRatio: 0.05
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -207,7 +207,7 @@ MonoBehaviour:
   - guid: db11f696-d388-494d-8d98-5f82cd5e76ea
     position: {x: 799, y: 1648}
     zoneId: b
-    areaRatio: 0.125
+    areaRatio: 0.05
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}

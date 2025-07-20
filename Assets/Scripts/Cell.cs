@@ -13,6 +13,7 @@ y       [v][-][-][v]
 
 namespace BuildingGenerator
 {
+    [System.Serializable]
     public class Cell // dando preferencia para classes para passar por ref
     {
         private Zone _zone;
@@ -31,8 +32,8 @@ namespace BuildingGenerator
         public Zone Zone => _zone;
         public Vector2Int GridPosition => _gridPosition;
         public bool IsBorderCell => _isBorderCell;
-        public bool IsAssignedToLeafZone => (_zone != null)? _zone.IsLeaf : false; // Is assigned to a leaf zone if this zone don't have children.
-        
+        public bool IsAssignedToLeafZone => (_zone != null) ? _zone.IsLeaf : false; // Is assigned to a leaf zone if this zone don't have children.
+
         public Cell TopNeighbor { set { _topNeighbor = value; } get { return _topNeighbor; } }
         public Cell TopRightNeighbor { set { _topRightNeighbor = value; } get { return _topRightNeighbor; } }
         public Cell RightNeighbor { set { _rightNeighbor = value; } get { return _rightNeighbor; } }
@@ -50,33 +51,33 @@ namespace BuildingGenerator
             _zone = zone;
         }
 
-/*
-        public Cell GetTopNeighbor(CellsGrid cellsGrid)
-        {
-            return GetNeighbor(cellsGrid, 0, -1);
-        }
+        /*
+                public Cell GetTopNeighbor(CellsGrid cellsGrid)
+                {
+                    return GetNeighbor(cellsGrid, 0, -1);
+                }
 
-        public Cell GetBottomNeighbor(CellsGrid cellsGrid)
-        {
-            return GetNeighbor(cellsGrid, 0, 1);
-        }
+                public Cell GetBottomNeighbor(CellsGrid cellsGrid)
+                {
+                    return GetNeighbor(cellsGrid, 0, 1);
+                }
 
-        public Cell GetLeftNeighbor(CellsGrid cellsGrid)
-        {
-            return GetNeighbor(cellsGrid, -1, 0);
-        }
+                public Cell GetLeftNeighbor(CellsGrid cellsGrid)
+                {
+                    return GetNeighbor(cellsGrid, -1, 0);
+                }
 
-        public Cell GetRightNeighbor(CellsGrid cellsGrid)
-        {
-            return GetNeighbor(cellsGrid, 1, 0);
-        }
+                public Cell GetRightNeighbor(CellsGrid cellsGrid)
+                {
+                    return GetNeighbor(cellsGrid, 1, 0);
+                }
 
-        private Cell GetNeighbor(CellsGrid cellsGrid, int xMod, int yMod)
-        {
-            cellsGrid.GetCell(_gridPosition.x + xMod, _gridPosition.y + yMod, out Cell neighbor);
-            return neighbor;
-        }
-*/
+                private Cell GetNeighbor(CellsGrid cellsGrid, int xMod, int yMod)
+                {
+                    cellsGrid.GetCell(_gridPosition.x + xMod, _gridPosition.y + yMod, out Cell neighbor);
+                    return neighbor;
+                }
+        */
 
         // TODO: after having direct ref to neigbors, change the way to calculate.
         public int NumNeighborsInSameZone()

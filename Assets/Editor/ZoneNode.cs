@@ -15,6 +15,7 @@ namespace BuildingGenerator
         // Variables to export.
         public string _zoneID;
         public float _areaRatio = 1;
+        public float _desiredAspectRatio = 1;
         public bool _hasOutsideDoor = false;
         public Texture2D _presetAreaTexture;
         public string _parentDataNodeGUID; // use guids to make easier to loading, to dont need to assign the acutual nodes.
@@ -143,12 +144,13 @@ namespace BuildingGenerator
             outputContainer.Add(addChildButton);
             */
 
-            // Label Field
+            // ZONE ID FIELD
             zoneIdField = new TextField("Zone ID");
             zoneIdField.value = _zoneID;
             zoneIdField.RegisterValueChangedCallback(evt => this.title = _zoneID = evt.newValue);
             mainContainer.Add(zoneIdField);
 
+            // PRESET AREA TEXTURE FIELD
             var textureField = new ObjectField("Preset area")
             {
                 objectType = typeof(Texture2D),
@@ -160,28 +162,25 @@ namespace BuildingGenerator
                 _presetAreaTexture = evt.newValue as Texture2D;
             });
             mainContainer.Add(textureField);
+            
 
             if (!_isRoot)
             {
-                // Create a slider
-                var slider = new Slider($"Area ratio [{_areaRatio}]", 0f, 1f)
-                {
-                    value = _areaRatio
-                };
-                slider.RegisterValueChangedCallback(evt =>
-                {
-                    _areaRatio = evt.newValue;
-                    slider.label = $"Area ratio [{_areaRatio}]";
-                });
-                mainContainer.Add(slider);
+                // AREA RATIO
+                //var slider = new Slider($"Area ratio [{_areaRatio}]", 0f, 1f)
+                var areaRatio = new FloatField($"Area ratio") { value = _areaRatio };
+                areaRatio.RegisterValueChangedCallback(evt => _areaRatio = evt.newValue);
+                mainContainer.Add(areaRatio);
 
+                // DESIRED ASPECT
+                var areaRatField = new FloatField($"Desired aspect ratio") { value = _desiredAspectRatio };
+                areaRatField.RegisterValueChangedCallback(evt => _desiredAspectRatio = evt.newValue);
+                mainContainer.Add(areaRatField);
 
+                // OUTSIDE DOOR
                 var hasDoor = new Toggle("Has outside door");
                 hasDoor.value = _hasOutsideDoor;
-                hasDoor.RegisterValueChangedCallback(evt =>
-                {
-                    _hasOutsideDoor = evt.newValue;
-                });
+                hasDoor.RegisterValueChangedCallback(evt => _hasOutsideDoor = evt.newValue);
                 mainContainer.Add(hasDoor);
             }
 

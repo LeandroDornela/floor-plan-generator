@@ -1,8 +1,7 @@
 using System;
-using com.cyborgAssets.inspectorButtonPro;
+using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 namespace BuildingGenerator
 {
@@ -11,26 +10,39 @@ namespace BuildingGenerator
     {
         // OBS: Uma varialvel com a ref de uma classe serializada exposta no editor "nunca" será nula.
         private FloorPlanGenerator _floorPlanGenerator;
-        //[SerializeField] private BuildingDataManager _buildingDataManager;
+        private IBuildingInterpreter _buildingInterpreter;
 
-        //public BuildingGeneratorSettings buildingGeneratorSettings;
+        public Event GenerationStartedEvent = new Event();
+        // Preferably for debugging to see the generation step by step.
+        public Event<FloorPlanManager> FloorPlanUpdatedEvent = new Event<FloorPlanManager>();
+        public Event<GeneratedBuildingData> GenerationFinishedEvent = new Event<GeneratedBuildingData>();
 
-        /*
-        [ProButton]
-        public async void GenerateBuilding()
+
+        public async UniTask<GeneratedBuildingData> GenerateBuilding(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, IBuildingInterpreter buildingInterpreter = null)
         {
-            if (!Application.isPlaying) return;
+            // Only instantiate a new interpreter if its given.
+            if (buildingInterpreter != null)
+            {
+                _buildingInterpreter = buildingInterpreter;
+                _buildingInterpreter.gameObject.name = buildingGeneratorSettings.BuildingConfig.FloorPlanConfig.name;
+            }
+            else if (buildingGeneratorSettings.BuildingDataInterpreterPrefab != null)
+            {
+                _buildingInterpreter = GameObject.Instantiate(buildingGeneratorSettings.BuildingDataInterpreterPrefab);
+                _buildingInterpreter.gameObject.name = buildingGeneratorSettings.BuildingConfig.FloorPlanConfig.name;
+            }
 
-            var result = await _floorPlanGenerator.GenerateFloorPlans(_buildingDataManager.GetFloorPlanData(), 1);
+            // Initialize the scene building interpreter.
+            if (_buildingInterpreter != null)
+            {
+                _buildingInterpreter.Init(this, buildingGeneratorSettings.BuildingConfig.BuildingAssetsPack);
+            }
+            else
+            {
+                Debug.LogWarning("Building interpreter is undefined.");
+            }
 
-            foreach (var plan in result)
-                plan.PrintFloorPlan();
-        }
-        */
-
-
-        public async void GenerateBuilding(BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, FloorPlanGenSceneDebugger sceneDebugger, Action onGenerationFinished)
-        {
+            // Set debug logs.
             if (buildingGeneratorSettings.EnableDevLogs)
             {
                 Utils.Debug._enable = true;
@@ -41,11 +53,24 @@ namespace BuildingGenerator
             }
 
             _floorPlanGenerator = new FloorPlanGenerator();
-            FloorPlanData floorPlanData = buildingGeneratorSettings.FloorPlanConfig.GetFloorPlanData();
+            _floorPlanGenerator.FloorPlanUpdatedEvent.Register(OnFloorPlanUpdated);
+            FloorPlanData floorPlanData = buildingGeneratorSettings.BuildingConfig.FloorPlanConfig.GetFloorPlanData();
 
-            var result = await _floorPlanGenerator.GenerateFloorPlans(buildingGeneratorSettings, methodGrowthSettings, sceneDebugger, floorPlanData, 1);
+            var result = await _floorPlanGenerator.GenerateFloorPlans(buildingGeneratorSettings, methodGrowthSettings, floorPlanData, 1);
 
-            onGenerationFinished.Invoke();
+            GeneratedBuildingData generatedBuildingData = ScriptableObject.CreateInstance<GeneratedBuildingData>();
+            generatedBuildingData.SetGeneratedPlans(result);
+            if (buildingGeneratorSettings.SaveGeneratedPlanToAsset)
+            {
+                string fileName = $"{Guid.NewGuid()}.asset";
+                string path = System.IO.Path.Combine("Assets", buildingGeneratorSettings.PlanGenPlanAssetsFolder, fileName);
+                AssetDatabase.CreateAsset(generatedBuildingData, path);
+                Debug.Log($"Generated building data saved to {path}.");
+            }
+
+            GenerationFinishedEvent.Invoke(generatedBuildingData);
+
+            return generatedBuildingData;
         }
 
 
@@ -55,8 +80,13 @@ namespace BuildingGenerator
             {
                 return _floorPlanGenerator.GenerationProgress;
             }
-            
+
             return -1;
+        }
+
+        void OnFloorPlanUpdated(FloorPlanManager floorPlanManager)
+        {
+            FloorPlanUpdatedEvent.Invoke(floorPlanManager);
         }
     }
 }
