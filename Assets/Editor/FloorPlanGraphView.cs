@@ -238,6 +238,7 @@ namespace BuildingGenerator
                     position = node.GetPosition().position,
                     zoneId = node._zoneID,
                     areaRatio = node._areaRatio,
+                    desiredAspectRatio = node._desiredAspectRatio,
                     hasOutsideDoor = node._hasOutsideDoor,
                     presetAreaTexture = node._presetAreaTexture,
                     parentGUID = node._parentDataNodeGUID,
@@ -271,6 +272,7 @@ namespace BuildingGenerator
                 var node = new ZoneNode(isRoot, model.guid, model.zoneId)
                 {
                     _areaRatio = model.areaRatio,
+                    _desiredAspectRatio = model.desiredAspectRatio,
                     _hasOutsideDoor = model.hasOutsideDoor,
                     _presetAreaTexture = model.presetAreaTexture,
                     _parentDataNodeGUID = model.parentGUID,

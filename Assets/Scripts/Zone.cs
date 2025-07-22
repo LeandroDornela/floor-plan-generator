@@ -17,6 +17,7 @@ namespace BuildingGenerator
     /// <summary>
     /// 
     /// </summary>
+    //[System.Serializable]
     public class Zone // similar a uma estrutura de nos em arvore
     {
         public enum Side
@@ -94,12 +95,13 @@ namespace BuildingGenerator
         public float DesiredArea => _desiredArea;
 
 
-        public Zone(FloorPlanManager floorPlanManager, Guid guid, string zoneId, float areaRatio, bool hasOutsideDoor, bool hasWindows)
+        public Zone(FloorPlanManager floorPlanManager, Guid guid, string zoneId, float areaRatio, float desiredAspectRatio, bool hasOutsideDoor, bool hasWindows)
         {
             _floorPlanManager = floorPlanManager;
             _guid = guid;
             _zoneId = zoneId;
             _areaRatio = areaRatio;
+            _desiredAspect = desiredAspectRatio;
             _parentZone = null;
             _cellsList = new List<Cell>();
             _childZones = new Dictionary<Guid, Zone>();

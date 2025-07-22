@@ -103,7 +103,7 @@ namespace BuildingGenerator
             // Create all zones.
             foreach (var zone in zonesConfigs)
             {
-                _zonesInstances.Add(zone.Key, new Zone(this, zone.Key, zone.Value.ZoneID, zone.Value.AreaRatio, zone.Value.HasOutsideDoor, zone.Value.HasWindows));
+                _zonesInstances.Add(zone.Key, new Zone(this, zone.Key, zone.Value.ZoneID, zone.Value.AreaRatio, zone.Value.DesiredAspectRatio, zone.Value.HasOutsideDoor, zone.Value.HasWindows));
             }
 
             // Set the parents and children of the zones.

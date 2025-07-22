@@ -12,7 +12,8 @@ namespace BuildingGenerator
         public string _zoneID;
         [NaughtyAttributes.ReadOnly] public string _zoneGUID = Guid.NewGuid().ToString();
         public string _parentZoneGUID;
-        public float _areaRatio;
+        public float _areaRatio = 1;
+        public float _desiredAspectRatio = 1;
         public Texture2D _presetArea;
         public bool _hasOutsideDoor;
         public bool _hasWindows;
@@ -28,7 +29,7 @@ namespace BuildingGenerator
 
             Guid.TryParse(_parentZoneGUID, out var parentGUI);
 
-            return new ZoneData(Guid.NewGuid(), _zoneID, parentGUI, _areaRatio, presetArea, _hasOutsideDoor, _hasWindows);
+            return new ZoneData(Guid.NewGuid(), _zoneID, parentGUI, _areaRatio, _desiredAspectRatio, presetArea, _hasOutsideDoor, _hasWindows);
         }
     }
 

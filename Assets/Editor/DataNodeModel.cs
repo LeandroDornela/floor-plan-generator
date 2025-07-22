@@ -13,6 +13,7 @@ namespace BuildingGenerator
 
         public string zoneId;
         public float areaRatio = 1;
+        public float desiredAspectRatio = 1;
         public bool hasOutsideDoor;
         public bool HasOutsideWindows;
         public Texture2D presetAreaTexture;

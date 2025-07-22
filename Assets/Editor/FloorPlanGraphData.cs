@@ -45,6 +45,7 @@ namespace BuildingGenerator
                     zDataModel.zoneId,
                     parentGuid,
                     zDataModel.areaRatio,
+                    zDataModel.desiredAspectRatio,
                     presetArea,
                     zDataModel.hasOutsideDoor,
                     zDataModel.HasOutsideWindows
