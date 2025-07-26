@@ -31,6 +31,8 @@ namespace BuildingGenerator
 
         private int yModifier = 1;
 
+        public FloorPlanManager CurrentFloorPlan => _currentFloorPlan;
+
 
         public override void Init(BuildingGenerator buildingGenerator, BuildingAssetsPack buildingAssetsPack)
         {

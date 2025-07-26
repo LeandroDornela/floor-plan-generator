@@ -1,4 +1,4 @@
-//#define TEST
+#define TEST
 
 using System;
 using System.Collections.Generic;
@@ -73,6 +73,8 @@ namespace BuildingGenerator
 
             int desiredZoneSqSize = Mathf.CeilToInt(Mathf.Sqrt(zoneToPlot.AreaRatio * cellsGrid.Area)); // Ceiling to round up to a size that can fit it.
             int minimumBorderDistance = desiredZoneSqSize / 4;
+            //int minimumBorderDistance = Mathf.CeilToInt(Mathf.Sqrt(desiredZoneSqSize)); // Mais falhas.
+            
 
             bool hasAnAvailableCell = false; // Will be tru if at least on cell in the grid have a weight != of 0.
 
@@ -221,7 +223,7 @@ namespace BuildingGenerator
                         {
                             if (zoneToPlot.MustBeAdjacentTo(plottedZone))
                             {
-                                weight += _settings.AdjacencyDistanceCurve.Evaluate(normToTotalRadius);
+                                weight *= _settings.AdjacencyDistanceCurve.Evaluate(normToTotalRadius);
                             }
                             else
                             {

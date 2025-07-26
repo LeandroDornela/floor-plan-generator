@@ -19,6 +19,7 @@ MonoBehaviour:
     position: {x: 1269, y: 298}
     zoneId: hall
     areaRatio: 0.04
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -33,6 +34,7 @@ MonoBehaviour:
     position: {x: 1634, y: 298}
     zoneId: bath
     areaRatio: 0.036
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -43,6 +45,7 @@ MonoBehaviour:
     position: {x: 928, y: 474}
     zoneId: privado-2
     areaRatio: 0.304
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -57,6 +60,7 @@ MonoBehaviour:
     position: {x: 591, y: 826}
     zoneId: publico
     areaRatio: 0.313
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -69,6 +73,7 @@ MonoBehaviour:
     position: {x: 915, y: 826}
     zoneId: great-room
     areaRatio: 0.168
+    desiredAspectRatio: 1
     hasOutsideDoor: 1
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -81,6 +86,7 @@ MonoBehaviour:
     position: {x: 1239, y: 1002}
     zoneId: kit-din
     areaRatio: 0.161
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -91,6 +97,7 @@ MonoBehaviour:
     position: {x: 1318, y: -90}
     zoneId: privado-1
     areaRatio: 0.313
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -104,6 +111,7 @@ MonoBehaviour:
     position: {x: 1634, y: 57}
     zoneId: master-bed
     areaRatio: 0.125
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -116,6 +124,7 @@ MonoBehaviour:
     position: {x: 1943, y: -90}
     zoneId: closed
     areaRatio: 0.054
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -126,6 +135,7 @@ MonoBehaviour:
     position: {x: 1943, y: -293}
     zoneId: master-bath
     areaRatio: 0.045
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -136,6 +146,7 @@ MonoBehaviour:
     position: {x: 240, y: 474}
     zoneId: house
     areaRatio: 1
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 2800000, guid: 0206a43bd61ce8143b378d2db44a938d, type: 3}
@@ -149,6 +160,7 @@ MonoBehaviour:
     position: {x: 1634, y: 760}
     zoneId: bed-2
     areaRatio: 0.143
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -159,6 +171,7 @@ MonoBehaviour:
     position: {x: 1634, y: 527}
     zoneId: bed-1
     areaRatio: 0.143
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}

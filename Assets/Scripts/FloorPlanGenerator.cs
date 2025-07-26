@@ -87,24 +87,30 @@ namespace BuildingGenerator
                         }
                     }
 
+                    if (isValid)
+                    {
+                        _generatedRawFloorPlans.Add(_currentFloorPlan);
+                    }
+
+                    /*
                     // Após _maxGenerationTries se não pode gerar uma amostra, pula para proxima tentativa sem adicionar a planta as amostras.
                     if (!isValid)
                     {
                         //Utils.Screenshot($"sample_{samplesCount}_fail");
-
                         continue;
-                        /*
+
+
                         // Dessa forma se tiver apenas 1 tentativa e falhar o algoritimo pode acusar falha e n tentar mais. Não fazer assim.
                         // TODO: _generationMethod.Run cold return a struct as result with a string containing the reason of the failure.
-                        Debug.LogError($"Unable to generate the floor plan: {floorPlanConfig}. Try changing the settings.");
-                        _running = false;
-                        return default;
-                        */
+                        //Debug.LogError($"Unable to generate the floor plan: {floorPlanConfig}. Try changing the settings.");
+                        //_running = false;
+                        //return default;
                     }
+                    */
 
-                    _generatedRawFloorPlans.Add(_currentFloorPlan);
+                    //_generatedRawFloorPlans.Add(_currentFloorPlan);
                     //sceneDebugger.OnFloorPlanUpdated(_currentFloorPlan);
-                    await UniTask.NextFrame();
+                    //await UniTask.NextFrame();
                     //Utils.Screenshot($"s{samplesCount}_sf{sampleFails}");
                     //await UniTask.WaitForSeconds(1);
                 }
@@ -158,6 +164,10 @@ namespace BuildingGenerator
                     }
                     */
                 }
+
+                Debug.Log(_generatedRawFloorPlans.Count);
+
+
                 _selectedFloorPlans.Add(selectedFloorPlan);
             }
 

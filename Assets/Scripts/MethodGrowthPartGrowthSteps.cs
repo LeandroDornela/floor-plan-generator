@@ -8,7 +8,7 @@ namespace BuildingGenerator
     public partial class MethodGrowth
     {
         /// <summary>
-        /// 
+        /// TODO: randomize if same space.
         /// </summary>
         /// <param name="zone"></param>
         /// <param name="cellsGrid"></param>
@@ -147,10 +147,12 @@ namespace BuildingGenerator
             // expand L if is L
             if (zone.IsLShaped)
             {
+                //return false;
                 return zone.TryExpandShapeL(true);
             }
 
             // Go on all sides randomly trying to expand
+            // TODO: get largest space
             //var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>().OrderBy(d => Guid.NewGuid());
             var sides = Enum.GetValues(typeof(Zone.Side)).Cast<Zone.Side>();
             foreach (var side in sides)

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37a140f82c35fc4ea5b44a0a978758e, type: 3}
+  m_Name: BuildingAssetsPack_retroMedieval
+  m_EditorClassIdentifier: 
+  floorPrefab: {fileID: 8401247682750587628, guid: f7546c6dc4599d5469ef96e63c3d47c9, type: 3}
+  wallPrefab: {fileID: 3114506991080562977, guid: 78894c57a0e329440b3c1e78f75a9c02, type: 3}
+  doorPrefab: {fileID: 1740624425447276377, guid: 48328766012d3da4580ef26d012ca0a1, type: 3}

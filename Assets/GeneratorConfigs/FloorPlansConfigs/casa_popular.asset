@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: casa_popular
   m_EditorClassIdentifier: 
   planId: Casa popular
-  gridDimensions: {x: 7, y: 9}
+  gridDimensions: {x: 8, y: 9}
   nodes:
   - guid: 3edaf155-1f83-4de8-a46b-a538251b3076
     position: {x: 865, y: 330}
     zoneId: sala
-    areaRatio: 0.25
+    areaRatio: 0.2
+    desiredAspectRatio: 1
     hasOutsideDoor: 1
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -30,7 +31,8 @@ MonoBehaviour:
   - guid: b51eb503-fa2b-4889-ad26-91cef0d33ac1
     position: {x: 1184, y: 330}
     zoneId: corredor
-    areaRatio: 0.018
+    areaRatio: 0.01
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -43,7 +45,8 @@ MonoBehaviour:
   - guid: 2d4e578e-59c6-4be7-8aed-09f214e6cd6d
     position: {x: 1512, y: 330}
     zoneId: cozinha
-    areaRatio: 0.268
+    areaRatio: 0.2
+    desiredAspectRatio: 1
     hasOutsideDoor: 1
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -52,18 +55,9 @@ MonoBehaviour:
     adjacenciesGUIDs: []
   - guid: a13338ad-ac7a-4ce8-8333-e3980aa88fca
     position: {x: 1512, y: 555}
-    zoneId: q2
-    areaRatio: 0.222
-    hasOutsideDoor: 0
-    HasOutsideWindows: 0
-    presetAreaTexture: {fileID: 0}
-    parentGUID: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
-    childrenGUIDs: []
-    adjacenciesGUIDs: []
-  - guid: 7b941e90-8cc5-4bcd-b4c6-eebad263f9a9
-    position: {x: 1184, y: 555}
-    zoneId: q1
-    areaRatio: 0.198
+    zoneId: quarto 2
+    areaRatio: 0.25
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -73,7 +67,8 @@ MonoBehaviour:
   - guid: 521f5942-eac6-48bb-a63e-f83484fd33f1
     position: {x: 516, y: 87}
     zoneId: publico
-    areaRatio: 0.464
+    areaRatio: 0.5
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -87,7 +82,8 @@ MonoBehaviour:
   - guid: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
     position: {x: 516, y: 607}
     zoneId: privado
-    areaRatio: 0.509
+    areaRatio: 0.5
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -100,6 +96,7 @@ MonoBehaviour:
     position: {x: 181, y: 330}
     zoneId: casa
     areaRatio: 1
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
@@ -111,10 +108,22 @@ MonoBehaviour:
   - guid: 17e32742-0a45-4d3d-ae96-e04d002b733b
     position: {x: 1512, y: 94}
     zoneId: banheiro
-    areaRatio: 0.168
+    areaRatio: 0.09
+    desiredAspectRatio: 1
     hasOutsideDoor: 0
     HasOutsideWindows: 0
     presetAreaTexture: {fileID: 0}
     parentGUID: 521f5942-eac6-48bb-a63e-f83484fd33f1
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 7b941e90-8cc5-4bcd-b4c6-eebad263f9a9
+    position: {x: 1184, y: 555}
+    zoneId: quarto 1
+    areaRatio: 0.25
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 5ee0d4cc-e3fc-4afa-899c-6d0d26eb520f
     childrenGUIDs: []
     adjacenciesGUIDs: []

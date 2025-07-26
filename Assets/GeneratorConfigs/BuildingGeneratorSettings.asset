@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: BuildingGeneratorSettings
   m_EditorClassIdentifier: 
   _useSeed: 0
-  _seed: 206397863
-  _maxGenerationTries: 100
-  _samples: 10
-  _saveGeneratedPlanToAsset: 1
+  _seed: 1253084519
+  _maxGenerationTries: 1
+  _samples: 100
+  _saveGeneratedPlanToAsset: 0
   _planGenPlanAssetsFolder: Generated Plans
   _buildingConfig: {fileID: 11400000, guid: ab0934bc881af5840b2736552815d29f, type: 2}
   _buildingDataInterpreterPrefab: {fileID: 4998041192179678752, guid: 4666bda4890d0b74e970959b43ae5fd0, type: 3}
