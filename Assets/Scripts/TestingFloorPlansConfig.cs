@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
-using com.cyborgAssets.inspectorButtonPro;
 
 namespace BuildingGenerator
 {

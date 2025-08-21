@@ -3,7 +3,6 @@ using UnityEngine.UIElements;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor.UIElements;
-using System;
 
 namespace BuildingGenerator
 {

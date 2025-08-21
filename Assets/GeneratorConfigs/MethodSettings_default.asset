@@ -20,28 +20,28 @@ MonoBehaviour:
       value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 1
       weightedMode: 0
       inWeight: 0
       outWeight: 0.19212434
     - serializedVersion: 3
-      time: 0.4
-      value: 0.6
-      inSlope: -2.9513893
-      outSlope: -2.9513893
+      time: 0.5
+      value: 0.5
+      inSlope: -2.7659762
+      outSlope: -2.7659762
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.060031556
-      outWeight: 0.034173544
+      inWeight: 0.34106874
+      outWeight: 0.11093457
     - serializedVersion: 3
-      time: 0.99401855
-      value: 0.20904541
+      time: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.15025358
-      outWeight: 0
+      inWeight: 0.13277467
+      outWeight: 0.042353094
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -58,32 +58,32 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.4453866
-      value: 0.6246996
-      inSlope: -2.2682023
-      outSlope: -2.2682023
+      time: 0.5
+      value: 0.5
+      inSlope: -3.0812309
+      outSlope: -3.0812309
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.010918772
-      outWeight: 0.042504374
+      inWeight: 0.118749976
+      outWeight: 0.070675425
     - serializedVersion: 3
-      time: 0.7
-      value: 0
-      inSlope: -0.34737808
-      outSlope: -0.34737808
+      time: 1
+      value: 0.008196722
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.08201167
+      inWeight: 0.31875002
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   _adjacencyWeightMultiplier: 1
   _borderWeightMultiplier: 1
-  _minLCorridorWidth: 2
+  _minLCorridorWidth: 3
   _unassignedCellsAction: 1
   _maxNeighborsToHaveDoor: 2
-  _delay: 0.01
+  _delay: 0.1
   _stopAtInitialPlot: 0
   _skipToFinalResult: 1
   _ignoreDesiredAreaInRect: 0

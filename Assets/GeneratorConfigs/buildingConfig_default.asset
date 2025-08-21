@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee66473f63ead441a154f2eca9a3544, type: 3}
   m_Name: buildingConfig_default
   m_EditorClassIdentifier: 
-  _floorPlanConfig: {fileID: 11400000, guid: 4b6b3cc58184e804fa1710cdc716a60e, type: 2}
-  _buildingAssetsPack: {fileID: 11400000, guid: 4bd3daef726e5fb438ce8fc81f14bf12, type: 2}
+  _floorPlanConfig: {fileID: 11400000, guid: bca1dd2607be604448cd3e2fcb869971, type: 2}
+  _buildingAssetsPack: {fileID: 11400000, guid: 9e7b96f651e6aea448770df6bed050b2, type: 2}

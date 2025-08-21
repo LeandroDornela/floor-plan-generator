@@ -1,4 +1,4 @@
-#define TEST
+//#define TEST
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,9 @@ namespace BuildingGenerator
 {
     public partial class MethodGrowth
     {
+        private int _borderDen = 4;
+        private int _adjDen = 2;
+
         /// <summary>
         /// 
         /// </summary>
@@ -72,7 +75,7 @@ namespace BuildingGenerator
             _cellsWeights = new WeightedArray(cellsToCalc.Length);
 
             int desiredZoneSqSize = Mathf.CeilToInt(Mathf.Sqrt(zoneToPlot.AreaRatio * cellsGrid.Area)); // Ceiling to round up to a size that can fit it.
-            int minimumBorderDistance = desiredZoneSqSize / 4;
+            int minimumBorderDistance = Mathf.CeilToInt(desiredZoneSqSize / _borderDen);
             //int minimumBorderDistance = Mathf.CeilToInt(Mathf.Sqrt(desiredZoneSqSize)); // Mais falhas.
             
 
@@ -202,7 +205,7 @@ namespace BuildingGenerator
                         if (plottedZone.OriginCell == null) continue;
 
                         float distance = Mathf.Round((plottedZone.OriginCell.GridPosition - cell.GridPosition).magnitude);
-                        float expectedAdjacentZoneSide = Mathf.Ceil(MathF.Sqrt(plottedZone.AreaRatio * cellsGrid.Area)) / 2;
+                        float expectedAdjacentZoneSide = (Mathf.Ceil(MathF.Sqrt(plottedZone.AreaRatio * cellsGrid.Area)) / _adjDen);
                         float normToPlottedRadius = distance / expectedAdjacentZoneSide;
                         float normToTotalRadius = distance / (desiredZoneSqSize + expectedAdjacentZoneSide);
 
@@ -250,9 +253,9 @@ namespace BuildingGenerator
                 }
             }
 
-
+#if TEST
             GenerationStats.Instance._zonePlotWeightGrids.Add(new GenerationStats.NamedGrid(zoneToPlot.ZoneId, _cellsWeights.Values, cellsGrid.Dimensions.x));
-
+#endif
 
             if (!hasAnAvailableCell)
             {

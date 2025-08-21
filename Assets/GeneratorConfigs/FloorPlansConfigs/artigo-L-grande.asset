@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: artigo-L-grande
   m_EditorClassIdentifier: 
   planId: Plan-L-artigo
-  gridDimensions: {x: 10, y: 10}
+  gridDimensions: {x: 15, y: 15}
   nodes:
   - guid: 2a3b1ea8-94b4-4d6e-ad53-6157952bac5e
     position: {x: 1269, y: 298}

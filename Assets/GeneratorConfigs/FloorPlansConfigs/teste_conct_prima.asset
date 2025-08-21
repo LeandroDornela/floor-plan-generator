@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
+  m_Name: teste_conct_prima
+  m_EditorClassIdentifier: 
+  planId: test conect prima
+  gridDimensions: {x: 20, y: 20}
+  nodes:
+  - guid: 8b22360d-953a-4c1d-9e69-e45e09e8852e
+    position: {x: 755, y: -149}
+    zoneId: a1
+    areaRatio: 0.25
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: d965a48c-f321-4749-9f0b-e4f9f74cdb04
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: eaa8f264-1a4e-4f27-a5c2-c4d405718051
+    position: {x: 755, y: 47}
+    zoneId: a2
+    areaRatio: 0.25
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: d965a48c-f321-4749-9f0b-e4f9f74cdb04
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 29fe8ff0-2e84-4777-ab69-6e0c20a9bebc
+    position: {x: 755, y: 296}
+    zoneId: b1
+    areaRatio: 0.25
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: e392da88-0c10-46ad-a33f-92bb5fcfb997
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - eaa8f264-1a4e-4f27-a5c2-c4d405718051
+    - ce266a46-c67b-4dec-bed8-cb40a9353c3c
+  - guid: ce266a46-c67b-4dec-bed8-cb40a9353c3c
+    position: {x: 755, y: 492}
+    zoneId: b2
+    areaRatio: 0.25
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: e392da88-0c10-46ad-a33f-92bb5fcfb997
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: e392da88-0c10-46ad-a33f-92bb5fcfb997
+    position: {x: 408, y: 394}
+    zoneId: b
+    areaRatio: 0.5
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 46451399-5223-4d47-8399-1ee8b7e338b1
+    childrenGUIDs:
+    - 29fe8ff0-2e84-4777-ab69-6e0c20a9bebc
+    - ce266a46-c67b-4dec-bed8-cb40a9353c3c
+    adjacenciesGUIDs: []
+  - guid: d965a48c-f321-4749-9f0b-e4f9f74cdb04
+    position: {x: 408, y: -51}
+    zoneId: a
+    areaRatio: 0.5
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 46451399-5223-4d47-8399-1ee8b7e338b1
+    childrenGUIDs:
+    - 8b22360d-953a-4c1d-9e69-e45e09e8852e
+    - eaa8f264-1a4e-4f27-a5c2-c4d405718051
+    adjacenciesGUIDs: []
+  - guid: 46451399-5223-4d47-8399-1ee8b7e338b1
+    position: {x: 85, y: 180}
+    zoneId: R
+    areaRatio: 1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs:
+    - d965a48c-f321-4749-9f0b-e4f9f74cdb04
+    - e392da88-0c10-46ad-a33f-92bb5fcfb997
+    adjacenciesGUIDs: []

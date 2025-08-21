@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37a140f82c35fc4ea5b44a0a978758e, type: 3}
+  m_Name: BuildingAssetsPack_sci-fi
+  m_EditorClassIdentifier: 
+  floorPrefab: {fileID: 7348748973698817562, guid: 3fa76d6e7997ddf4ea393e8157a386a2, type: 3}
+  floorBorderPrefab: {fileID: 3668424052056781806, guid: d60c5a631f3328046b12af7c626948c7, type: 3}
+  wallPrefab: {fileID: 1136389997195994779, guid: bf338301241e0c94fbb5fc1fa3353087, type: 3}
+  doorPrefab: {fileID: 8047766454827679883, guid: 376879d1c8d9ae445bdb15593b03d8e3, type: 3}

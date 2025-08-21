@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
+  m_Name: caso_graficoTempoExec
+  m_EditorClassIdentifier: 
+  planId: caso_graficoTempoExec
+  gridDimensions: {x: 8, y: 8}
+  nodes:
+  - guid: 4c4e0399-caac-492a-a359-7c47e8352296
+    position: {x: 392, y: 91}
+    zoneId: A
+    areaRatio: 0.5
+    desiredAspectRatio: 1
+    hasOutsideDoor: 1
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: f38f22ee-71f5-47ab-8aff-579526dccf71
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - e17a31e2-eb92-4cd6-ab73-5e2814bb6fc9
+  - guid: e17a31e2-eb92-4cd6-ab73-5e2814bb6fc9
+    position: {x: 392, y: 342}
+    zoneId: B
+    areaRatio: 0.3
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: f38f22ee-71f5-47ab-8aff-579526dccf71
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 0c1af993-d67e-4881-a55c-28b724bc43de
+  - guid: 0c1af993-d67e-4881-a55c-28b724bc43de
+    position: {x: 392, y: 588}
+    zoneId: C
+    areaRatio: 0.2
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: f38f22ee-71f5-47ab-8aff-579526dccf71
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: f38f22ee-71f5-47ab-8aff-579526dccf71
+    position: {x: 72, y: 342}
+    zoneId: R
+    areaRatio: 1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs:
+    - 4c4e0399-caac-492a-a359-7c47e8352296
+    - e17a31e2-eb92-4cd6-ab73-5e2814bb6fc9
+    - 0c1af993-d67e-4881-a55c-28b724bc43de
+    adjacenciesGUIDs: []

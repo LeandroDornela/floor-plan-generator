@@ -156,11 +156,29 @@ namespace BuildingGenerator
 
                     if (cellsTuple.HasDoor)
                     {
-                        if(buildingAssetsPack.doorPrefab != null) _wallInstances.Add(Instantiate(buildingAssetsPack.doorPrefab, new Vector3(pos.x, 0, pos.z), rot, wallsHolder));
+                        if (buildingAssetsPack.doorPrefab != null)
+                        {
+                            GameObject door = Instantiate(buildingAssetsPack.doorPrefab, new Vector3(pos.x, 0, pos.z), rot, wallsHolder);
+                            ScaleAnimation scaleAnimation = door.GetComponent<ScaleAnimation>();
+                            if (scaleAnimation != null)
+                            {
+                                scaleAnimation.TriggerAnimation(pos.x);
+                            }
+                            _wallInstances.Add(door);
+                        }
                     }
                     else
                     {
-                        if(buildingAssetsPack.wallPrefab != null) _wallInstances.Add(Instantiate(buildingAssetsPack.wallPrefab, new Vector3(pos.x, 0, pos.z), rot, wallsHolder));
+                        if (buildingAssetsPack.wallPrefab != null)
+                        {
+                            GameObject wall = Instantiate(buildingAssetsPack.wallPrefab, new Vector3(pos.x, 0, pos.z), rot, wallsHolder);
+                            ScaleAnimation scaleAnimation = wall.GetComponent<ScaleAnimation>();
+                            if (scaleAnimation != null)
+                            {
+                                scaleAnimation.TriggerAnimation(pos.x);
+                            }
+                            _wallInstances.Add(wall);
+                        }
                     }
                 }
             }
@@ -221,9 +239,20 @@ namespace BuildingGenerator
             // Instancia as celulas.
             foreach (var cell in floorPlan.CellsGrid.Cells)
             {
-                if (cell.Zone == null) continue;
+                //if (cell.Zone == null) continue;
 
-                VisualCell visualCell = Instantiate(buildingAssetsPack.floorPrefab,
+                GameObject prefab;
+
+                if (cell.IsBorderCell && buildingAssetsPack.floorBorderPrefab != null)
+                {
+                    prefab = buildingAssetsPack.floorBorderPrefab;
+                }
+                else
+                {
+                    prefab = buildingAssetsPack.floorPrefab;
+                }
+
+                VisualCell visualCell = Instantiate(prefab,
                                                     new Vector3(transform.position.x + cell.GridPosition.x, transform.position.y, transform.position.z + yModifier * cell.GridPosition.y),
                                                     Quaternion.identity,
                                                     cellsHolder).GetComponent<VisualCell>();
@@ -236,7 +265,8 @@ namespace BuildingGenerator
                 }
                 else
                 {
-                    visualCell.SetColor(Color.black, null);
+                    //visualCell.SetColor(Color.black, null);
+                    visualCell.HideGraphics();
                 }
                 _cellsGraphicsInstances.Add(visualCell);
             }

@@ -1,0 +1,244 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
+  m_Name: predio_4kitnets_circ_preset_hard
+  m_EditorClassIdentifier: 
+  planId: Pred-4-kit-hard
+  gridDimensions: {x: 30, y: 30}
+  nodes:
+  - guid: 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    position: {x: 483, y: -76}
+    zoneId: ap1
+    areaRatio: 0.2
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    childrenGUIDs:
+    - bb3a662b-1df0-4137-afd1-4cea21e6002d
+    - 968bc9a5-1260-4b3b-8941-7c2cee82ad0b
+    - d4453db2-aec1-41cd-a764-6b912601014e
+    adjacenciesGUIDs: []
+  - guid: bb3a662b-1df0-4137-afd1-4cea21e6002d
+    position: {x: 799, y: -252}
+    zoneId: s
+    areaRatio: 0.15
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 968bc9a5-1260-4b3b-8941-7c2cee82ad0b
+    - d4453db2-aec1-41cd-a764-6b912601014e
+  - guid: 968bc9a5-1260-4b3b-8941-7c2cee82ad0b
+    position: {x: 799, y: -76}
+    zoneId: b
+    areaRatio: 0.05
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: d4453db2-aec1-41cd-a764-6b912601014e
+    position: {x: 799, y: 100}
+    zoneId: q
+    areaRatio: 0.1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 2a3b1ea8-94b4-4d6e-ad53-6157952bac5e
+    position: {x: 799, y: 303}
+    zoneId: s
+    areaRatio: 0.15
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 10d44379-9e50-4d5b-bda5-b1e505366d04
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - ff61191a-eaa7-4012-a9fe-50e1a92c0fd9
+    - cb8f66a3-15f9-4cc7-bf3a-088835b9f600
+  - guid: ff61191a-eaa7-4012-a9fe-50e1a92c0fd9
+    position: {x: 799, y: 479}
+    zoneId: b
+    areaRatio: 0.05
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 10d44379-9e50-4d5b-bda5-b1e505366d04
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: cb8f66a3-15f9-4cc7-bf3a-088835b9f600
+    position: {x: 799, y: 655}
+    zoneId: q
+    areaRatio: 0.1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 10d44379-9e50-4d5b-bda5-b1e505366d04
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 262d31c3-1020-4897-b9d0-0ee34eab9c0d
+    position: {x: 448, y: 670}
+    zoneId: circ
+    areaRatio: 0.1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 1
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 2800000, guid: 5b115ff7d3d5ceb40b9375a1d5ee45e0, type: 3}
+    parentGUID: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 2a3b1ea8-94b4-4d6e-ad53-6157952bac5e
+    - bb3a662b-1df0-4137-afd1-4cea21e6002d
+    - d4004ae1-d4ba-490f-823b-e3921ee6aa0f
+    - b3e231af-f535-4c9f-ae68-1adc9844c3bc
+  - guid: 10d44379-9e50-4d5b-bda5-b1e505366d04
+    position: {x: 448, y: 391}
+    zoneId: ap2
+    areaRatio: 0.2
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    childrenGUIDs:
+    - 2a3b1ea8-94b4-4d6e-ad53-6157952bac5e
+    - ff61191a-eaa7-4012-a9fe-50e1a92c0fd9
+    - cb8f66a3-15f9-4cc7-bf3a-088835b9f600
+    adjacenciesGUIDs: []
+  - guid: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    position: {x: 21, y: 670}
+    zoneId: predio
+    areaRatio: 1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 2800000, guid: 8156d8879c2591f42bb5d2a580695210, type: 3}
+    parentGUID: 
+    childrenGUIDs:
+    - 262d31c3-1020-4897-b9d0-0ee34eab9c0d
+    - 58fb5d47-f18e-424e-b85d-fa118c6237f1
+    - 10d44379-9e50-4d5b-bda5-b1e505366d04
+    - c274b2c7-5995-4bd1-95b2-949b1c04e291
+    - 29d55e9b-c883-43f6-b15f-ed035a419baf
+    adjacenciesGUIDs: []
+  - guid: c274b2c7-5995-4bd1-95b2-949b1c04e291
+    position: {x: 448, y: 965}
+    zoneId: ap3
+    areaRatio: 0.2
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    childrenGUIDs:
+    - d4004ae1-d4ba-490f-823b-e3921ee6aa0f
+    - dc326163-ea21-4c03-963c-40c1bbe1c8b4
+    - 7d37b43f-bac9-4cac-a143-ac9fad883012
+    adjacenciesGUIDs: []
+  - guid: d4004ae1-d4ba-490f-823b-e3921ee6aa0f
+    position: {x: 799, y: 877}
+    zoneId: s
+    areaRatio: 0.15
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: c274b2c7-5995-4bd1-95b2-949b1c04e291
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - dc326163-ea21-4c03-963c-40c1bbe1c8b4
+    - 7d37b43f-bac9-4cac-a143-ac9fad883012
+  - guid: dc326163-ea21-4c03-963c-40c1bbe1c8b4
+    position: {x: 799, y: 1053}
+    zoneId: b
+    areaRatio: 0.05
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: c274b2c7-5995-4bd1-95b2-949b1c04e291
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 7d37b43f-bac9-4cac-a143-ac9fad883012
+    position: {x: 799, y: 1229}
+    zoneId: q
+    areaRatio: 0.1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: c274b2c7-5995-4bd1-95b2-949b1c04e291
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 29d55e9b-c883-43f6-b15f-ed035a419baf
+    position: {x: 448, y: 1472}
+    zoneId: ap4
+    areaRatio: 0.2
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 004996ce-6143-4a68-aa74-552ebd7d46fd
+    childrenGUIDs:
+    - b3e231af-f535-4c9f-ae68-1adc9844c3bc
+    - db11f696-d388-494d-8d98-5f82cd5e76ea
+    - 6b371de5-4502-41de-9df0-b3f363a8e105
+    adjacenciesGUIDs: []
+  - guid: db11f696-d388-494d-8d98-5f82cd5e76ea
+    position: {x: 799, y: 1648}
+    zoneId: b
+    areaRatio: 0.05
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 29d55e9b-c883-43f6-b15f-ed035a419baf
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 6b371de5-4502-41de-9df0-b3f363a8e105
+    position: {x: 799, y: 1824}
+    zoneId: q
+    areaRatio: 0.1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 29d55e9b-c883-43f6-b15f-ed035a419baf
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: b3e231af-f535-4c9f-ae68-1adc9844c3bc
+    position: {x: 799, y: 1472}
+    zoneId: s
+    areaRatio: 0.15
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 29d55e9b-c883-43f6-b15f-ed035a419baf
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - db11f696-d388-494d-8d98-5f82cd5e76ea
+    - 6b371de5-4502-41de-9df0-b3f363a8e105

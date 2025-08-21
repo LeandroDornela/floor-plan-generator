@@ -7,20 +7,28 @@ namespace BuildingGenerator
     {
         public Renderer _renderer;
         [SerializeReference] private Cell _cell;
+       
 
-        public bool _drawDebug = false;
+        public bool _drawDebug = true;
         public bool _drawNeighborConnections = false;
+        public bool _drawCoords = true;
+        public bool _drawZoneId = true;
+
+        public Vector3 textCorrect = Vector3.zero;
+
+        public ScaleAnimation _scaleAnimation;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             if (_renderer == null) { _renderer = GetComponent<Renderer>(); }
+            if (_scaleAnimation == null) { _scaleAnimation = GetComponent<ScaleAnimation>(); }
         }
 
         // Update is called once per frame
         void Update()
         {
-
+            
         }
 
         public void Init(Cell cell)
@@ -39,8 +47,21 @@ namespace BuildingGenerator
 
         public void SetColor(Color color, Cell cell)
         {
+            if (!gameObject.activeSelf) return;
+
             if (_renderer == null) { _renderer = GetComponent<Renderer>(); }
             //_renderer.material.color = _renderer.material.color + color/100;
+
+            //if(cell?.Zone != null) if (cell.Zone.IsRoot) color = Color.white;
+            try
+            {
+                if(cell?.Zone != null) if (cell.Zone.IsRoot) color = Color.white;
+            }
+            catch
+            {
+                Debug.LogError("Error in SetColor");
+            }
+
             if (Application.isPlaying)
             {
                 _renderer.material.color = color;
@@ -52,6 +73,13 @@ namespace BuildingGenerator
 
 
             _cell = cell;
+
+            _scaleAnimation?.TriggerAnimation(_cell.GridPosition.x);
+        }
+
+        public void HideGraphics()
+        {
+            gameObject.SetActive(false);
         }
 
         public void SetSelectedState(bool state)
@@ -76,7 +104,7 @@ namespace BuildingGenerator
 
             string zoneId;
 
-            if (_cell != null && _cell.Zone != null)
+            if (_cell != null && _cell.Zone != null && _drawZoneId)
             {
                 zoneId = _cell.Zone.ZoneId;
             }
@@ -85,11 +113,18 @@ namespace BuildingGenerator
                 zoneId = "";
             }
 
+            string coordText = "";
+            if (_drawCoords)
+            {
+                coordText = $"[{_cell.GridPosition.x}, {Mathf.Abs(_cell.GridPosition.y)}]\n";
+            }
+
             // Create a new GUIStyle
             GUIStyle style = new GUIStyle();
             style.normal.textColor = Color.black;
             style.alignment = TextAnchor.MiddleCenter;
-            Handles.Label(transform.position, $"[{_cell.GridPosition.x}, {Mathf.Abs(_cell.GridPosition.y)}]\n{zoneId}", style);
+
+            Handles.Label(transform.position + textCorrect, $"{coordText}{zoneId}", style);
 
             if (_cell != null && _drawNeighborConnections)
             {

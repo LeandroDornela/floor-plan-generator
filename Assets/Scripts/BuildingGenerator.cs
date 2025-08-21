@@ -73,6 +73,58 @@ namespace BuildingGenerator
             return generatedBuildingData;
         }
 
+        // Gera um grande numero de resultados para análise de tempo de execução.
+        public async UniTask<bool> DEBUG_GRAPH_GenerateBuilding(int graphSamples, BuildingGeneratorSettings buildingGeneratorSettings, MethodGrowthSettings methodGrowthSettings, IBuildingInterpreter buildingInterpreter = null)
+        {
+            // Only instantiate a new interpreter if its given.
+            if (buildingInterpreter != null)
+            {
+                _buildingInterpreter = buildingInterpreter;
+                _buildingInterpreter.gameObject.name = buildingGeneratorSettings.BuildingConfig.FloorPlanConfig.name;
+            }
+            else if (buildingGeneratorSettings.BuildingDataInterpreterPrefab != null)
+            {
+                _buildingInterpreter = GameObject.Instantiate(buildingGeneratorSettings.BuildingDataInterpreterPrefab);
+                _buildingInterpreter.gameObject.name = buildingGeneratorSettings.BuildingConfig.FloorPlanConfig.name;
+            }
+
+            // Initialize the scene building interpreter.
+            if (_buildingInterpreter != null)
+            {
+                _buildingInterpreter.Init(this, buildingGeneratorSettings.BuildingConfig.BuildingAssetsPack);
+            }
+            else
+            {
+                Debug.LogWarning("Building interpreter is undefined.");
+            }
+
+            // Set debug logs.
+            if (buildingGeneratorSettings.EnableDevLogs)
+            {
+                Utils.Debug._enable = true;
+            }
+            else
+            {
+                Utils.Debug._enable = false;
+            }
+
+            _floorPlanGenerator = new FloorPlanGenerator();
+            _floorPlanGenerator.FloorPlanUpdatedEvent.Register(OnFloorPlanUpdated);
+
+            FloorPlanData floorPlanData = buildingGeneratorSettings.BuildingConfig.FloorPlanConfig.GetFloorPlanData();
+
+            for (int i = 0; i < graphSamples; i++)
+            {
+                var result = await _floorPlanGenerator.GenerateFloorPlans(buildingGeneratorSettings, methodGrowthSettings, floorPlanData, 1);
+
+                Debug.Log($"{floorPlanData.GridDimensions} done");
+
+                floorPlanData.GridDimensions = floorPlanData.GridDimensions + new Vector2Int(2, 2);
+            }
+
+            return true;
+        }
+
 
         public float GenerationProgress()
         {

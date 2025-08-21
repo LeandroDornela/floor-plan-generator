@@ -119,6 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1101520622583173426}
   - component: {fileID: 7989667955065627512}
+  - component: {fileID: 9053298720855468466}
   m_Layer: 0
   m_Name: VisualCell3D
   m_TagString: Untagged
@@ -160,11 +161,64 @@ MonoBehaviour:
     rid: -2
   _drawDebug: 0
   _drawNeighborConnections: 0
+  _drawCoords: 1
+  _drawZoneId: 1
+  textCorrect: {x: 0, y: 0, z: 0}
+  _scaleAnimation: {fileID: 9053298720855468466}
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!114 &9053298720855468466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5761674233669688500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3add89a4d0ef1b04da147287ae5fc414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animationDuration: 0.3
+  _interval: 0.05
+  _baseStartDelay: 0.1
+  _randomDelay: 0.1
+  _animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.37353605
+      value: 1.0191231
+      inSlope: 1.3731394
+      outSlope: 1.3731394
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &112794125477872083
 PrefabInstance:
   m_ObjectHideFlags: 0

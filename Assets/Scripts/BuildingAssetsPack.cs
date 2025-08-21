@@ -6,6 +6,7 @@ using UnityEngine;
 public class BuildingAssetsPack : ScriptableObject
 {
     public GameObject floorPrefab;
+    public GameObject floorBorderPrefab;
     public GameObject wallPrefab;
     public GameObject doorPrefab;
 }

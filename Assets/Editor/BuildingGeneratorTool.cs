@@ -9,10 +9,7 @@ namespace BuildingGenerator
         public BuildingGeneratorSettings BuildingGeneratorSettings;
         public MethodGrowthSettings MethodGrowthSettings;
 
-
-
         // Generator runtime.
-        private IBuildingInterpreter _buildingDataInterpreterInstance; // Scene visualization
         private BuildingGenerator _buildingGenerator;
         private bool _generationRunning = false;
 
@@ -122,6 +119,13 @@ namespace BuildingGenerator
 
                 //_generationRunning = true;
             }
+
+            /*
+            if (GUILayout.Button("Gen Graph data", customButtonStyle, GUILayout.Width(128)))
+            {
+                _buildingGenerator.DEBUG_GRAPH_GenerateBuilding(20, BuildingGeneratorSettings, MethodGrowthSettings);
+            }
+            */
             //}
             /*
             else

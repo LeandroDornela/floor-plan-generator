@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfc14e2d5b4ef5445921aff7b0b9eec0, type: 3}
+  m_Name: BuildingGeneratorSettings_ex_simples
+  m_EditorClassIdentifier: 
+  _useSeed: 0
+  _seed: 0
+  _maxGenerationTries: 10
+  _samples: 10
+  _saveGeneratedPlanToAsset: 0
+  _planGenPlanAssetsFolder: Generated Plans
+  _buildingConfig: {fileID: 11400000, guid: ab0934bc881af5840b2736552815d29f, type: 2}
+  _buildingDataInterpreterPrefab: {fileID: 4998041192179678752, guid: 4666bda4890d0b74e970959b43ae5fd0, type: 3}
+  _screenshotPlan: 0
+  _enableDevLogs: 0
+  _saveGenStatsJson: 0

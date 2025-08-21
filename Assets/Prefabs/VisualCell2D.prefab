@@ -50,6 +50,9 @@ MonoBehaviour:
     rid: -2
   _drawDebug: 1
   _drawNeighborConnections: 0
+  _drawCoords: 0
+  _drawZoneId: 1
+  textCorrect: {x: 0, y: 0, z: 0}
   references:
     version: 2
     RefIds:

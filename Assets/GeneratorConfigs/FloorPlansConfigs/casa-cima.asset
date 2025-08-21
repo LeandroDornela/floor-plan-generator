@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
+  m_Name: casa-cima
+  m_EditorClassIdentifier: 
+  planId: casa-cima
+  gridDimensions: {x: 15, y: 10}
+  nodes:
+  - guid: 3ec1af0c-1727-428b-b3b2-f8fcc67b1423
+    position: {x: 1001, y: 285}
+    zoneId: quartof
+    areaRatio: 0.1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 06034a87-d2cb-49bb-a256-1d720632e107
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
+    position: {x: 209, y: 414}
+    zoneId: casa
+    areaRatio: 1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs:
+    - 06034a87-d2cb-49bb-a256-1d720632e107
+    - ccc925ba-01fe-4774-81a2-1de2b5c86293
+    adjacenciesGUIDs: []
+  - guid: 7e52e909-81d6-4c75-aa47-49cea918d46a
+    position: {x: 1001, y: 481}
+    zoneId: banheiro
+    areaRatio: 0.05
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 06034a87-d2cb-49bb-a256-1d720632e107
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 35d5a82f-1f5e-4ee9-88a4-c3e727acc1c8
+    position: {x: 1001, y: 89}
+    zoneId: corredor
+    areaRatio: 0.05
+    desiredAspectRatio: 1
+    hasOutsideDoor: 1
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 06034a87-d2cb-49bb-a256-1d720632e107
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 3ec1af0c-1727-428b-b3b2-f8fcc67b1423
+    - 7e52e909-81d6-4c75-aa47-49cea918d46a
+    - fb274040-fbd6-418e-b683-3226bdb471aa
+  - guid: 6bda7055-2c0d-49a6-8ba2-4df664689c40
+    position: {x: 1001, y: -107}
+    zoneId: sala
+    areaRatio: 0.1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 1
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 06034a87-d2cb-49bb-a256-1d720632e107
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 35d5a82f-1f5e-4ee9-88a4-c3e727acc1c8
+  - guid: 06034a87-d2cb-49bb-a256-1d720632e107
+    position: {x: 625, y: 187}
+    zoneId: publica
+    areaRatio: 1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
+    childrenGUIDs:
+    - 6bda7055-2c0d-49a6-8ba2-4df664689c40
+    - 35d5a82f-1f5e-4ee9-88a4-c3e727acc1c8
+    - 3ec1af0c-1727-428b-b3b2-f8fcc67b1423
+    - 7e52e909-81d6-4c75-aa47-49cea918d46a
+    adjacenciesGUIDs: []
+  - guid: ccc925ba-01fe-4774-81a2-1de2b5c86293
+    position: {x: 625, y: 1032}
+    zoneId: publico
+    areaRatio: 1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 12d92088-3342-4d8d-8bc5-d4c9905a72dd
+    childrenGUIDs:
+    - fb274040-fbd6-418e-b683-3226bdb471aa
+    - 4d7c2199-5b17-41fa-8d9b-82f90c36b7dc
+    - c5a07c82-fd66-4705-a7fa-c974a38b2fb0
+    adjacenciesGUIDs: []
+  - guid: fb274040-fbd6-418e-b683-3226bdb471aa
+    position: {x: 1001, y: 836}
+    zoneId: cozinha
+    areaRatio: 0.2
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: ccc925ba-01fe-4774-81a2-1de2b5c86293
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 4d7c2199-5b17-41fa-8d9b-82f90c36b7dc
+    - bd082920-4c50-48cb-834c-d654be7e2ad0
+  - guid: c5a07c82-fd66-4705-a7fa-c974a38b2fb0
+    position: {x: 1001, y: 1237}
+    zoneId: quartop
+    areaRatio: 0.2
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: ccc925ba-01fe-4774-81a2-1de2b5c86293
+    childrenGUIDs:
+    - bd082920-4c50-48cb-834c-d654be7e2ad0
+    - 9f453062-ba8a-456a-b85a-6669874d56d9
+    adjacenciesGUIDs: []
+  - guid: bd082920-4c50-48cb-834c-d654be7e2ad0
+    position: {x: 1394, y: 1130}
+    zoneId: quarto
+    areaRatio: 0.15
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: c5a07c82-fd66-4705-a7fa-c974a38b2fb0
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - 9f453062-ba8a-456a-b85a-6669874d56d9
+  - guid: 9f453062-ba8a-456a-b85a-6669874d56d9
+    position: {x: 1394, y: 1335}
+    zoneId: closed
+    areaRatio: 0.05
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: c5a07c82-fd66-4705-a7fa-c974a38b2fb0
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 4d7c2199-5b17-41fa-8d9b-82f90c36b7dc
+    position: {x: 1001, y: 1032}
+    zoneId: quartomp
+    areaRatio: 0.1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: ccc925ba-01fe-4774-81a2-1de2b5c86293
+    childrenGUIDs: []
+    adjacenciesGUIDs: []

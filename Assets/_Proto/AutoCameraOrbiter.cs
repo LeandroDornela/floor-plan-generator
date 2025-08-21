@@ -5,6 +5,8 @@ using BuildingGenerator;
 public class AutoCameraOrbiter : MonoBehaviour
 {
     public float speed = 10;
+    public bool rotate = true;
+    public bool translate = true;
 
 
     private Vector3 targetPos;
@@ -19,8 +21,8 @@ public class AutoCameraOrbiter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(Vector3.up, Time.deltaTime * speed);
-        transform.Translate((targetPos - transform.position)*Time.deltaTime * speed, Space.World);
+        if(rotate) transform.Rotate(Vector3.up, Time.deltaTime * speed);
+        if(translate) transform.Translate((targetPos - transform.position)*Time.deltaTime * speed, Space.World);
     }
     
     void OnSelectionChanged()
@@ -40,6 +42,6 @@ public class AutoCameraOrbiter : MonoBehaviour
             posCorrect = sceneDebugger.CurrentFloorPlan.CellsGrid.Dimensions/2;
         }
 
-        targetPos = new Vector3(sceneDebugger.transform.position.x + posCorrect.x, 0, sceneDebugger.transform.position.z + posCorrect.y);
+        targetPos = new Vector3(sceneDebugger.transform.position.x + posCorrect.x -0.5f, 0, sceneDebugger.transform.position.z + posCorrect.y -0.5f);
     }
 }

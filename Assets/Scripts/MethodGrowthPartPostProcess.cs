@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Animations;
 
 namespace BuildingGenerator
 {
@@ -87,10 +86,11 @@ namespace BuildingGenerator
                 }
             }
 
+            //Debug_SetAllDoorCandidatesAsDoors(doorsCandidates);
             RandomDoorSelection(doorsCandidates);
 
             // =============================== ADJACENCY CHECK ==================================
-            if (!AreAdjacencyConstsMeet(floorPlanManager.Adjacencies, doorsCandidates))
+            if (!AreAdjacencyConstsMeet(floorPlanManager.Adjacencies, doorsCandidates, floorPlanManager.ZonesInstances))
             {
                 return false;
             }
@@ -118,9 +118,10 @@ namespace BuildingGenerator
                 newTuple.SetOutsideBorder(true);
                 floorPlanManager.WallCellsTuples.Add(newTuple);
 
-                if (currentCell.Zone.HasOutsideDoor && currentCell.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor)
+                //if (currentCell.Zone.HasOutsideDoor && currentCell.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor)
+                if (currentCell.Zone.HasOutsideDoor && currentCell.IsAtCorner())
                 {
-                    doorsCandidates.AddValue(currentCell.Zone.GUID, _outsideZoneId, newTuple);
+                    doorsCandidates.AddValue(currentCell.Zone.GUID, _outsideZoneGuid, newTuple);
                 }
             }
         }
@@ -142,7 +143,8 @@ namespace BuildingGenerator
 
                 if (currentCell.Zone != null && neighborCell.Zone != null && currentCell.Zone.MustBeAdjacentTo(neighborCell.Zone))
                 {
-                    if (currentCell.NumNeighborsInSameZone() < 3 || neighborCell.NumNeighborsInSameZone() < 3)
+                    //if (currentCell.NumNeighborsInSameZone() < 3 || neighborCell.NumNeighborsInSameZone() < 3)
+                    if (CanTupleHaveADoor(currentCell, neighborCell))
                         doorsCandidates.AddValue(currentCell.Zone.GUID, neighborCell.Zone.GUID, newTuple);
                 }
 
@@ -151,12 +153,12 @@ namespace BuildingGenerator
                     if (currentCell.Zone != null && neighborCell.Zone == null && currentCell.Zone.HasOutsideDoor)
                     {
                         newTuple.SetOutsideBorder(true);
-                        doorsCandidates.AddValue(currentCell.Zone.GUID, _outsideZoneId, newTuple);
+                        doorsCandidates.AddValue(currentCell.Zone.GUID, _outsideZoneGuid, newTuple);
                     }
                     else if (currentCell.Zone == null && neighborCell.Zone != null && neighborCell.Zone.HasOutsideDoor)
                     {
                         newTuple.SetOutsideBorder(true);
-                        doorsCandidates.AddValue(_outsideZoneId, neighborCell.Zone.GUID, newTuple);
+                        doorsCandidates.AddValue(_outsideZoneGuid, neighborCell.Zone.GUID, newTuple);
                     }
                 }
 
@@ -176,8 +178,8 @@ namespace BuildingGenerator
         {
             // One cell have a number of neighbors between a min and max value
             // Or the cell have a number of neighbors between a min and max value
-            return cellA.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor ||
-                   cellB.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor;
+            //return cellA.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor || cellB.NumNeighborsInSameZone() <= _settings.MaxNeighborsToHaveDoor;
+            return cellA.IsAtCorner() || cellB.IsAtCorner();
         }
 
 
@@ -204,7 +206,7 @@ namespace BuildingGenerator
         /// <param name="adjacencyRules"></param>
         /// <param name="doorsCandidates"></param>
         /// <returns></returns>
-        bool AreAdjacencyConstsMeet(Dictionary<Guid, Guid[]> adjacencyRules, DictionaryDictionaryList<Guid, CellsTuple> doorsCandidates)
+        bool AreAdjacencyConstsMeet(Dictionary<Guid, Guid[]> adjacencyRules, DictionaryDictionaryList<Guid, CellsTuple> doorsCandidates, Dictionary<Guid, Zone> zonesInstances)
         {
             // Compare the adjacency rules with the door candidates, if all adjacency rules have at least one valid candidate door
             // it means all zones that shold be connected(have a door) actually have a door.
@@ -255,6 +257,27 @@ namespace BuildingGenerator
                 }
             }
 
+            // Check for outside doors.
+            foreach (var zone in zonesInstances)
+            {
+                if (zone.Value.HasOutsideDoor)
+                {
+                    if (doorsCandidates.TryGetValue(zone.Value.GUID, _outsideZoneGuid, out var listOfDoorCandidates))
+                    {
+                        if (listOfDoorCandidates.Count == 0)
+                        {
+                            Utils.Debug.DevError($"Post process: No outside doors for <b>{zone.Value.ZoneId}, {zone.Value.GUID}</b>");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        Utils.Debug.DevError($"Post process: No outside doors for <b>{zone.Value.ZoneId}, {zone.Value.GUID}</b>");
+                        return false;
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -263,7 +286,7 @@ namespace BuildingGenerator
         /// 
         /// </summary>
         /// <param name="doorsCandidates"></param>
-        void Debug_SetAllDoorCandidatesAsDoors(DictionaryDictionaryList<string, CellsTuple> doorsCandidates)
+        void Debug_SetAllDoorCandidatesAsDoors(DictionaryDictionaryList<Guid, CellsTuple> doorsCandidates)
         {
             foreach (var dictionary in doorsCandidates.Dictionary.Values)
             {

@@ -12,11 +12,14 @@ namespace BuildingGenerator
     {
         private CancellationTokenSource _cts;
         private Zone _currentZone;
-        private List<Zone> _zonesToSubdivide; // TODO: QUEUE
+        // TODO: QUEUE, // TODO: manter no contexto de Run e não como variavel da classe.
+        private List<Zone> _zonesToSubdivide;
+        // TODO: manter no contexto de Run e não como variavel da classe.
         private List<Zone> _zonesToGrow;
 
         // Quando uma zona n pode mais crescer na iteração atual é armazenada aqui.
         // Depois retorna para crescer usando outra logical, 'L' ou 'free'
+        // TODO: manter no contexto de Run e não como variavel da classe.
         private List<Zone> _grownZones;
 
         private WeightedArray _cellsWeights;
@@ -24,9 +27,9 @@ namespace BuildingGenerator
 
         private MethodGrowthSettings _settings;
 
-        private Guid _outsideZoneId = Guid.NewGuid();
+        private Guid _outsideZoneGuid = Guid.NewGuid();
         private bool _checkFullSpace = true;
-        
+
         public Event<FloorPlanManager> FloorPlanUpdatedEvent = new Event<FloorPlanManager>();
 
 
@@ -49,7 +52,7 @@ namespace BuildingGenerator
             */
 
             // Start the timer.
-            Utils.Stopwatch timer = new Utils.Stopwatch();
+            //Utils.Stopwatch timer = new Utils.Stopwatch();
 
             _cts = new CancellationTokenSource();
             //EditorApplication.playModeStateChanged += PlayModeStateChanged;
@@ -65,14 +68,32 @@ namespace BuildingGenerator
             // Add root zone to subdivision.
             _zonesToSubdivide.Add(floorPlanManager.RootZone);
 
+            if (!_settings.SkipToFinalResult)
+            {
+                //sceneDebugger.OnFloorPlanUpdated(floorPlanManager);
+                FloorPlanUpdatedEvent.Invoke(floorPlanManager);
+                await UniTask.WaitForSeconds(_settings.Delay, cancellationToken: _cts.Token);
+            }
+
 
             while (_zonesToSubdivide.Count > 0) // A CADA EXECUÇÃO FAZ A DIVISÃO DE UMA ZONA.
             {
+                if (!_settings.SkipToFinalResult)
+                {
+                    //sceneDebugger.OnFloorPlanUpdated(floorPlanManager);
+                    FloorPlanUpdatedEvent.Invoke(floorPlanManager);
+                    await UniTask.WaitForSeconds(_settings.Delay, cancellationToken: _cts.Token);
+                }
+
                 // Get the child zones from the next zone to subdivide.
                 _zonesToGrow = GetNextZonesToGrowList(floorPlanManager);
                 UpdateZonesWeights(_zonesToGrow);
 
-                if (_settings.StopAtInitialPlot) break;
+                if (_settings.StopAtInitialPlot)
+                {
+                    FloorPlanUpdatedEvent.Invoke(floorPlanManager);
+                    break;
+                }
 
                 // LOOP CRESCIMENTO RECT
                 while (_zonesToGrow.Count > 0)
@@ -93,7 +114,7 @@ namespace BuildingGenerator
                         await UniTask.WaitForSeconds(_settings.Delay + 0.1f, cancellationToken: _cts.Token);
                     }
                 }
-
+                
                 // Prepare for next step.
                 _zonesToGrow = new List<Zone>(_grownZones);
                 UpdateZonesWeights(_zonesToGrow);
@@ -165,7 +186,7 @@ namespace BuildingGenerator
                 return false;
             }
 
-            GenerationStats.Instance.AddTimeEnter("fullMethod", timer.Stop());
+            //GenerationStats.Instance.AddTimeEnter("fullMethod", timer.Stop());
 
             //EditorApplication.playModeStateChanged -= PlayModeStateChanged;
             _cts.Dispose();

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 /*------------------>x
@@ -93,6 +92,7 @@ namespace BuildingGenerator
         public bool IsLeaf => _childZones?.Count == 0;
         public bool IsDirty => _isDirty;
         public float DesiredArea => _desiredArea;
+        public bool IsRoot => (_parentZone == null) ? true : false;
 
 
         public Zone(FloorPlanManager floorPlanManager, Guid guid, string zoneId, float areaRatio, float desiredAspectRatio, bool hasOutsideDoor, bool hasWindows)

@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05c2da466db79b4785edf865212192a, type: 3}
+  m_Name: caso_1
+  m_EditorClassIdentifier: 
+  planId: caso_1
+  gridDimensions: {x: 8, y: 8}
+  nodes:
+  - guid: 41feca1d-c98e-41a5-93df-b670619eb6b5
+    position: {x: 111, y: 245}
+    zoneId: kitnet
+    areaRatio: 1
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 
+    childrenGUIDs:
+    - 3faba487-14a3-485e-bc2c-676a835cddb0
+    - fb90edab-8e61-45d7-b74a-183c7c7f0ad1
+    adjacenciesGUIDs: []
+  - guid: 7bf6028c-9e9e-49e5-987b-17e90c890667
+    position: {x: 1092, y: 383}
+    zoneId: quarto
+    areaRatio: 0.402
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 3faba487-14a3-485e-bc2c-676a835cddb0
+    childrenGUIDs: []
+    adjacenciesGUIDs: []
+  - guid: 3faba487-14a3-485e-bc2c-676a835cddb0
+    position: {x: 615, y: 525}
+    zoneId: privado
+    areaRatio: 0.5
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 41feca1d-c98e-41a5-93df-b670619eb6b5
+    childrenGUIDs:
+    - cb76abee-7ca6-4c1e-a836-d68ac236bfcc
+    - 7bf6028c-9e9e-49e5-987b-17e90c890667
+    adjacenciesGUIDs: []
+  - guid: fb90edab-8e61-45d7-b74a-183c7c7f0ad1
+    position: {x: 615, y: 245}
+    zoneId: sala
+    areaRatio: 0.5
+    desiredAspectRatio: 1
+    hasOutsideDoor: 1
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 41feca1d-c98e-41a5-93df-b670619eb6b5
+    childrenGUIDs: []
+    adjacenciesGUIDs:
+    - cb76abee-7ca6-4c1e-a836-d68ac236bfcc
+    - 7bf6028c-9e9e-49e5-987b-17e90c890667
+  - guid: cb76abee-7ca6-4c1e-a836-d68ac236bfcc
+    position: {x: 1092, y: 582}
+    zoneId: banheiro
+    areaRatio: 0.098
+    desiredAspectRatio: 1
+    hasOutsideDoor: 0
+    HasOutsideWindows: 0
+    presetAreaTexture: {fileID: 0}
+    parentGUID: 3faba487-14a3-485e-bc2c-676a835cddb0
+    childrenGUIDs: []
+    adjacenciesGUIDs: []

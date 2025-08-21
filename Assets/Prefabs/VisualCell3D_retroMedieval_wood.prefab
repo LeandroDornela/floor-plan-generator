@@ -119,6 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5035696382783852879}
   - component: {fileID: 4685264983706519075}
+  - component: {fileID: 2618147077289176834}
   m_Layer: 0
   m_Name: VisualCell3D_retroMedieval_wood
   m_TagString: Untagged
@@ -160,11 +161,64 @@ MonoBehaviour:
     rid: -2
   _drawDebug: 0
   _drawNeighborConnections: 0
+  _drawCoords: 1
+  _drawZoneId: 1
+  textCorrect: {x: 0, y: 0, z: 0}
+  _scaleAnimation: {fileID: 2618147077289176834}
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!114 &2618147077289176834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401247682750587628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3add89a4d0ef1b04da147287ae5fc414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animationDuration: 0.3
+  _interval: 0.05
+  _baseStartDelay: 0
+  _randomDelay: 0.1
+  _animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.37353605
+      value: 1.0191231
+      inSlope: 1.3731394
+      outSlope: 1.3731394
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &5188368069029343232
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216,6 +270,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b884e6ccf503edf4aaf4e0734701ac57, type: 3}
       propertyPath: m_Name
       value: wood-floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b884e6ccf503edf4aaf4e0734701ac57, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -34,6 +34,7 @@ namespace BuildingGenerator
         public bool IsBorderCell => _isBorderCell;
         public bool IsAssignedToLeafZone => (_zone != null) ? _zone.IsLeaf : false; // Is assigned to a leaf zone if this zone don't have children.
 
+        // TODO: Rollback para deixar de guardar estas referencias, parace não haver diferença significativa de desempenho.
         public Cell TopNeighbor { set { _topNeighbor = value; } get { return _topNeighbor; } }
         public Cell TopRightNeighbor { set { _topRightNeighbor = value; } get { return _topRightNeighbor; } }
         public Cell RightNeighbor { set { _rightNeighbor = value; } get { return _rightNeighbor; } }
@@ -90,6 +91,19 @@ namespace BuildingGenerator
             if (RightNeighbor?.Zone == _zone) counter++;
 
             return counter;
+        }
+
+        public bool IsAtCorner()
+        {
+            if (TopNeighbor?.Zone == _zone && RightNeighbor?.Zone == _zone && BottomNeighbor?.Zone != _zone && LeftNeighbor?.Zone != _zone)
+                return true;
+            if (TopNeighbor?.Zone != _zone && RightNeighbor?.Zone == _zone && BottomNeighbor?.Zone == _zone && LeftNeighbor?.Zone != _zone)
+                return true;
+            if (TopNeighbor?.Zone != _zone && RightNeighbor?.Zone != _zone && BottomNeighbor?.Zone == _zone && LeftNeighbor?.Zone == _zone)
+                return true;
+            if (TopNeighbor?.Zone == _zone && RightNeighbor?.Zone != _zone && BottomNeighbor?.Zone != _zone && LeftNeighbor?.Zone == _zone)
+                return true;
+            return false;
         }
 
 

@@ -43,18 +43,24 @@ namespace BuildingGenerator
             GenerationStats genStats = new GenerationStats(floorPlanConfig);
 
             _running = true;
+
             // Random setup.
             if (!_useSeed) _seed = (int)DateTime.Now.Ticks; // Keep like this to store current seed.
             Utils.Random.SetSeed(_seed);
             genStats._seed = _seed;
 
-            Debug.Log($"Seed: {_seed}");
+            Utils.Debug.DevLog($"Seed: {_seed}");
+            genStats.AddCustomData("dims:", floorPlanConfig.GridDimensions.ToString());
 
             //await UniTask.SwitchToThreadPool();
+
+            //Utils.Stopwatch timer = new Utils.Stopwatch();
 
             // Loop for generating the final desired number of floor plans
             for (int amountCount = 0; amountCount < amount; amountCount++)
             {
+                Utils.Stopwatch timer = new Utils.Stopwatch();
+
                 List<FloorPlanManager> _generatedRawFloorPlans = new List<FloorPlanManager>();
 
                 // Loop to generate the defined number of samples to select the best to enter the select array
@@ -165,9 +171,6 @@ namespace BuildingGenerator
                     */
                 }
 
-                Debug.Log(_generatedRawFloorPlans.Count);
-
-
                 _selectedFloorPlans.Add(selectedFloorPlan);
             }
 
@@ -177,12 +180,18 @@ namespace BuildingGenerator
             Utils.Random.ClearSeed();
             _running = false;
 
+            //genStats.AddTimeEnter("fullGen", timer.Stop());
+
             Utils.Debug.DevLog($"Selected - Regular:{_selectedFloorPlans[0].RectZonesIndex()}, Aspect:{_selectedFloorPlans[0].DesiredAspectIndex()}, Area: {_selectedFloorPlans[0].DesiredAreaIndex()}");
-            //sceneDebugger.OnFloorPlanUpdated(_selectedFloorPlans[0]);
+
             FloorPlanUpdatedEvent.Invoke(_selectedFloorPlans[0]);
             await UniTask.NextFrame();
-            Utils.Screenshot($"selected_tf{genStats._totalFails}");
 
+            if (buildingGeneratorSettings.ScreenshotPlan)
+            {
+                Utils.Screenshot($"selected_tf{genStats._totalFails}");
+            }
+            
             if (buildingGeneratorSettings.SaveGenStatsJson)
             {
                 genStats.SaveStatsAsJsonFile();

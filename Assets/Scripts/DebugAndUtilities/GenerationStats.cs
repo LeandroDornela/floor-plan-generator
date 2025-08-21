@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Rendering;
 
 namespace BuildingGenerator
 {
@@ -57,7 +58,7 @@ namespace BuildingGenerator
                 _median = Utils.CalculateMedian(_values);
             }
 
-            
+
         }
 
         public string _generationID;
@@ -66,8 +67,9 @@ namespace BuildingGenerator
         public int _totalFails;
         public List<NamedGrid> _zonePlotWeightGrids;
         public List<TimingEnter> _timingEnters;
+        public SerializedDictionary<string, string> _customData;
 
-        private TimeUnit _timeUnit = TimeUnit.ElapsedTicks;
+        private TimeUnit _timeUnit = TimeUnit.ElapsedMilliseconds;
 
         private static GenerationStats _instance;
         public static GenerationStats Instance => _instance;
@@ -136,6 +138,24 @@ namespace BuildingGenerator
             File.WriteAllText(path, json);
 
             Debug.Log($"Saved JSON to: {path}");
+        }
+
+
+        public void AddCustomData(string key, string value)
+        {
+            if (_customData == null)
+            {
+                _customData = new SerializedDictionary<string, string>();
+            }
+
+            if (_customData.ContainsKey(key))
+            {
+                _customData[key] = value;
+            }
+            else
+            {
+                _customData.Add(key, value);
+            }
         }
     }
 }
