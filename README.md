@@ -1,3 +1,46 @@
-Unity tool for procedural floor plans and buildings generation. Implemented for my Baschelor of Computer Science monography.
-Still having a lot of work to make a complete tool but you can try it or fork.
+# Unity Procedural Floor Plan & Building Generator Tool
+
+A Unity tool for **procedural generation of floor plans and buildings**, originally developed as part of my **Bachelor of Computer Science monograph**.
+
+⚠️ The tool is still under development — there’s plenty of work ahead to make it feature-complete.
+However, you’re welcome to **try it out, fork it, and contribute**!
+
+You can also read the full monograph (in Brazilian Portuguese) here:
+[**Geração procedural de plantas baixas para jogos digitais (PDF)**](https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/Gera%C3%A7%C3%A3o%20procedural%20de%20plantas%20baixas%20para%20jogos%20digitais%20-%20revisado.pdf)
+
+---
+
+## Screenshots
+
+### Example Results
+
+<img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/res_1.png" width="700"/>
+
+|   |  |  |
+|----------|----------|----------|
+| ![Result 2](https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/res_2.jpg) | ![Result 3](https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/res_3.jpg) | ![Result 4](https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/res_4.png) |
+
+### Full Tool Overview (PT-BR)
+
+<img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/aplic_leg.png" width="700"/>  
+
+### Floor Plan Graph
+
+<img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/casa_pop.png" width="700"/>  
+
+### System Overview (PT-BR)
+
+<img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/floor-plan-gen-areaDeTrab.png" width="700"/>  
+
+---
+
+## ⚠️ Disclaimer
+
+Some parts of the documentation and code comments are written in **Brazilian Portuguese**, as the project was originally created for my academic monograph.
+
+---
+
+## License
+
+[MIT License](LICENSE)
 
