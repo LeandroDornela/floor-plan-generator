@@ -14,25 +14,30 @@ Some parts of the documentation and code comments are written in **Brazilian Por
 ## Screenshots
 
 ### Example Results
-
+<p align="center">
+<img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/animated.gif" width="700"/>
+</p>
+<p align="center">
 <img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/res_1.png" width="700"/>
+</p>
 
-|   |  |  |
+|  |  |  |
 |----------|----------|----------|
 | ![Result 2](https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/res_2.jpg) | ![Result 3](https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/res_3.jpg) | ![Result 4](https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/res_4.png) |
 
 ### Full Tool Overview (PT-BR)
 
+<p align="center">
 <img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/aplic_leg.png" width="700"/>  
-
+</p>
 ### Floor Plan Graph
-
+<p align="center">
 <img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/casa_pop.png" width="700"/>  
-
+</p>
 ### System Overview (PT-BR)
-
+<p align="center">
 <img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/floor-plan-gen-areaDeTrab.png" width="700"/> 
-
+</p>
 ## License
 
 [MIT License](LICENSE)
