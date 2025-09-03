@@ -30,14 +30,19 @@ Some parts of the documentation and code comments are written in **Brazilian Por
 <p align="center">
 <img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/aplic_leg.png" width="700"/>  
 </p>
+
 ### Floor Plan Graph
+
 <p align="center">
 <img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/casa_pop.png" width="700"/>  
 </p>
+
 ### System Overview (PT-BR)
+
 <p align="center">
 <img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/floor-plan-gen-areaDeTrab.png" width="700"/> 
 </p>
+
 ## License
 
 [MIT License](LICENSE)
