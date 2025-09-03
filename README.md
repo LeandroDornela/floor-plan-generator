@@ -2,14 +2,15 @@
 
 A Unity tool for **procedural generation of floor plans and buildings**, originally developed as part of my **Bachelor of Computer Science monograph**.
 
-⚠️ The tool is still under development — there’s plenty of work ahead to make it feature-complete.
-However, you’re welcome to **try it out, fork it, and contribute**!
-
 You can also read the full monograph (in Brazilian Portuguese) here:
 [**Geração procedural de plantas baixas para jogos digitais (PDF)**](https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/Gera%C3%A7%C3%A3o%20procedural%20de%20plantas%20baixas%20para%20jogos%20digitais%20-%20revisado.pdf)
 
----
+⚠️ The tool is still under development — there’s plenty of work ahead to make it feature-complete.
+However, you’re welcome to **try it out, fork it, and contribute**!
 
+Some parts of the documentation and code comments are written in **Brazilian Portuguese**, as the project was originally created for my academic monograph.
+
+---
 ## Screenshots
 
 ### Example Results
@@ -30,15 +31,7 @@ You can also read the full monograph (in Brazilian Portuguese) here:
 
 ### System Overview (PT-BR)
 
-<img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/floor-plan-gen-areaDeTrab.png" width="700"/>  
-
----
-
-## ⚠️ Disclaimer
-
-Some parts of the documentation and code comments are written in **Brazilian Portuguese**, as the project was originally created for my academic monograph.
-
----
+<img src="https://github.com/LeandroDornela/floor-plan-generator/blob/main/DocResources/floor-plan-gen-areaDeTrab.png" width="700"/> 
 
 ## License
 
